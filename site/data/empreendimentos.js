@@ -1,0 +1,289 @@
+window.EMPREENDIMENTOS_DATA = {
+  "items": [
+    {
+      "slug": "garrett",
+      "nome": "Residencial Garrett",
+      "status": "pronto",
+      "tag_label": "Pronto para morar",
+      "meta_descricao": "Residencial Garrett — pronto para morar, em Ocian, Praia Grande/SP. Apenas 2 unidades disponíveis.",
+      "endereco": "Rua Alfonso Bovero, 506, Ocian, Praia Grande - SP",
+      "capa": "assets/garrett-capa.jpg",
+      "capa_webp": "assets/garrett-capa.webp",
+      "resumo_curto": "Uma oportunidade para você se livrar do seu aluguel: prédio exclusivo já pronto, varanda com churrasqueira e acabamento de altíssima qualidade.",
+      "descricao": "Uma oportunidade para você se livrar do seu aluguel: o Residencial Garrett tem apenas 2 unidades, já prontas e entregues, com acabamento de altíssima qualidade e varanda equipada com churrasqueira.",
+      "specs_card": [
+        "Apenas 2 unidades",
+        "3 dorm. · 1 suíte",
+        "89,1 a 94,5 m²"
+      ],
+      "diferenciais": [
+        "Apenas 2 unidades disponíveis",
+        "3 dormitórios, sendo 1 suíte",
+        "Lavabo",
+        "Varanda com churrasqueira",
+        "Acabamento de altíssima qualidade",
+        "Entrada exclusiva coberta"
+      ],
+      "unidades_titulo": "Unidades",
+      "unidades_col1": "Unidade",
+      "unidades": [
+        {
+          "nome": "Unidade 1",
+          "area": "94,5 m²",
+          "vaga": "2 vagas de garagem"
+        },
+        {
+          "nome": "Unidade 2",
+          "area": "89,1 m²",
+          "vaga": "1 vaga rotativa"
+        }
+      ],
+      "galeria": [
+        {
+          "src": "assets/garrett-capa.jpg",
+          "webp": "assets/garrett-capa.webp",
+          "alt": "Fachada do Residencial Garrett"
+        },
+        {
+          "src": "assets/garrett-fachada.jpg",
+          "webp": "assets/garrett-fachada.webp",
+          "alt": "Fachada do Residencial Garrett, outro ângulo"
+        },
+        {
+          "src": "assets/garrett-aerea.jpg",
+          "webp": "assets/garrett-aerea.webp",
+          "alt": "Vista aérea do Residencial Garrett"
+        },
+        {
+          "src": "assets/varanda-poentesol.jpg",
+          "webp": "assets/varanda-poentesol.webp",
+          "alt": "Vista da varanda ao pôr do sol do Residencial Garrett"
+        },
+        {
+          "src": "assets/garrett-varanda.jpg",
+          "webp": "assets/garrett-varanda.webp",
+          "alt": "Varanda com vista do Residencial Garrett"
+        },
+        {
+          "src": "assets/churrasqueira.jpg",
+          "webp": "assets/churrasqueira.webp",
+          "alt": "Churrasqueira na varanda do Residencial Garrett"
+        },
+        {
+          "src": "assets/sala.jpg",
+          "webp": "assets/sala.webp",
+          "alt": "Sala com acesso à varanda do Residencial Garrett"
+        },
+        {
+          "src": "assets/cozinha.jpg",
+          "webp": "assets/cozinha.webp",
+          "alt": "Cozinha do Residencial Garrett"
+        },
+        {
+          "src": "assets/corredor.jpg",
+          "webp": "assets/corredor.webp",
+          "alt": "Corredor de acesso aos quartos do Residencial Garrett"
+        },
+        {
+          "src": "assets/quarto2.jpg",
+          "webp": "assets/quarto2.webp",
+          "alt": "Dormitório do Residencial Garrett"
+        },
+        {
+          "src": "assets/lavabo.jpg",
+          "webp": "assets/lavabo.webp",
+          "alt": "Lavabo do Residencial Garrett"
+        },
+        {
+          "src": "assets/garrett-banheiro.jpg",
+          "webp": "assets/garrett-banheiro.webp",
+          "alt": "Banheiro com acabamento do Residencial Garrett"
+        }
+      ],
+      "galeria_nota": "",
+      "videos": [
+        {
+          "src": "assets/garrett-tour-interna.mp4",
+          "poster": "assets/sala.jpg",
+          "legenda": "Tour interno do imóvel já pronto"
+        }
+      ],
+      "sidebar_rows": [
+        {
+          "label": "Status",
+          "value": "Pronto"
+        },
+        {
+          "label": "Unidades",
+          "value": "2 disponíveis"
+        },
+        {
+          "label": "Valores",
+          "value": "Sob consulta"
+        }
+      ],
+      "sidebar_botao": "Mais informações",
+      "sidebar_nota": "Valores e condições sob consulta — chame no WhatsApp para receber todas as opções.",
+      "whatsapp_msg": "Olá, tenho interesse no Residencial Garrett e quero mais opções e valores."
+    },
+    {
+      "slug": "carmo",
+      "nome": "Residencial Carmo",
+      "status": "construcao",
+      "tag_label": "Em construção · Entrega Jan/2027",
+      "meta_descricao": "Residencial Carmo — em construção, entrega Jan/2027, no bairro Tupy, Praia Grande/SP, 300m da praia.",
+      "endereco": "Rua Dr. Freud, 161, Vila Tupy, Praia Grande - SP · 300m da praia",
+      "capa": "assets/carmo-fachada.jpg",
+      "capa_webp": "assets/carmo-fachada.webp",
+      "resumo_curto": "Condomínio de alto padrão com piscina e sauna exclusiva, garagem individual com infraestrutura para carro elétrico e entrada individual por unidade.",
+      "descricao": "Condomínio de alto padrão: triplex com 2 suítes e garagem individual, área de lazer com piscina e sauna exclusiva do condomínio, a apenas 300 metros da praia no bairro Tupy.",
+      "specs_card": [
+        "5 casas triplex",
+        "2 suítes",
+        "92 a 103 m²"
+      ],
+      "diferenciais": [
+        "Todas as unidades com 2 suítes",
+        "Garagem individual",
+        "Plantas amplas e modernas",
+        "Infraestrutura para energia solar",
+        "Infraestrutura para carregador de carro elétrico",
+        "Iluminação em LED",
+        "Piscina e sauna exclusiva do condomínio",
+        "Lavabo em todas as unidades",
+        "Depósito individual",
+        "Entrada individual por unidade"
+      ],
+      "unidades_titulo": "Casas",
+      "unidades_col1": "Casa",
+      "unidades": [
+        {
+          "nome": "Casa 1",
+          "area": "103 m²",
+          "vaga": "1 vaga · entrada individual"
+        },
+        {
+          "nome": "Casa 2",
+          "area": "92 m²",
+          "vaga": "1 vaga privativa"
+        },
+        {
+          "nome": "Casa 3",
+          "area": "92 m²",
+          "vaga": "1 vaga privativa"
+        },
+        {
+          "nome": "Casa 4",
+          "area": "92 m²",
+          "vaga": "1 vaga privativa"
+        },
+        {
+          "nome": "Casa 5",
+          "area": "102 m²",
+          "vaga": "2 vagas privativas"
+        }
+      ],
+      "galeria": [
+        {
+          "src": "assets/carmo-fachada.jpg",
+          "webp": "assets/carmo-fachada.webp",
+          "alt": "Fachada em render do Residencial Carmo"
+        },
+        {
+          "src": "assets/carmo-fachada2.jpg",
+          "webp": "assets/carmo-fachada2.webp",
+          "alt": "Fachada em render do Residencial Carmo, vista angulada"
+        },
+        {
+          "src": "assets/carmo-varanda.jpg",
+          "webp": "assets/carmo-varanda.webp",
+          "alt": "Varandas do Residencial Carmo"
+        },
+        {
+          "src": "assets/carmo-piscina.jpg",
+          "webp": "assets/carmo-piscina.webp",
+          "alt": "Piscina e sauna do condomínio Residencial Carmo"
+        },
+        {
+          "src": "assets/carmo-piscina2.jpg",
+          "webp": "assets/carmo-piscina2.webp",
+          "alt": "Piscina do condomínio Residencial Carmo, vista lateral"
+        },
+        {
+          "src": "assets/carmo-garagem.jpg",
+          "webp": "assets/carmo-garagem.webp",
+          "alt": "Garagem individual com carregador elétrico do Residencial Carmo"
+        },
+        {
+          "src": "assets/carmo-garagem2.jpg",
+          "webp": "assets/carmo-garagem2.webp",
+          "alt": "Corredor de garagens individuais do Residencial Carmo"
+        },
+        {
+          "src": "assets/carmo-garagem3.jpg",
+          "webp": "assets/carmo-garagem3.webp",
+          "alt": "Vaga de garagem individual do Residencial Carmo"
+        },
+        {
+          "src": "assets/carmo-sala.jpg",
+          "webp": "assets/carmo-sala.webp",
+          "alt": "Sala de estar do Residencial Carmo"
+        },
+        {
+          "src": "assets/carmo-lavabo2.jpg",
+          "webp": "assets/carmo-lavabo2.webp",
+          "alt": "Lavabo do Residencial Carmo"
+        },
+        {
+          "src": "assets/carmo-quarto1.jpg",
+          "webp": "assets/carmo-quarto1.webp",
+          "alt": "Suíte com closet do Residencial Carmo"
+        },
+        {
+          "src": "assets/carmo-quarto2.jpg",
+          "webp": "assets/carmo-quarto2.webp",
+          "alt": "Quarto do Residencial Carmo"
+        },
+        {
+          "src": "assets/carmo-banheiro1.jpg",
+          "webp": "assets/carmo-banheiro1.webp",
+          "alt": "Banheiro do Residencial Carmo"
+        },
+        {
+          "src": "assets/carmo-banheiro2.jpg",
+          "webp": "assets/carmo-banheiro2.webp",
+          "alt": "Banheiro do Residencial Carmo, vista do lavatório"
+        },
+        {
+          "src": "assets/carmo-cozinha.jpg",
+          "webp": "assets/carmo-cozinha.webp",
+          "alt": "Cozinha do Residencial Carmo"
+        },
+        {
+          "src": "assets/carmo-lavanderia.jpg",
+          "webp": "assets/carmo-lavanderia.webp",
+          "alt": "Área de serviço do Residencial Carmo"
+        }
+      ],
+      "galeria_nota": "Imagens ilustrativas (render) — sujeitas a alterações no projeto executivo.",
+      "videos": [],
+      "sidebar_rows": [
+        {
+          "label": "Status",
+          "value": "Em construção"
+        },
+        {
+          "label": "Entrega prevista",
+          "value": "Jan/2027"
+        },
+        {
+          "label": "Valores",
+          "value": "Sob consulta"
+        }
+      ],
+      "sidebar_botao": "Ver plantas 3D e tour virtual",
+      "sidebar_nota": "Condições de pagamento sob consulta — chame no WhatsApp para receber a tabela completa.",
+      "whatsapp_msg": "Olá, tenho interesse no Residencial Carmo e quero ver as plantas 3D e o tour virtual."
+    }
+  ]
+};

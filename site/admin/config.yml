@@ -1,0 +1,86 @@
+backend:
+  name: github
+  # IMPORTANTE: troque "SEU-USUARIO/SEU-REPOSITORIO" pelo caminho real do
+  # repositório no GitHub depois de criá-lo (ex: "willsilva/chiado-site").
+  repo: SEU-USUARIO/SEU-REPOSITORIO
+  branch: main
+  # IMPORTANTE: troque pelo endereço real do seu site na Vercel depois de publicar
+  # (ex: "https://chiado-site.vercel.app"). Sem "/" no final.
+  base_url: https://SEU-SITE.vercel.app
+  auth_endpoint: api/auth
+
+media_folder: "assets"
+public_folder: "assets"
+
+locale: "pt"
+
+collections:
+  - name: "empreendimentos"
+    label: "Empreendimentos"
+    files:
+      - file: "data/empreendimentos.json"
+        label: "Lista de Empreendimentos"
+        name: "lista"
+        fields:
+          - label: "Empreendimentos"
+            name: "items"
+            widget: "list"
+            summary: "{{fields.nome}}"
+            fields:
+              - { label: "Identificador (slug, sem espaços/acentos)", name: "slug", widget: "string", hint: "Usado na URL da página, ex: garrett" }
+              - { label: "Nome do empreendimento", name: "nome", widget: "string" }
+              - label: "Status"
+                name: "status"
+                widget: "select"
+                options:
+                  - { label: "Pronto para morar", value: "pronto" }
+                  - { label: "Em construção", value: "construcao" }
+              - { label: "Texto da etiqueta (tag na foto)", name: "tag_label", widget: "string", hint: "Ex: Pronto para morar / Em construção · Entrega Jan/2027" }
+              - { label: "Descrição para o Google/redes sociais", name: "meta_descricao", widget: "text", required: false }
+              - { label: "Endereço", name: "endereco", widget: "string" }
+              - { label: "Foto de capa (JPG ou PNG)", name: "capa", widget: "image" }
+              - { label: "Foto de capa em WebP (opcional, mais leve)", name: "capa_webp", widget: "image", required: false, hint: "Se não tiver uma versão .webp, deixe em branco — o site usa a foto normal." }
+              - { label: "Resumo curto (card da home)", name: "resumo_curto", widget: "text" }
+              - { label: "Descrição completa (página do imóvel)", name: "descricao", widget: "text" }
+              - label: "Specs rápidas do card (2 a 3 itens curtos)"
+                name: "specs_card"
+                widget: "list"
+                field: { label: "Item", name: "item", widget: "string" }
+              - label: "Diferenciais"
+                name: "diferenciais"
+                widget: "list"
+                field: { label: "Item", name: "item", widget: "string" }
+              - { label: "Título da tabela de unidades", name: "unidades_titulo", widget: "string", default: "Unidades" }
+              - { label: "Nome da 1ª coluna da tabela", name: "unidades_col1", widget: "string", default: "Unidade" }
+              - label: "Unidades / Casas"
+                name: "unidades"
+                widget: "list"
+                fields:
+                  - { label: "Nome (ex: Unidade 1, Casa 2)", name: "nome", widget: "string" }
+                  - { label: "Área", name: "area", widget: "string" }
+                  - { label: "Vaga(s)", name: "vaga", widget: "string" }
+              - label: "Galeria de fotos"
+                name: "galeria"
+                widget: "list"
+                fields:
+                  - { label: "Foto (JPG ou PNG)", name: "src", widget: "image" }
+                  - { label: "Foto em WebP (opcional, mais leve)", name: "webp", widget: "image", required: false }
+                  - { label: "Descrição da foto (acessibilidade)", name: "alt", widget: "string" }
+              - { label: "Observação sobre a galeria (opcional)", name: "galeria_nota", widget: "string", required: false }
+              - label: "Vídeos (opcional)"
+                name: "videos"
+                widget: "list"
+                required: false
+                fields:
+                  - { label: "Arquivo de vídeo", name: "src", widget: "file" }
+                  - { label: "Imagem de capa do vídeo", name: "poster", widget: "image" }
+                  - { label: "Legenda", name: "legenda", widget: "string" }
+              - label: "Linhas do painel lateral (Status, Entrega, Valores...)"
+                name: "sidebar_rows"
+                widget: "list"
+                fields:
+                  - { label: "Rótulo", name: "label", widget: "string" }
+                  - { label: "Valor", name: "value", widget: "string" }
+              - { label: "Texto do botão principal", name: "sidebar_botao", widget: "string", default: "Falar no WhatsApp" }
+              - { label: "Nota abaixo do botão", name: "sidebar_nota", widget: "string" }
+              - { label: "Mensagem pré-preenchida do WhatsApp", name: "whatsapp_msg", widget: "string" }
