@@ -9,7 +9,7 @@ backend:
   base_url: https://site-chaido.vercel.app 
   auth_endpoint: api/auth
 
-media_folder: "assets"
+media_folder: "site/assets"
 public_folder: "assets"
 
 locale: "pt"
@@ -18,7 +18,7 @@ collections:
   - name: "empreendimentos"
     label: "Empreendimentos"
     files:
-      - file: "data/empreendimentos.json"
+      - file: "site/data/empreendimentos.json"
         label: "Lista de Empreendimentos"
         name: "lista"
         fields:
