@@ -2,11 +2,11 @@ backend:
   name: github
   # IMPORTANTE: troque "SEU-USUARIO/SEU-REPOSITORIO" pelo caminho real do
   # repositório no GitHub depois de criá-lo (ex: "willsilva/chiado-site").
-  repo: SEU-USUARIO/SEU-REPOSITORIO
+  repo: Agster2004/Site-Chaido
   branch: main
   # IMPORTANTE: troque pelo endereço real do seu site na Vercel depois de publicar
   # (ex: "https://chiado-site.vercel.app"). Sem "/" no final.
-  base_url: https://SEU-SITE.vercel.app
+  base_url: https://site-chaido.vercel.app 
   auth_endpoint: api/auth
 
 media_folder: "assets"
