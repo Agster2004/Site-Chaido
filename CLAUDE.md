@@ -106,3 +106,6 @@ qualquer coisa. Uma mudança grande ou experimental pode ter branch própria a p
   usuário autorizar expressamente naquele momento.
 - Domínio oficial: `https://www.chiadoconstrutora.com.br`.
 - Site sem build: HTML/CSS/JS puros e funções da Vercel que usam só `fetch`.
+- **Tudo dentro de `site/` é público na internet.** Guias, planos, notas e qualquer arquivo interno ficam fora dela
+  (em `docs/`, na raiz ou em `supabase/`). Antes de criar ou mover um arquivo para `site/`, pergunte: pode qualquer
+  pessoa ler isto?

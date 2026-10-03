@@ -180,6 +180,12 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   (39 passam, 6 pulados). **Próximo passo:** o usuário decide e faz os 6 itens de "Antes de colocar no ar"; só então o
   "podemos colocar no ar".
 
+- Documentos sincronizados e enviados ao GitHub (resumo, `CLAUDE.md`, desenho, plano e o guia de publicação).
+- Descoberto que o `site/README-VERCEL.md` era **público** (tudo dentro de `site/` é publicado) e a nota nova com nomes de
+  variáveis iria junto. O arquivo foi movido com `git mv` para `docs/README-VERCEL.md` (commit `038266c`); na prévia o
+  endereço antigo dá 404 e o resto segue funcionando. No site oficial o guia antigo continua público até a `trabalho` ir
+  ao ar. **Regra:** nada interno (guias, planos, notas) vai dentro de `site/`.
+
 ## 8. Regras de trabalho
 
 - Só mexer neste projeto; nunca no Site Financeiro (repositório, pasta, banco ou chaves).
