@@ -102,8 +102,6 @@ git commit -m "Desenho do painel de leads: vendido_em, tabelas de fases e IP_HAS
 -- Painel de leads da Chiado. Projeto Supabase só do Chiado.
 -- Rodar inteiro no SQL Editor do Supabase.
 
-create extension if not exists pgcrypto;
-
 create table public.textos_consentimento (
   versao text primary key,
   texto text not null,
