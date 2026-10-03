@@ -7,6 +7,17 @@ alterado nem misturado com este (código, banco Supabase, chaves, documentos).
 O usuário trabalha em **2 computadores**. Por isso o que precisa valer nos dois fica escrito aqui e em
 `resumo-tecnico-sessao.md`, que viajam pelo GitHub (a memória do Claude fica só em cada computador).
 
+## Branch de trabalho: `trabalho` (a mesma nos dois computadores)
+
+No Chiado o `main` é o **site no ar**, então o dia a dia **não** acontece nele. Os dois computadores ficam
+sempre na branch **`trabalho`**: "puxe" e "envie" movem a `trabalho`, como o usuário faz no Financeiro com o
+`main`. A prévia dela fica em `site-chaido-git-trabalho-chiado.vercel.app`. O `main` só recebe a `trabalho`
+quando o usuário diz "podemos colocar no ar" (ver Regras).
+
+**Atenção:** o painel `/admin` grava **direto no `main`** (edições de empreendimentos vão ao ar sem prévia).
+Essas edições **não aparecem sozinhas** na `trabalho`: o git as guarda em outra branch. Por isso o "puxe do
+github" confere o `main` (passo 4) e traz as novidades para a `trabalho`.
+
 ## A rotina do usuário (seguir sempre nesta ordem)
 
 1. **"puxe do github"**: traz o que foi feito no outro computador.
@@ -24,8 +35,12 @@ Quando o usuário enviar a mensagem exata **"puxe do github"**, execute automati
 1. `git fetch --prune` e `git status -sb` (dizer em qual branch está).
 2. Se houver alterações locais não commitadas, **não puxe**: mostre o que há e avise (para não sobrescrever nada).
 3. `git pull --ff-only` na branch atual. Se a branch ainda não existe no GitHub, diga isso.
-4. `git log -1`, e liste branches do GitHub que ainda não existem neste computador, se houver.
-5. Leia a última entrada da seção 7 do `resumo-tecnico-sessao.md` e dê um resumo curto (poucas frases) do que
+4. **Confira o `main`:** `git log --oneline HEAD..origin/main`. Se o `main` tiver commits que a branch atual não
+   tem (por exemplo, edições feitas pelo `/admin`), liste-os, diga o que mudou (ex.: `data/empreendimentos.json`)
+   e **pergunte** se pode trazê-los (`git merge origin/main`). Em conflito, pare e avise.
+5. `git log -1`, e liste branches do GitHub que ainda não existem neste computador, se houver. Se a branch atual
+   não for a `trabalho`, avise.
+6. Leia a última entrada da seção 7 do `resumo-tecnico-sessao.md` e dê um resumo curto (poucas frases) do que
    foi feito no outro computador e **em que ponto o trabalho parou**.
 
 Vale só para esse gatilho exato e só para fetch/pull sem merge forçado. Não cobre rebase, reset nem outras
@@ -65,18 +80,20 @@ e dizer em poucas linhas o que foi feito e onde paramos:
 Assim o próximo dia, em qualquer computador, começa atualizado. Não encerrar a sessão sem isso.
 
 ## Ao começar uma mudança
-Se estiver no `main` e o trabalho for alterar o site, crie antes uma branch com nome claro e trabalhe nela.
+Trabalhe na `trabalho`. Se estiver no `main`, mude para a `trabalho` (`git checkout trabalho`) antes de alterar
+qualquer coisa. Uma mudança grande ou experimental pode ter branch própria a partir da `trabalho`, avisando o usuário.
 
 ## Regras
 - Tudo em português (conversa, commits, documentos).
-- **Fluxo de publicação:** trabalhar sempre numa branch (que é a prévia) → enviar a branch → testar tudo na
+- **Fluxo de publicação:** trabalhar sempre na `trabalho` (que é a prévia) → enviar a branch → testar tudo na
   prévia da Vercel → o usuário aprova → só então juntar no `main` (o site oficial) e conferir no ar.
   **Nunca juntar no `main` sem ok explícito do usuário.** Depois de juntar, apagar a branch só se o usuário pedir.
 - **Gatilho para colocar no ar:** quando tudo estiver feito, testado e validado na branch, o Claude pergunta
   "podemos colocar no ar?", ou o próprio usuário diz **"podemos colocar no ar"** (ou "pode colocar no ar" /
   "pode subir no main"). Essa frase é o ok para juntar **aquela branch** no `main`. Então o Claude:
   1. confere que a branch está atualizada e sem mudanças novas depois da validação (se houver, avisa e pergunta);
-  2. junta no `main` sem merge forçado (`--ff-only`) e envia;
+  2. traz o `main` para a branch (`git merge origin/main`, por causa das edições do `/admin`), confere de novo
+     e só então junta no `main` sem merge forçado (`--ff-only`) e envia;
   3. espera a Vercel publicar, confere o site oficial e conta o resultado, inclusive o que não conseguiu verificar.
   Respostas vagas ("foi", "ok", "beleza") **não** valem como ok para o `main`: nesse caso, perguntar de novo.
   O ok vale só para a branch validada; outra branch pede novo ok. Não se aplica ao Site Financeiro.

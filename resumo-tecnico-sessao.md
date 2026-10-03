@@ -101,13 +101,15 @@ virar venda no financeiro) é uma decisão à parte, tomada com o usuário e des
 - Criados este arquivo e o `CLAUDE.md`, com a rotina do usuário (puxe do github → ler os .md → trabalhar →
   atualizar os .md → envie para o github), o fluxo branch → prévia → testar → "podemos colocar no ar" → `main`
   e a regra de que cada sessão mexe só no seu projeto.
-- Pasta de documentos `docs/` e estes arquivos enviados ao GitHub numa branch (`docs-continuidade`) para valerem
-  nos dois computadores; só entram no `main` com o "podemos colocar no ar" do usuário.
+- Pasta de documentos `docs/` e estes arquivos enviados ao GitHub (branch `docs-continuidade`) e depois criada a
+  branch **`trabalho`**, a branch de trabalho fixa nos dois computadores. Motivo: no Chiado o `main` é o site no ar e
+  o `/admin` grava direto nele; a `trabalho` protege o site, e o "puxe do github" confere o `main` e traz as
+  edições do `/admin`. Só entra no `main` com o "podemos colocar no ar" do usuário. **No ar: não** (só `.md`).
 
 ## 8. Regras de trabalho
 
 - Só mexer neste projeto; nunca no Site Financeiro (repositório, pasta, banco ou chaves).
 - Mudanças em branch própria, com prévia da Vercel; **`main` só com ok explícito do usuário**.
 - Commits e explicações em português. Nunca pedir nem receber senhas ou chaves pelo chat.
-- **Rotina diária, em 2 computadores:** começar com "puxe do github" (mostra onde parou) e terminar com "envie para o github" (atualiza este arquivo, faz commit e push **da branch atual**; no `main` o Claude para e pergunta, porque publica o site). Detalhes no `CLAUDE.md`.
+- **Rotina diária, em 2 computadores, sempre na branch `trabalho`:** começar com "puxe do github" (mostra onde parou e confere se o `main` tem edições do `/admin`) e terminar com "envie para o github" (atualiza este arquivo, faz commit e push **da branch atual**; no `main` o Claude para e pergunta, porque publica o site). Detalhes no `CLAUDE.md`.
 - No fim de cada sessão: atualizar a seção 7 (e as seções 4 a 6 se algo mudou) antes de encerrar.
