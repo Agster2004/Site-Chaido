@@ -61,3 +61,18 @@ button[disabled]{ opacity:.6; cursor:default; }
 }
 .vazio{ padding:24px; text-align:center; color:var(--muted); }
 .sr{ flex-direction:row; align-items:center; gap:6px; font-weight:400; font-size:13px; color:var(--muted); }
+
+.voltar{ display:inline-block; margin-bottom:8px; font-size:13px; color:var(--green-800); text-decoration:none; }
+.ficha h2{ font-family:'Poppins',sans-serif; font-size:13px; text-transform:none; color:var(--green-800); margin:18px 0 6px; font-weight:600; }
+.acoes{ display:flex; gap:8px; margin:12px 0; flex-wrap:wrap; }
+.acoes .botao.primario{ flex:1; min-width:180px; }
+.aviso{ background:var(--aviso-bg); color:var(--aviso); border-radius:6px; padding:8px 12px; font-size:13px; margin:8px 0; }
+.dados{ display:grid; grid-template-columns:auto 1fr; gap:4px 12px; font-size:14px; margin:8px 0; }
+.dados dt{ color:var(--muted); }
+.chip.perigo{ border-color:var(--perigo); color:var(--perigo); }
+.chip.perigo.on{ background:var(--perigo); color:#fff; }
+.perda{ display:flex; gap:8px; align-items:flex-end; margin-top:8px; flex-wrap:wrap; }
+.perda[hidden]{ display:none; }
+.sr-bloco{ margin-bottom:8px; }
+.historico{ list-style:none; display:flex; flex-direction:column; gap:8px; font-size:14px; }
+.historico li{ display:flex; flex-direction:column; border-bottom:1px solid var(--line); padding-bottom:6px; }
