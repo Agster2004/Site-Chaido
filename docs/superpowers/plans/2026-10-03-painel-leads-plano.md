@@ -72,7 +72,7 @@ Nenhum código do site. Sem estes itens, parar e perguntar.
 - [ ] **Passo 3: o usuário cria a conta no Resend,** verifica o domínio `chiadoconstrutora.com.br` (os registros DNS são criados no Registro.br, onde o usuário tem acesso; o Claude passa o passo a passo) e cria uma chave de API só de envio.
 - [ ] **Passo 4: o usuário informa os dados para a política de privacidade:** razão social, endereço da empresa e e-mail para pedidos de privacidade (o CNPJ `57.026.203/0001-74` já está no site).
 - [ ] **Passo 5: o usuário informa** os e-mails que recebem o aviso de lead novo e o e-mail do primeiro usuário do painel.
-- [ ] **Passo 6: o usuário cola as variáveis na Vercel** (projeto `site-chaido` → Settings → Environment Variables), marcadas para **Preview e Production**. Para `IP_HASH_SALT`, gerar um texto aleatório **no terminal do próprio usuário** (não no chat): `node -e "console.log(require('crypto').randomBytes(24).toString('hex'))"`. Variáveis novas só valem depois de um novo deploy.
+- [ ] **Passo 6: o usuário cola as variáveis na Vercel.** No Supabase (Project Settings → API Keys), a chave pública pode se chamar "Publishable key" (ou "anon", no formato antigo) e a de servidor "Secret key" (ou "service_role"); o código aceita os dois formatos, e os nomes das variáveis continuam `SUPABASE_ANON_KEY` e `SUPABASE_SERVICE_ROLE_KEY`. Marcar as chaves secretas como "Sensitive" na Vercel. Cole as variáveis na Vercel (projeto `site-chaido` → Settings → Environment Variables), marcadas para **Preview e Production**. Para `IP_HASH_SALT`, gerar um texto aleatório **no terminal do próprio usuário** (não no chat): `node -e "console.log(require('crypto').randomBytes(24).toString('hex'))"`. Variáveis novas só valem depois de um novo deploy.
 - [ ] **Passo 7: conferir os nomes (sem ver valores).** O Claude lista as variáveis do projeto pela ferramenta da Vercel (`filter_project_envs`, sem descriptografar) e confirma que os 7 nomes existem em Preview e Production.
 - [ ] **Passo 8: atualizar o desenho aprovado.** Em `docs/superpowers/specs/2026-10-03-painel-leads-design.md`: (a) na seção 5, na tabela de `leads`, acrescentar a linha `| vendido_em | timestamptz, opcional | preenchido quando a fase vira vendido; base do número "vendidos no mês" |`; (b) na seção 5, depois de `lead_eventos`, acrescentar o parágrafo `**fases** e **motivos_perda**: tabelas de apoio (id, nome, ordem) com a lista de fases do funil e de motivos de perda. Mudar ou incluir uma fase passa a ser uma linha nova na tabela, sem alterar vários arquivos.`; (c) na seção 15, na lista de variáveis, acrescentar `IP_HASH_SALT` (texto aleatório, usado só para guardar o IP como hash).
 - [ ] **Passo 9: commit.**
@@ -362,7 +362,12 @@ const pular = !URL_BASE || !ANON || !SERVICO ? 'defina TESTE_SUPABASE_URL, TESTE
 const chamar = (caminho, chave, opcoes = {}) =>
   fetch(URL_BASE.replace(/\/$/, '') + caminho, {
     ...opcoes,
-    headers: { apikey: chave, Authorization: 'Bearer ' + chave, 'Content-Type': 'application/json', ...(opcoes.headers || {}) },
+    headers: {
+      apikey: chave,
+      ...(chave.startsWith('eyJ') ? { Authorization: 'Bearer ' + chave } : {}),
+      'Content-Type': 'application/json',
+      ...(opcoes.headers || {}),
+    },
   });
 
 test('visitante anônimo não lê leads', { skip: pular }, async () => {
@@ -641,11 +646,11 @@ git commit -m "Validacao do lead, telefone brasileiro e anti-robo"
 
 **Arquivos:**
 - Criar: `site/api/_lib/supabase.js`, `site/api/_lib/email.js`, `site/api/_lib/proprio.js`
-- Criar: `tests/email.test.mjs`
+- Criar: `tests/email.test.mjs`, `tests/supabase.test.mjs`
 
 **Interfaces:**
 - Consome: nada das tarefas anteriores.
-- Produz: `rpc(nome: string, args: object) → Promise<any>`; `marcarAviso(id: string, ok: boolean) → Promise<null>`; `montarEmail(lead, { retorno: boolean, nomesEmpreendimentos: Record<string,string> }) → { assunto, html, texto }`; `enviarEmail({ assunto, html, texto }) → Promise<void>`; `lerJsonProprio(req, caminho: string) → Promise<any>`.
+- Produz: `cabecalhos(chave: string, extras?: object) → object` (cabeçalhos da chamada ao Supabase); `rpc(nome: string, args: object) → Promise<any>`; `marcarAviso(id: string, ok: boolean) → Promise<null>`; `montarEmail(lead, { retorno: boolean, nomesEmpreendimentos: Record<string,string> }) → { assunto, html, texto }`; `enviarEmail({ assunto, html, texto }) → Promise<void>`; `lerJsonProprio(req, caminho: string) → Promise<any>`.
 
 - [ ] **Passo 1: escrever o teste do e-mail (falha).**
 
@@ -694,7 +699,30 @@ test('montarEmail lida com campos vazios', () => {
 });
 ```
 
-- [ ] **Passo 2: rodar e ver falhar.** `node --test tests/email.test.mjs`. Esperado: `ERR_MODULE_NOT_FOUND`.
+- [ ] **Passo 1b: teste dos cabeçalhos do Supabase (falha).** O Supabase tem chaves antigas (JWT, começam com `eyJ`) e novas (`sb_secret_...`, que não são JWT). O código precisa aceitar as duas.
+
+`tests/supabase.test.mjs`:
+
+```js
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { cabecalhos } from '../site/api/_lib/supabase.js';
+
+test('chave antiga (JWT) vai em apikey e em Authorization', () => {
+  const h = cabecalhos('eyJabc.def.ghi');
+  assert.equal(h.apikey, 'eyJabc.def.ghi');
+  assert.equal(h.Authorization, 'Bearer eyJabc.def.ghi');
+});
+
+test('chave nova (sb_secret_) vai só em apikey', () => {
+  const h = cabecalhos('sb_secret_abc123', { Prefer: 'return=minimal' });
+  assert.equal(h.apikey, 'sb_secret_abc123');
+  assert.equal(h.Authorization, undefined);
+  assert.equal(h.Prefer, 'return=minimal');
+});
+```
+
+- [ ] **Passo 2: rodar e ver falhar.** `node --test tests/email.test.mjs tests/supabase.test.mjs`. Esperado: `ERR_MODULE_NOT_FOUND`.
 - [ ] **Passo 3: criar `site/api/_lib/email.js`.**
 
 ```js
@@ -779,16 +807,19 @@ function config() {
   return { url, chave };
 }
 
+// Chaves novas do Supabase (sb_secret_...) não são JWT e vão só no cabeçalho apikey.
+// Chaves antigas (service_role, JWT que começa com "eyJ") também vão em Authorization.
+export function cabecalhos(chave, extras = {}) {
+  const h = { apikey: chave, 'Content-Type': 'application/json', ...extras };
+  if (chave.startsWith('eyJ')) h.Authorization = 'Bearer ' + chave;
+  return h;
+}
+
 async function chamar(caminho, opcoes = {}) {
   const { url, chave } = config();
   const resp = await fetch(url + caminho, {
     ...opcoes,
-    headers: {
-      apikey: chave,
-      Authorization: 'Bearer ' + chave,
-      'Content-Type': 'application/json',
-      ...(opcoes.headers || {}),
-    },
+    headers: cabecalhos(chave, opcoes.headers),
   });
   // Não inclui o corpo da resposta no erro: pode ter dados pessoais.
   if (!resp.ok) throw new Error('Supabase ' + resp.status + ' em ' + caminho.split('?')[0]);
@@ -820,11 +851,11 @@ export async function lerJsonProprio(req, caminho) {
 }
 ```
 
-- [ ] **Passo 6: rodar e ver passar.** `node --test tests/email.test.mjs`. Esperado: 4 testes passam.
+- [ ] **Passo 6: rodar e ver passar.** `node --test tests/email.test.mjs tests/supabase.test.mjs`. Esperado: 6 testes passam.
 - [ ] **Passo 7: commit.**
 
 ```bash
-git add site/api/_lib/supabase.js site/api/_lib/email.js site/api/_lib/proprio.js tests/email.test.mjs
+git add site/api/_lib/supabase.js site/api/_lib/email.js site/api/_lib/proprio.js tests/email.test.mjs tests/supabase.test.mjs
 git commit -m "Acesso ao Supabase e e-mail de aviso no servidor"
 ```
 
@@ -2427,7 +2458,7 @@ git grep -n "SERVICE_ROLE" -- site
 Esperado: aparece **só** em `site/api/_lib/supabase.js` (e em comentários dessa mesma pasta). Nada em `site/painel`, `site/assets` nem `site/data`.
 
 ```bash
-git grep -nE "eyJ[A-Za-z0-9_-]{20,}" -- .
+git grep -nE "eyJ[A-Za-z0-9_-]{20,}|sb_secret_[A-Za-z0-9_-]{20,}|re_[A-Za-z0-9]{20,}" -- .
 ```
 
 Esperado: **nenhuma linha** (nenhuma chave dentro do repositório).

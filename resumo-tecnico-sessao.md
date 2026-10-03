@@ -87,6 +87,26 @@ virar venda no financeiro) é uma decisão à parte, tomada com o usuário e des
   reconfirmar), assinar a Vercel Pro na equipe Chiado (o plano grátis não permite uso comercial) e revisar a
   `/privacidade` com um advogado. Durante a construção só existe 1 projeto Supabase (o gratuito permite 2 e o
   Financeiro usa 1); os leads de teste são apagados antes de ir ao ar.
+- **Dados da empresa para `/privacidade` (informados e confirmados pelo usuário em 04/10/2026):** razão social
+  CHIADO CONSTRUTORA E INCORPORADORA LTDA - EPP; CNPJ 57.026.203/0001-74; endereço Rua Jaú, 955, 2º andar,
+  escritório 26 a 16, CEP 11701-190, Praia Grande/SP; e-mail para pedidos de privacidade
+  chiadoconstrutora@gmail.com. (Dados públicos da empresa; nada secreto.)
+- **Progresso da Tarefa 0 do plano (04/10/2026):** passo 1 feito (organização `Chiado Site` e projeto `Chiado Leads`
+  no Supabase, plano Free, região São Paulo); passo 2 feito (cadastro aberto desligado e usuário
+  `cv.cvwill@gmail.com` criado; falta o usuário confirmar o nome que aparece no painel); passo 3 parcial (conta no
+  Resend criada com `cv.cvwill@gmail.com`, domínio `chiadoconstrutora.com.br` adicionado, **DNS pendente**: o
+  usuário não tinha a senha do Registro.br neste computador; Resend pede TXT `resend._domainkey`, CNAME `rsend`,
+  CNAME `send` e, opcional, TXT `_dmarc`; **deixar "Enable Receiving" desligado**; antes de adicionar, conferir a
+  zona atual no Registro.br); passo 4 feito (dados acima); passo 5 parcial: o **e-mail definitivo que recebe o aviso de lead
+  (`LEAD_NOTIFY_EMAILS`) ficou em aberto de propósito** (decisão do usuário); nos testes o aviso vai para
+  `cv.cvwill@gmail.com`, com o remetente de teste `onboarding@resend.dev` do Resend; **definir o e-mail real
+  antes de entrar no ar**; usuário do painel confirmado: **William** (`cv.cvwill@gmail.com`); passo 6 **feito em parte**: na Vercel (projeto `site-chaido`,
+  Production e Preview) existem `SUPABASE_URL`, `SUPABASE_ANON_KEY` (tipo Config), `SUPABASE_SERVICE_ROLE_KEY` e
+  `IP_HASH_SALT` (tipo Secret), conferidos pelos nomes sem ver valores; **faltam** `RESEND_API_KEY`,
+  `LEAD_FROM_EMAIL` e `LEAD_NOTIFY_EMAILS` (dependem do DNS do Resend e do e-mail definitivo). O plano Vercel da
+  equipe Chiado é **Hobby** (confirmado na tela). Observação: `OAUTH_CLIENT_SECRET` (login do `/admin`) aparece na
+  Vercel com "Needs Attention / readable-secret"; deixado para o item opcional de segurança do `/admin`. O plano foi ajustado para aceitar os dois formatos de chave do Supabase (antigas
+  `anon`/`service_role` em JWT e novas `Publishable`/`Secret`, que não são JWT); os nomes das variáveis não mudam.
 - O usuário precisa providenciar: projeto novo no Supabase (região São Paulo), conta no Resend e quem
   controla o DNS de `chiadoconstrutora.com.br`, e-mails do aviso, dados da empresa para `/privacidade`.
   Chaves entram direto na Vercel, **nunca pelo chat**.

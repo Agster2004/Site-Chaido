@@ -86,12 +86,15 @@ Você ──► /painel (login) ──► Supabase (leitura e edição, só usu�
 | referrer | texto, opcional | de onde o visitante veio |
 | retornos | inteiro, padrão 0 | quantas vezes a mesma pessoa voltou a preencher |
 | ultimo_contato_em | timestamptz, opcional | atualizado ao mudar a fase ou anotar |
+| vendido_em | timestamptz, opcional | preenchido quando a fase vira vendido; base do número "vendidos no mês" |
 | consentimento_em | timestamptz, obrigatório | |
 | consentimento_versao | texto, obrigatório | liga ao texto exato mostrado |
 | aviso_email_ok | booleano | falso se o e-mail de aviso falhou |
 
 **`lead_eventos`** (histórico): id, lead_id (apaga junto com o lead), criado_em, tipo
 (`nota`, `mudanca_fase`, `retorno`), texto, de_fase, para_fase, autor (uuid, opcional).
+
+**`fases`** e **`motivos_perda`**: tabelas de apoio (id, nome, ordem) com a lista de fases do funil e de motivos de perda. Mudar ou incluir uma fase passa a ser uma linha nova na tabela, sem alterar vários arquivos.
 
 **`textos_consentimento`**: versao (chave), texto, criado_em. Cada lead guarda a versão que viu.
 
@@ -232,7 +235,7 @@ Cada etapa em branch própria, com prévia da Vercel; nada entra no `main` sem o
 - Informar razão social, endereço e e-mail para pedidos de privacidade (para `/privacidade`).
 - **Variáveis de ambiente**, coladas pelo próprio usuário na Vercel (nunca por chat):
   `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`,
-  `LEAD_NOTIFY_EMAILS`, `LEAD_FROM_EMAIL`. `SITE_URL` já existe como opção.
+  `LEAD_NOTIFY_EMAILS`, `LEAD_FROM_EMAIL`, `IP_HASH_SALT` (texto aleatório usado só para guardar o IP como hash). `SITE_URL` já existe como opção.
 
 ## 16. Decisões que ficam com o usuário mais adiante
 
