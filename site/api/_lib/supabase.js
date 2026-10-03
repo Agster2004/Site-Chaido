@@ -22,9 +22,16 @@ async function chamar(caminho, opcoes = {}) {
     ...opcoes,
     headers: cabecalhos(chave, opcoes.headers),
   });
-  // Não inclui o corpo da resposta no erro: pode ter dados pessoais.
-  if (!resp.ok) throw new Error('Supabase ' + resp.status + ' em ' + caminho.split('?')[0]);
   const bruto = await resp.text();
+  if (!resp.ok) {
+    // Só status, rota, código e mensagem. Nunca "details"/"hint": podem trazer dados da pessoa.
+    let extra = '';
+    try {
+      const c = JSON.parse(bruto);
+      if (c && c.code) extra = ' [' + c.code + '] ' + String(c.message || '').slice(0, 160);
+    } catch {}
+    throw new Error('Supabase ' + resp.status + ' em ' + caminho.split('?')[0] + extra);
+  }
   return bruto ? JSON.parse(bruto) : null;
 }
 
