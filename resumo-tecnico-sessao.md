@@ -34,14 +34,13 @@ virar venda no financeiro) é uma decisão à parte, tomada com o usuário e des
 | `api/imovel.js` | Serve `/imovel/<slug>` com title, canonical, og:*, JSON-LD e `<base href="/">` |
 | `api/sitemap.js` | Gera `/sitemap.xml` a partir do JSON |
 | `robots.txt`, `vercel.json` | Robots, redirecionamentos, rewrites e cabeçalhos de cache |
-| `README-VERCEL.md` | Passo a passo original de publicação |
 | `privacidade.html`, `assets/privacidade.js`, `data/empresa.json` | Política de privacidade (dados da empresa escritos na página e no JSON) |
 | `assets/utm.js`, `assets/lead-form.js`, `data/consentimento.json` | Formulário de interesse, origem da visita e texto de consentimento (`v1`) |
 | `api/lead.js`, `api/_lib/*.js` | Recebe o lead (`POST /api/lead`): validação, anti-robô, Supabase e e-mail (Resend) |
 | `api/painel-config.js` | Entrega ao painel a URL e a chave **pública** do Supabase |
 | `painel/` (`index.html`, `painel.css`, `js/*.js`) | Painel de leads em `/painel` (login, lista, ficha, dados da pessoa); `noindex` |
 
-Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (banco), `tests/*.test.mjs` (`node --test`), `docs/` (desenho e plano), `CLAUDE.md` e este resumo.
+Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (banco), `tests/*.test.mjs` (`node --test`), `docs/` (desenho, plano e `docs/README-VERCEL.md`, o passo a passo original de publicação), `CLAUDE.md` e este resumo. **Tudo que está dentro de `site/` é público na internet**: por isso o `README-VERCEL.md` saiu de lá em 03/10/2026.
 
 ## 3. Como funciona (o que não é óbvio)
 

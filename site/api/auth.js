@@ -1,6 +1,6 @@
 // Primeira etapa do login do painel: manda o navegador para a tela de
 // autorização do GitHub. Precisa das variáveis de ambiente OAUTH_CLIENT_ID
-// e OAUTH_CLIENT_SECRET configuradas no projeto da Vercel (veja README-VERCEL.md).
+// e OAUTH_CLIENT_SECRET configuradas no projeto da Vercel (veja docs/README-VERCEL.md).
 export default function handler(req, res) {
   const clientId = process.env.OAUTH_CLIENT_ID;
 
