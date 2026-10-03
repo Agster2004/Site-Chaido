@@ -1,8 +1,14 @@
 // Acesso ao Supabase com a chave de serviço. Só roda no servidor (api/*).
 // A chave nunca sai daqui: vem de variável de ambiente da Vercel.
 
+// Aceita o endereço do projeto com ou sem barra final e mesmo se vier com /rest/v1
+// (a tela "Data API" do Supabase mostra a URL assim, e isso quebrava com PGRST125).
+export function urlBase(valor) {
+  return String(valor || '').trim().replace(/\/+$/, '').replace(/\/rest\/v1$/i, '').replace(/\/+$/, '');
+}
+
 function config() {
-  const url = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
+  const url = urlBase(process.env.SUPABASE_URL);
   const chave = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
   if (!url || !chave) throw new Error('Supabase não configurado');
   return { url, chave };

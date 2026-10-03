@@ -704,7 +704,7 @@ test('montarEmail lida com campos vazios', () => {
 ```js
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { cabecalhos } from '../site/api/_lib/supabase.js';
+import { cabecalhos, urlBase } from '../site/api/_lib/supabase.js';
 
 test('chave antiga (JWT) vai em apikey e em Authorization', () => {
   const h = cabecalhos('eyJabc.def.ghi');
@@ -736,6 +736,17 @@ test('erro do Supabase mostra status, rota, código e mensagem, mas nunca os det
     assert.equal(e.message.includes('+5513900000000'), false);
     return true;
   });
+});
+
+test('urlBase aceita o endereço com barra final ou com /rest/v1', () => {
+  const certo = 'https://abc.supabase.co';
+  assert.equal(urlBase('https://abc.supabase.co'), certo);
+  assert.equal(urlBase('https://abc.supabase.co/'), certo);
+  assert.equal(urlBase('https://abc.supabase.co/rest/v1'), certo);
+  assert.equal(urlBase('https://abc.supabase.co/rest/v1/'), certo);
+  assert.equal(urlBase('  https://abc.supabase.co/rest/v1/  '), certo);
+  assert.equal(urlBase(''), '');
+  assert.equal(urlBase(undefined), '');
 });
 ```
 
@@ -817,8 +828,14 @@ export async function enviarEmail({ assunto, html, texto }) {
 // Acesso ao Supabase com a chave de serviço. Só roda no servidor (api/*).
 // A chave nunca sai daqui: vem de variável de ambiente da Vercel.
 
+// Aceita o endereço do projeto com ou sem barra final e mesmo se vier com /rest/v1
+// (a tela "Data API" do Supabase mostra a URL assim, e isso quebrava com PGRST125).
+export function urlBase(valor) {
+  return String(valor || '').trim().replace(/\/+$/, '').replace(/\/rest\/v1$/i, '').replace(/\/+$/, '');
+}
+
 function config() {
-  const url = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
+  const url = urlBase(process.env.SUPABASE_URL);
   const chave = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
   if (!url || !chave) throw new Error('Supabase não configurado');
   return { url, chave };

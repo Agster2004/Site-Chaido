@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { cabecalhos } from '../site/api/_lib/supabase.js';
+import { cabecalhos, urlBase } from '../site/api/_lib/supabase.js';
 
 test('chave antiga (JWT) vai em apikey e em Authorization', () => {
   const h = cabecalhos('eyJabc.def.ghi');
@@ -32,4 +32,15 @@ test('erro do Supabase mostra status, rota, código e mensagem, mas nunca os det
     assert.equal(e.message.includes('+5513900000000'), false);
     return true;
   });
+});
+
+test('urlBase aceita o endereço com barra final ou com /rest/v1', () => {
+  const certo = 'https://abc.supabase.co';
+  assert.equal(urlBase('https://abc.supabase.co'), certo);
+  assert.equal(urlBase('https://abc.supabase.co/'), certo);
+  assert.equal(urlBase('https://abc.supabase.co/rest/v1'), certo);
+  assert.equal(urlBase('https://abc.supabase.co/rest/v1/'), certo);
+  assert.equal(urlBase('  https://abc.supabase.co/rest/v1/  '), certo);
+  assert.equal(urlBase(''), '');
+  assert.equal(urlBase(undefined), '');
 });
