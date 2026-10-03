@@ -245,6 +245,9 @@ footer{ background:var(--green-900); color:rgba(255,255,255,0.6); padding:56px 0
 
 .cards{ padding:52px 0 100px; display:grid; grid-template-columns:1fr 1fr; gap:28px; }
 @media(max-width:860px){ .cards{ grid-template-columns:1fr; } }
+/* reserva a altura dos cards enquanto o JS ainda os monta, para o rodapé não pular */
+.cards:empty{ min-height:640px; }
+#detail-root{ min-height:75vh; }
 .card{
   background:var(--paper); border:1px solid var(--line); border-radius:8px; overflow:hidden;
   display:flex; flex-direction:column;

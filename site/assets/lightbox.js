@@ -9,7 +9,8 @@ window.initLightbox = function(){
 
     const images = links.map(function(a){
       const img = a.querySelector('img');
-      return { src: a.getAttribute('href'), alt: img ? img.getAttribute('alt') : '' };
+      // usa o WebP (bem mais leve) quando existe; o JPG continua como link de reserva
+      return { src: a.getAttribute('data-webp') || a.getAttribute('href'), alt: img ? img.getAttribute('alt') : '' };
     });
 
     let current = 0;

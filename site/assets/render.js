@@ -107,8 +107,10 @@
     const root = document.getElementById('detail-root');
     if(!root) return;
 
+    // Aceita /imovel/<slug> (endereço novo) e imovel.html?slug=<slug> (endereço antigo / abrindo o arquivo direto).
     const params = new URLSearchParams(window.location.search);
-    const slug = params.get('slug');
+    const pathMatch = window.location.pathname.match(/\/imovel\/([^\/?#]+)/);
+    const slug = pathMatch ? decodeURIComponent(pathMatch[1]) : params.get('slug');
     const item = items.find(i => i.slug === slug) || items[0];
 
     if(!item){
@@ -124,7 +126,8 @@
     const ogDesc = document.querySelector('meta[property="og:description"]');
     if(ogDesc) ogDesc.setAttribute('content', item.meta_descricao || item.descricao || '');
     const ogImage = document.querySelector('meta[property="og:image"]');
-    if(ogImage) ogImage.setAttribute('content', item.capa);
+    // em /imovel/<slug> o servidor já pôs a foto certa com URL absoluta; só preenche aqui quando abre sem o servidor
+    if(ogImage && !document.querySelector('link[rel="canonical"]')) ogImage.setAttribute('content', item.capa);
 
     const tagClass = item.status === 'pronto' ? 'tag-ready' : 'tag-building';
 
@@ -137,7 +140,7 @@
     }).join('');
 
     const galleryItems = (item.galeria || []).map(function(g){
-      return '<a href="' + esc(g.src) + '" target="_blank" rel="noopener">' + picture(g.src, g.webp, g.alt, {lazy:true}) + '</a>';
+      return '<a href="' + esc(g.src) + '"' + (g.webp ? ' data-webp="' + esc(g.webp) + '"' : '') + ' target="_blank" rel="noopener">' + picture(g.src, g.webp, g.alt, {lazy:true}) + '</a>';
     }).join('');
 
     const galleryNote = item.galeria_nota ? '<p class="side-note" style="margin-top:10px;">' + esc(item.galeria_nota) + '</p>' : '';

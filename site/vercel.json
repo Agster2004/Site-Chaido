@@ -1,9 +1,41 @@
 {
+  "redirects": [
+    {
+      "source": "/imovel.html",
+      "has": [{ "type": "query", "key": "slug", "value": "(?<slug>[A-Za-z0-9_-]+)" }],
+      "destination": "/imovel/:slug",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    { "source": "/imovel/:slug", "destination": "/api/imovel?slug=:slug" }
+  ],
+  "functions": {
+    "api/imovel.js": { "includeFiles": "{imovel.html,data/empreendimentos.json}" }
+  },
   "headers": [
     {
       "source": "/data/empreendimentos.json",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache" }
+      ]
+    },
+    {
+      "source": "/assets/(.*)\\.(jpg|jpeg|webp|png|svg|ico)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=2592000" }
+      ]
+    },
+    {
+      "source": "/assets/(.*)\\.(mp4|webm)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=604800" }
+      ]
+    },
+    {
+      "source": "/assets/(.*)\\.(css|js)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
       ]
     }
   ]
