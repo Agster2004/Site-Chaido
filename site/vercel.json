@@ -9,7 +9,8 @@
   ],
   "rewrites": [
     { "source": "/imovel/:slug", "destination": "/api/imovel?slug=:slug" },
-    { "source": "/sitemap.xml", "destination": "/api/sitemap" }
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
+    { "source": "/privacidade", "destination": "/privacidade.html" }
   ],
   "headers": [
     {

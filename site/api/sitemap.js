@@ -8,7 +8,7 @@ function esc(s) {
 }
 
 export default async function handler(req, res) {
-  const urls = [SITE_URL + '/'];
+  const urls = [SITE_URL + '/', SITE_URL + '/privacidade'];
 
   try {
     const proto = req.headers['x-forwarded-proto'] || 'https';

@@ -76,3 +76,8 @@ button[disabled]{ opacity:.6; cursor:default; }
 .sr-bloco{ margin-bottom:8px; }
 .historico{ list-style:none; display:flex; flex-direction:column; gap:8px; font-size:14px; }
 .historico li{ display:flex; flex-direction:column; border-bottom:1px solid var(--line); padding-bottom:6px; }
+
+.busca{ display:flex; gap:8px; margin:12px 0; }
+.busca input{ flex:1; }
+button.perigo{ border-color:var(--perigo); color:var(--perigo); }
+.historico .acoes{ margin:6px 0 0; }
