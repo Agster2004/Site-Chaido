@@ -1,6 +1,6 @@
 # Painel de leads da Chiado Construtora — desenho da versão 1
 
-Data: 03/10/2026 · Projeto: Site-Chaido (separado do Site Financeiro) · Estado: aguardando revisão do usuário
+Data: 03/10/2026 · Projeto: Site-Chaido (separado do Site Financeiro) · Estado: aprovado pelo usuário em 03/10/2026; plano de implementação em `docs/superpowers/plans/2026-10-03-painel-leads-plano.md` (nada construído)
 
 ## 1. Objetivo
 
@@ -173,7 +173,7 @@ automaticamente de tempos em tempos. Não guarda o IP em texto.
 Feito primeiro para celular, e também usável no computador. Segue o visual do site (verde e dourado).
 
 - **Login:** e-mail e senha.
-- **Lista:** números no topo (novos, sem contato há mais de 24 h, visitas agendadas,
+- **Lista:** números no topo (novos, aguardando contato há mais de 24 h, visitas agendadas,
   vendidos no mês). Lista do mais recente para o mais antigo, com filtro por fase,
   empreendimento, origem e data. Leads novos aparecem destacados. Botão para exportar a lista
   em CSV. No celular os leads viram cartões empilhados; no computador, uma tabela.

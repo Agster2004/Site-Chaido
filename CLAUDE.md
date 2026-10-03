@@ -68,8 +68,9 @@ apagar branch, merge nem push no `main`.
 **Ao começar a sessão** (antes de qualquer outra coisa, mesmo sem o usuário pedir): ler os `.md` do projeto
 e dizer em poucas linhas o que foi feito e onde paramos:
 - `resumo-tecnico-sessao.md`: estado atual, como o site funciona, pendências e o registro por sessão.
-- Os documentos de desenho/plano em andamento, em `docs/superpowers/specs/` (hoje:
-  `2026-10-03-painel-leads-design.md`), e outros `.md` que o resumo indicar como ativos.
+- Os documentos de desenho e plano em andamento, em `docs/superpowers/specs/` e `docs/superpowers/plans/`
+  (hoje: `2026-10-03-painel-leads-design.md` e `2026-10-03-painel-leads-plano.md`), e outros `.md` que o
+  resumo indicar como ativos.
 
 **Ao terminar o dia** (quando o usuário disser que terminou, que vai parar, ou enviar "envie para o github"):
 **atualizar os `.md` antes de encerrar**, para salvar tudo que foi conversado e feito:

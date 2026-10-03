@@ -63,9 +63,11 @@ virar venda no financeiro) é uma decisão à parte, tomada com o usuário e des
 - **Etapa 2** (no ar, commit `1ac5569`): `sitemap.xml`, `robots.txt`, JSON-LD (construtora na home;
   Residence + BreadcrumbList nos imóveis), link "Pular para o conteúdo", `<main>`, `aria-expanded` no
   menu, ícones com `aria-hidden`, `scroll-margin-top`, correção do `$`.
-- Branches `melhorias-etapa1` e `melhorias-etapa2` já foram apagadas (tudo está no `main`).
+- Branches `melhorias-etapa1` e `melhorias-etapa2` já foram apagadas (tudo está no `main`). Depois também foram
+  apagadas `docs-continuidade` e `painel-leads` (nada se perdeu: tudo está na `trabalho`). Hoje existem só `main`
+  (site no ar) e `trabalho` (branch de trabalho nos dois computadores).
 
-## 5. Painel de leads (em desenho, nada construído)
+## 5. Painel de leads (desenho aprovado e plano escrito; nada construído)
 
 - Parte 1 de 5 do plano "painel da Chiado": **captar leads e acompanhar a venda**. As outras, nesta
   ordem: 2 acessos do site → 5 tráfego pago → 3 divulgação → 4 impulsionar vendas.
@@ -74,15 +76,28 @@ virar venda no financeiro) é uma decisão à parte, tomada com o usuário e des
   usa outro projeto, nunca misturar dados nem chaves), usuários começando com 1, avisos por e-mail e
   painel (WhatsApp numa segunda fase), funil Novo → Contatado → Visita agendada → Proposta → Vendido
   (+ Perdido), lead com o mesmo telefone não duplica.
-- **Status:** documento escrito, aguardando revisão do usuário. Depois: commit do documento, plano de
-  implementação (skill `writing-plans`), construção em etapas com prévia.
+- **Status (03/10/2026, fim do dia):** desenho **aprovado** pelo usuário (ele viu uma simulação visual das telas e
+  pediu só trocar o nome do número para "Aguardando contato há +24 h", já feito no desenho). **Plano de
+  implementação escrito**: `docs/superpowers/plans/2026-10-03-painel-leads-plano.md` (10 tarefas, 0 a 9; testes
+  do código do plano rodados fora do repositório: 39 testes, 33 passaram, 0 falharam, 6 pulados que dependem das
+  chaves do Supabase). **Nada foi construído**: só começa quando o usuário disser "pode construir".
+- O plano acrescenta ao desenho: tabelas `fases` e `motivos_perda`, coluna `vendido_em` e a variável
+  `IP_HASH_SALT` (a Tarefa 0 do plano atualiza o desenho com isso).
+- Antes de entrar no ar: decidir o plano do Supabase (Pro: US$ 25/mês pelo plano do Financeiro, valor a
+  reconfirmar), assinar a Vercel Pro na equipe Chiado (o plano grátis não permite uso comercial) e revisar a
+  `/privacidade` com um advogado. Durante a construção só existe 1 projeto Supabase (o gratuito permite 2 e o
+  Financeiro usa 1); os leads de teste são apagados antes de ir ao ar.
 - O usuário precisa providenciar: projeto novo no Supabase (região São Paulo), conta no Resend e quem
   controla o DNS de `chiadoconstrutora.com.br`, e-mails do aviso, dados da empresa para `/privacidade`.
   Chaves entram direto na Vercel, **nunca pelo chat**.
 
 ## 6. Pendências e próximos passos
 
-- Revisão do desenho do painel de leads pelo usuário (seção 5).
+- **Painel de leads:** esperar o "pode construir" do usuário. Antes disso, o usuário faz a Tarefa 0 do plano:
+  projeto novo no Supabase (organização e projeto só do Chiado, região São Paulo), conta no Resend com o domínio
+  verificado (DNS no Registro.br), dados para `/privacidade` (razão social, endereço, e-mail de privacidade),
+  e-mails do aviso de lead e do primeiro usuário, e as variáveis na Vercel (Preview e Production).
+- Na execução, escolher o modo: uma tarefa por vez com revisão entre elas (recomendado) ou tudo na mesma conversa.
 - Cadastrar `sitemap.xml` no Google Search Console (ação do usuário, na conta Google dele).
 - Testar a prévia do link no WhatsApp com o site já publicado.
 - Opcionais: reduzir o escopo do login do painel `/admin` (hoje `repo,user`) e adicionar `state` — risco de
@@ -101,10 +116,17 @@ virar venda no financeiro) é uma decisão à parte, tomada com o usuário e des
 - Criados este arquivo e o `CLAUDE.md`, com a rotina do usuário (puxe do github → ler os .md → trabalhar →
   atualizar os .md → envie para o github), o fluxo branch → prévia → testar → "podemos colocar no ar" → `main`
   e a regra de que cada sessão mexe só no seu projeto.
-- Pasta de documentos `docs/` e estes arquivos enviados ao GitHub (branch `docs-continuidade`) e depois criada a
-  branch **`trabalho`**, a branch de trabalho fixa nos dois computadores. Motivo: no Chiado o `main` é o site no ar e
+- Pasta de documentos `docs/` e estes arquivos enviados ao GitHub (branch `docs-continuidade`, depois apagada) e
+  criada a branch **`trabalho`**, a branch de trabalho fixa nos dois computadores. Motivo: no Chiado o `main` é o site no ar e
   o `/admin` grava direto nele; a `trabalho` protege o site, e o "puxe do github" confere o `main` e traz as
   edições do `/admin`. Só entra no `main` com o "podemos colocar no ar" do usuário. **No ar: não** (só `.md`).
+- Mostrada ao usuário uma simulação visual do painel (lista de leads e ficha, dados fictícios) e confirmado que
+  ajustes futuros são fáceis (texto, números, filtros: minutos; campo novo ou fases: médio, com backup antes).
+- Plano de implementação escrito (skill `writing-plans`) e checado; o usuário encerrou o dia pedindo para
+  atualizar os `.md`. **Fim do dia:** `main` = site no ar, sem mudanças desde a Etapa 2; `trabalho` tem o
+  `CLAUDE.md`, este resumo, o desenho e o plano (os `.md` atualizados hoje só vão ao GitHub com o "envie para o
+  github" do usuário). **Próximo passo:** o usuário faz a Tarefa 0 do plano e diz "pode construir"; no outro
+  computador, abrir uma conversa na pasta raiz do GitHub e pedir para trazer o Site Chiado (branch `trabalho`).
 
 ## 8. Regras de trabalho
 
