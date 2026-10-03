@@ -85,8 +85,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   projeto, nunca misturar dados nem chaves), avisos por e-mail e painel (WhatsApp numa segunda fase), funil
   Novo → Contatado → Visita agendada → Proposta → Vendido (+ Perdido), lead com o mesmo telefone não duplica
   (soma `retornos`).
-- **Estado (03/10/2026):** Tarefas 1 a 8 do plano **construídas e testadas** na branch `trabalho` (16 commits à
-  frente do `main`); a Tarefa 9 (verificação final) foi feita, falta decidir/fazer os itens abaixo antes de ir ao ar.
+- **Estado (03/10/2026):** Tarefas 1 a 8 do plano **construídas e testadas** na branch `trabalho` (à frente do `main`: veja `git log --oneline origin/main..trabalho`); a Tarefa 9 (verificação final) foi feita, falta decidir/fazer os itens abaixo antes de ir ao ar.
   **O site oficial (`main`) ainda NÃO tem o formulário, o `/painel` nem o `/privacidade`.**
 - **O que existe:** banco no Supabase (projeto `Chiado Leads`, organização `Chiado Site`, São Paulo) com
   `supabase/migrations/0001_leads.sql` aplicada e o usuário William liberado em `usuarios_painel`; funções
