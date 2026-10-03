@@ -445,3 +445,28 @@ footer{ background:var(--green-900); color:rgba(255,255,255,0.6); padding:56px 0
 main:focus{ outline:none; }
 /* âncoras (#sobre, #contato) não ficam escondidas atrás do menu fixo */
 [id]{ scroll-margin-top:90px; }
+
+/* ---------- formulário de interesse ---------- */
+.lead-section{ padding:20px 0 60px; }
+.lead-card{
+  background:var(--paper); border:1px solid var(--line); border-radius:8px;
+  padding:32px 28px; max-width:620px; margin:0 auto;
+}
+.lead-card h2{ font-size:clamp(24px, 3.4vw, 32px); color:var(--green-900); }
+.lead-sub{ margin:8px 0 18px; color:rgba(27,33,24,0.72); font-size:15px; }
+.lead-card label{ display:block; font-size:13px; font-weight:600; color:var(--green-800); margin:14px 0 6px; }
+.lead-card input[type=text], .lead-card input[type=tel], .lead-card input[type=email], .lead-card select, .lead-card textarea{
+  width:100%; padding:12px 14px; font:inherit; font-size:15px; color:var(--ink);
+  background:#fff; border:1px solid var(--line); border-radius:4px;
+}
+.lead-card [aria-invalid=true]{ border-color:#9B2C2C; }
+.lead-erro{ min-height:0; margin:4px 0 0; font-size:12.5px; color:#9B2C2C; }
+.lead-consent{ display:flex; gap:10px; align-items:flex-start; margin-top:16px; }
+.lead-consent input{ margin-top:3px; flex-shrink:0; width:18px; height:18px; }
+.lead-consent label{ margin:0; font-weight:400; font-size:13px; color:rgba(27,33,24,0.78); }
+.lead-consent a{ text-decoration:underline; }
+.lead-card .btn{ margin-top:18px; }
+.lead-card .btn[disabled]{ opacity:0.6; cursor:default; }
+.lead-status{ margin-top:12px; }
+.lead-erro-geral{ color:#9B2C2C; font-size:14px; margin:0 0 10px; }
+.lead-isca{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }

@@ -1,5 +1,5 @@
 // Recebe o formulário de interesse: valida, barra robôs, grava o lead e avisa por e-mail.
-import { validarLead, ehRobo } from './_lib/validacao.js';
+import { validarLead, motivoRobo } from './_lib/validacao.js';
 import { hashIp, ipDaRequisicao } from './_lib/ip.js';
 import { rpc, marcarAviso } from './_lib/supabase.js';
 import { montarEmail, enviarEmail } from './_lib/email.js';
@@ -38,8 +38,12 @@ export default async function handler(req, res) {
 
   const corpo = lerCorpo(req);
 
-  // Robô: responde como se tivesse dado certo, sem gravar nada.
-  if (ehRobo(corpo)) return res.status(200).json({ ok: true });
+  const motivo = motivoRobo(corpo);
+  // Campo-isca: só robô preenche. Responde como se tivesse dado certo, sem gravar nada.
+  if (motivo === 'isca') return res.status(200).json({ ok: true });
+  // Rápido demais pode ser uma pessoa com preenchimento automático: nada é gravado, mas
+  // devolve erro para ela tentar de novo em instantes, sem perder o lead em silêncio.
+  if (motivo === 'rapido') return res.status(400).json({ ok: false, erros: {} });
 
   let empreendimentos;
   let consentimento;

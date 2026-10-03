@@ -443,7 +443,7 @@ git commit -m "Banco do painel de leads: tabelas, regras de acesso e funcoes"
 ```js
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { normalizarTelefone, validarLead, ehRobo } from '../site/api/_lib/validacao.js';
+import { normalizarTelefone, validarLead, ehRobo, motivoRobo } from '../site/api/_lib/validacao.js';
 import { hashIp, ipDaRequisicao } from '../site/api/_lib/ip.js';
 
 test('normalizarTelefone aceita celular com e sem formatação e com +55', () => {
@@ -516,6 +516,14 @@ test('ehRobo detecta campo-isca e preenchimento rápido demais', () => {
   assert.equal(ehRobo({ website: '', tempo_ms: 'abc' }), true);
   assert.equal(ehRobo({ website: '', tempo_ms: 8000 }), false);
   assert.equal(ehRobo(null), true);
+});
+
+test('motivoRobo separa o campo-isca do envio rápido demais', () => {
+  assert.equal(motivoRobo({ website: 'http://spam', tempo_ms: 9000 }), 'isca');
+  assert.equal(motivoRobo({ website: 'http://spam', tempo_ms: 100 }), 'isca');
+  assert.equal(motivoRobo({ website: '', tempo_ms: 500 }), 'rapido');
+  assert.equal(motivoRobo({ website: '', tempo_ms: 'abc' }), 'rapido');
+  assert.equal(motivoRobo({ website: '', tempo_ms: 8000 }), null);
 });
 
 test('hashIp é estável, depende do sal e não contém o IP', () => {
@@ -602,14 +610,18 @@ export function validarLead(corpo, { slugsValidos, versaoConsentimento }) {
   };
 }
 
-// Campo-isca preenchido, ou formulário enviado em menos de 3 segundos, é robô.
-export function ehRobo(corpo) {
+// 'isca': o campo-isca (invisível) veio preenchido, só um robô faz isso.
+// 'rapido': enviado em menos de 3 segundos. Pode ser robô, mas também uma pessoa com
+// preenchimento automático; por isso o servidor não finge sucesso nesse caso.
+export function motivoRobo(corpo) {
   const c = corpo && typeof corpo === 'object' ? corpo : {};
-  if (texto(c.website) !== '') return true;
+  if (texto(c.website) !== '') return 'isca';
   const t = Number(c.tempo_ms);
-  if (!Number.isFinite(t) || t < 3000) return true;
-  return false;
+  if (!Number.isFinite(t) || t < 3000) return 'rapido';
+  return null;
 }
+
+export const ehRobo = (corpo) => motivoRobo(corpo) !== null;
 ```
 
 - [ ] **Passo 4: criar `site/api/_lib/ip.js`.**
@@ -1034,6 +1046,15 @@ test('robô (campo-isca) recebe sucesso e nada é gravado', async () => {
   assert.equal(chamadasAoBanco(c).length, 0);
 });
 
+test('envio rápido demais devolve 400 sem gravar (pessoa com autopreenchimento pode tentar de novo)', async () => {
+  const c = instalarFetch(rotasBase());
+  const res = criarRes();
+  await handler(req({ body: { ...corpoValido(), tempo_ms: 500 } }), res);
+  assert.equal(res.statusCode, 400);
+  assert.deepEqual(res.corpo, { ok: false, erros: {} });
+  assert.equal(chamadasAoBanco(c).length, 0);
+});
+
 test('dados inválidos devolvem 400 com os erros', async () => {
   instalarFetch(rotasBase());
   const res = criarRes();
@@ -1092,7 +1113,7 @@ test('falha no banco devolve 500 sem detalhes', async () => {
 
 ```js
 // Recebe o formulário de interesse: valida, barra robôs, grava o lead e avisa por e-mail.
-import { validarLead, ehRobo } from './_lib/validacao.js';
+import { validarLead, motivoRobo } from './_lib/validacao.js';
 import { hashIp, ipDaRequisicao } from './_lib/ip.js';
 import { rpc, marcarAviso } from './_lib/supabase.js';
 import { montarEmail, enviarEmail } from './_lib/email.js';
@@ -1131,8 +1152,12 @@ export default async function handler(req, res) {
 
   const corpo = lerCorpo(req);
 
-  // Robô: responde como se tivesse dado certo, sem gravar nada.
-  if (ehRobo(corpo)) return res.status(200).json({ ok: true });
+  const motivo = motivoRobo(corpo);
+  // Campo-isca: só robô preenche. Responde como se tivesse dado certo, sem gravar nada.
+  if (motivo === 'isca') return res.status(200).json({ ok: true });
+  // Rápido demais pode ser uma pessoa com preenchimento automático: nada é gravado, mas
+  // devolve erro para ela tentar de novo em instantes, sem perder o lead em silêncio.
+  if (motivo === 'rapido') return res.status(400).json({ ok: false, erros: {} });
 
   let empreendimentos;
   let consentimento;
@@ -1247,6 +1272,15 @@ Esperado: `HTTP 200` com `{"ok":true}`; o e-mail chega aos endereços de aviso; 
     return d.innerHTML;
   }
 
+  // O link da política é a própria frase "Política de Privacidade" do texto (sem repetir).
+  function textoConsentimento(texto) {
+    var link = '<a href="privacidade" target="_blank" rel="noopener">Política de Privacidade</a>';
+    var seguro = esc(texto);
+    return seguro.indexOf('Política de Privacidade') >= 0
+      ? seguro.replace('Política de Privacidade', link)
+      : seguro + ' ' + link;
+  }
+
   function mascara(v) {
     var d = v.replace(/\D/g, '').slice(0, 11);
     if (d.length <= 2) return d ? '(' + d : '';
@@ -1306,7 +1340,7 @@ Esperado: `HTTP 200` com `{"ok":true}`; o e-mail chega aos endereços de aviso; 
         '<label for="lf-email">E-mail</label><input id="lf-email" name="email" type="email" autocomplete="email" maxlength="254" aria-describedby="lf-email-erro"><p class="lead-erro" id="lf-email-erro"></p>' +
         '<label for="lf-msg">Mensagem</label><textarea id="lf-msg" name="mensagem" rows="3" maxlength="1000" aria-describedby="lf-mensagem-erro"></textarea><p class="lead-erro" id="lf-mensagem-erro"></p>' +
         '<div class="lead-isca" aria-hidden="true"><label for="lf-site">Não preencha este campo</label><input id="lf-site" name="website" type="text" tabindex="-1" autocomplete="off"></div>' +
-        '<div class="lead-consent"><input id="lf-consent" name="consentimento" type="checkbox" aria-describedby="lf-consentimento-erro"><label for="lf-consent">' + esc(cons.texto) + ' <a href="privacidade" target="_blank" rel="noopener">Política de Privacidade</a></label></div><p class="lead-erro" id="lf-consentimento-erro"></p>' +
+        '<div class="lead-consent"><input id="lf-consent" name="consentimento" type="checkbox" aria-describedby="lf-consentimento-erro"><label for="lf-consent">' + textoConsentimento(cons.texto) + '</label></div><p class="lead-erro" id="lf-consentimento-erro"></p>' +
         '<button class="btn btn-dark" type="submit" id="lf-enviar">Enviar</button>' +
         '<div class="lead-status" id="lf-status" role="status" aria-live="polite"></div>' +
         '</form></div>';
@@ -1384,7 +1418,7 @@ Esperado: `HTTP 200` com `{"ok":true}`; o e-mail chega aos endereços de aviso; 
                 '<a class="btn btn-dark" target="_blank" rel="noopener" href="' + esc(linkWhatsapp(msg)) + '">Chamar no WhatsApp</a></div>';
               return;
             }
-            if (res.status === 400 && res.corpo.erros) {
+            if (res.status === 400 && res.corpo.erros && Object.keys(res.corpo.erros).length) {
               mostrarErros(res.corpo.erros);
             } else {
               falhaEnvio();

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { normalizarTelefone, validarLead, ehRobo } from '../site/api/_lib/validacao.js';
+import { normalizarTelefone, validarLead, ehRobo, motivoRobo } from '../site/api/_lib/validacao.js';
 import { hashIp, ipDaRequisicao } from '../site/api/_lib/ip.js';
 
 test('normalizarTelefone aceita celular com e sem formatação e com +55', () => {
@@ -73,6 +73,14 @@ test('ehRobo detecta campo-isca e preenchimento rápido demais', () => {
   assert.equal(ehRobo({ website: '', tempo_ms: 'abc' }), true);
   assert.equal(ehRobo({ website: '', tempo_ms: 8000 }), false);
   assert.equal(ehRobo(null), true);
+});
+
+test('motivoRobo separa o campo-isca do envio rápido demais', () => {
+  assert.equal(motivoRobo({ website: 'http://spam', tempo_ms: 9000 }), 'isca');
+  assert.equal(motivoRobo({ website: 'http://spam', tempo_ms: 100 }), 'isca');
+  assert.equal(motivoRobo({ website: '', tempo_ms: 500 }), 'rapido');
+  assert.equal(motivoRobo({ website: '', tempo_ms: 'abc' }), 'rapido');
+  assert.equal(motivoRobo({ website: '', tempo_ms: 8000 }), null);
 });
 
 test('hashIp é estável, depende do sal e não contém o IP', () => {

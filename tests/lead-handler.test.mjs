@@ -85,6 +85,15 @@ test('robô (campo-isca) recebe sucesso e nada é gravado', async () => {
   assert.equal(chamadasAoBanco(c).length, 0);
 });
 
+test('envio rápido demais devolve 400 sem gravar (pessoa com autopreenchimento pode tentar de novo)', async () => {
+  const c = instalarFetch(rotasBase());
+  const res = criarRes();
+  await handler(req({ body: { ...corpoValido(), tempo_ms: 500 } }), res);
+  assert.equal(res.statusCode, 400);
+  assert.deepEqual(res.corpo, { ok: false, erros: {} });
+  assert.equal(chamadasAoBanco(c).length, 0);
+});
+
 test('dados inválidos devolvem 400 com os erros', async () => {
   instalarFetch(rotasBase());
   const res = criarRes();

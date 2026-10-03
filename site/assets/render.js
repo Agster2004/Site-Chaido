@@ -212,7 +212,8 @@
           '</a>' +
           '<p class="side-note">' + esc(item.sidebar_nota) + '</p>' +
         '</div>' +
-      '</div>';
+      '</div>' +
+      '<section id="interesse" class="lead-section"><div class="wrap"><div id="lead-form-root" data-empreendimento="' + esc(item.slug) + '"></div></div></section>';
 
     // atualiza o botão do topo e o flutuante do WhatsApp com a mensagem deste empreendimento
     document.querySelectorAll('[data-wa-cta]').forEach(function(a){
@@ -227,6 +228,7 @@
       renderDetail(items);
       if(window.initReveal) window.initReveal();
       if(window.initLightbox) window.initLightbox();
+      if(window.initLeadForm) window.initLeadForm(items);
     }).catch(function(err){
       console.error('Erro ao carregar empreendimentos:', err);
     });

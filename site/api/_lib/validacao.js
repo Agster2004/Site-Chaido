@@ -63,11 +63,15 @@ export function validarLead(corpo, { slugsValidos, versaoConsentimento }) {
   };
 }
 
-// Campo-isca preenchido, ou formulário enviado em menos de 3 segundos, é robô.
-export function ehRobo(corpo) {
+// 'isca': o campo-isca (invisível) veio preenchido, só um robô faz isso.
+// 'rapido': enviado em menos de 3 segundos. Pode ser robô, mas também uma pessoa com
+// preenchimento automático; por isso o servidor não finge sucesso nesse caso.
+export function motivoRobo(corpo) {
   const c = corpo && typeof corpo === 'object' ? corpo : {};
-  if (texto(c.website) !== '') return true;
+  if (texto(c.website) !== '') return 'isca';
   const t = Number(c.tempo_ms);
-  if (!Number.isFinite(t) || t < 3000) return true;
-  return false;
+  if (!Number.isFinite(t) || t < 3000) return 'rapido';
+  return null;
 }
+
+export const ehRobo = (corpo) => motivoRobo(corpo) !== null;
