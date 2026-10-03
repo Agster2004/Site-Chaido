@@ -1096,7 +1096,8 @@ export default async function handler(req, res) {
   try {
     empreendimentos = (await lerJsonProprio(req, '/data/empreendimentos.json')).items || [];
     consentimento = await lerJsonProprio(req, '/data/consentimento.json');
-  } catch {
+  } catch (e) {
+    console.error('lead: não leu os JSONs do site:', e.message);
     return res.status(500).json({ ok: false });
   }
 
@@ -1113,7 +1114,9 @@ export default async function handler(req, res) {
     if (permitido !== true) return res.status(200).json({ ok: true });
 
     resultado = await rpc('registrar_lead', { p: validacao.dados });
-  } catch {
+  } catch (e) {
+    // e.message tem só o status e a rota, nunca dados do lead
+    console.error('lead: falha ao gravar no banco:', e.message);
     return res.status(500).json({ ok: false });
   }
 
@@ -1121,7 +1124,8 @@ export default async function handler(req, res) {
   try {
     const nomes = Object.fromEntries(empreendimentos.map((e) => [e.slug, e.nome]));
     await enviarEmail(montarEmail(validacao.dados, { retorno: resultado.novo === false, nomesEmpreendimentos: nomes }));
-  } catch {
+  } catch (e) {
+    console.error('lead: aviso por e-mail não enviado:', e.message);
     await marcarAviso(resultado.id, false).catch(() => {});
   }
 
