@@ -8,7 +8,8 @@
     }
   ],
   "rewrites": [
-    { "source": "/imovel/:slug", "destination": "/api/imovel?slug=:slug" }
+    { "source": "/imovel/:slug", "destination": "/api/imovel?slug=:slug" },
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" }
   ],
   "headers": [
     {

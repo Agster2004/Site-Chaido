@@ -76,7 +76,46 @@ export default async function handler(req, res) {
         '<meta name="twitter:description" content="' + esc(desc) + '">\n' +
         '<meta name="twitter:image" content="' + esc(image) + '">\n';
 
-      html = html.replace('</head>', head + '</head>');
+      // Dados estruturados (só para endereços reais; o 404 de slug inventado não leva).
+      // Só informa o que existe nos dados: não inventa preço, quartos ou datas.
+      let jsonLd = '';
+      if (item) {
+        const ld = {
+          '@context': 'https://schema.org',
+          '@graph': [
+            {
+              '@type': 'Residence',
+              '@id': url + '#imovel',
+              name: it.nome,
+              description: desc,
+              url: url,
+              image: absolute(it.capa),
+              address: {
+                '@type': 'PostalAddress',
+                streetAddress: it.endereco,
+                addressLocality: 'Praia Grande',
+                addressRegion: 'SP',
+                addressCountry: 'BR',
+              },
+            },
+            {
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Início', item: SITE_URL + '/' },
+                { '@type': 'ListItem', position: 2, name: it.nome, item: url },
+              ],
+            },
+          ],
+        };
+        // "<" escapado para o texto do empreendimento nunca conseguir fechar a tag <script>
+        jsonLd =
+          '<script type="application/ld+json">' +
+          JSON.stringify(ld).replace(/</g, '\\u003c') +
+          '</script>\n';
+      }
+
+      // função em vez de texto: um "$" na descrição (ex: "R$ 500 mil") não pode virar padrão do replace
+      html = html.replace('</head>', () => head + jsonLd + '</head>');
     }
   } catch (err) {
     // Se algo falhar ao ler os dados, a página ainda abre com as tags genéricas.

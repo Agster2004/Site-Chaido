@@ -24,14 +24,14 @@ window.initLightbox = function(){
     lb.setAttribute('aria-label', 'Galeria de fotos');
     lb.innerHTML =
       '<button class="lightbox-close" aria-label="Fechar">' +
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>' +
+        '<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>' +
       '</button>' +
       '<button class="lightbox-nav lightbox-prev" aria-label="Foto anterior">' +
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>' +
+        '<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>' +
       '</button>' +
       '<div class="lightbox-img-wrap"><img alt=""></div>' +
       '<button class="lightbox-nav lightbox-next" aria-label="Próxima foto">' +
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>' +
+        '<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>' +
       '</button>' +
       '<div class="lightbox-counter"></div>';
     document.body.appendChild(lb);
