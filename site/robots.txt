@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
+Disallow: /painel/
 Disallow: /api/
 
 Sitemap: https://www.chiadoconstrutora.com.br/sitemap.xml

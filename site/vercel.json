@@ -13,6 +13,12 @@
   ],
   "headers": [
     {
+      "source": "/painel/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    },
+    {
       "source": "/data/empreendimentos.json",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache" }

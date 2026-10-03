@@ -1613,6 +1613,8 @@ test('gerarCsv: cabeçalho, escape de aspas e proteção contra fórmulas de pla
   assert.match(csv, /"'=CMD\(\)"/);
   assert.match(csv, /"disse ""oi""; tchau"/);
   assert.match(csv, /Residencial Carmo/);
+  assert.match(csv, /;"\+5513997770974";/);
+  assert.equal(csv.includes("\"'+5513997770974"), false);
 });
 ```
 
@@ -1699,9 +1701,10 @@ export const linkTelefone = (lead) => 'tel:' + lead.telefone;
 // Separador ";" e BOM para abrir certo no Excel brasileiro.
 // Valores que começam com = + - @ ganham um apóstrofo: texto digitado por visitantes não vira fórmula.
 export function gerarCsv(leads, nomeFase, nomeEmp) {
-  const celula = (v) => {
+  // O telefone (coluna 2) já é validado pelo banco (+55 e só dígitos), então não leva o apóstrofo.
+  const celula = (v, proteger = true) => {
     let t = String(v ?? '');
-    if (/^[=+\-@\t\r]/.test(t)) t = "'" + t;
+    if (proteger && /^[=+\-@\t\r]/.test(t)) t = "'" + t;
     return '"' + t.replace(/"/g, '""') + '"';
   };
   const cab = ['Data', 'Nome', 'WhatsApp', 'E-mail', 'Empreendimento', 'Fase', 'Origem', 'Campanha', 'Mensagem', 'Retornos'];
@@ -1717,7 +1720,7 @@ export function gerarCsv(leads, nomeFase, nomeEmp) {
       l.origem_campanha,
       l.mensagem,
       l.retornos,
-    ].map(celula).join(';')
+    ].map((v, i) => celula(v, i !== 2)).join(';')
   );
   return '﻿' + cab.join(';') + '\n' + linhas.join('\n') + '\n';
 }
