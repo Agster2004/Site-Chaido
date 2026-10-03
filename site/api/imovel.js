@@ -2,8 +2,6 @@
 // (og:*) do empreendimento certo. Sem isso, WhatsApp/Instagram/Facebook, que não
 // executam JavaScript, mostrariam sempre a prévia genérica da página.
 // O resto da página continua sendo montado no navegador por assets/render.js.
-import fs from 'node:fs';
-import path from 'node:path';
 
 // Domínio oficial do site. Para mudar, defina
 // SITE_URL nas variáveis de ambiente da Vercel (ex: https://www.exemplo.com.br).
@@ -21,18 +19,26 @@ function absolute(p) {
   return /^https?:\/\//.test(p) ? p : SITE_URL + '/' + String(p).replace(/^\//, '');
 }
 
-export default function handler(req, res) {
-  const root = process.cwd();
+// Busca os arquivos do próprio site pela web (em vez de ler do disco da função),
+// assim funciona igual em produção e nas prévias, sem depender de includeFiles.
+async function fetchOwn(req, file) {
+  const proto = req.headers['x-forwarded-proto'] || 'https';
+  const r = await fetch(proto + '://' + req.headers.host + file);
+  if (!r.ok) throw new Error(file + ' respondeu ' + r.status);
+  return r;
+}
+
+export default async function handler(req, res) {
   let html;
   try {
-    html = fs.readFileSync(path.join(root, 'imovel.html'), 'utf8');
+    html = await (await fetchOwn(req, '/imovel.html')).text();
   } catch (err) {
     res.status(500).send('Não foi possível carregar a página do empreendimento.');
     return;
   }
 
   try {
-    const data = JSON.parse(fs.readFileSync(path.join(root, 'data', 'empreendimentos.json'), 'utf8'));
+    const data = await (await fetchOwn(req, '/data/empreendimentos.json')).json();
     const items = data.items || [];
     const slug = Array.isArray(req.query.slug) ? req.query.slug[0] : req.query.slug;
     const item = items.find((i) => i.slug === slug);

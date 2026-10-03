@@ -10,9 +10,6 @@
   "rewrites": [
     { "source": "/imovel/:slug", "destination": "/api/imovel?slug=:slug" }
   ],
-  "functions": {
-    "api/imovel.js": { "includeFiles": "{imovel.html,data/empreendimentos.json}" }
-  },
   "headers": [
     {
       "source": "/data/empreendimentos.json",
