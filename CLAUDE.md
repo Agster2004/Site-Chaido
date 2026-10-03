@@ -98,8 +98,9 @@ qualquer coisa. Uma mudança grande ou experimental pode ter branch própria a p
   3. espera a Vercel publicar, confere o site oficial e conta o resultado, inclusive o que não conseguiu verificar.
   Respostas vagas ("foi", "ok", "beleza") **não** valem como ok para o `main`: nesse caso, perguntar de novo.
   O ok vale só para a branch validada; outra branch pede novo ok. Não se aplica ao Site Financeiro.
-- Não construir o painel de leads, back-end nem criar contas/serviços sem o usuário dizer "pode construir";
-  o desenho tem de estar aprovado antes.
+- Não construir back-end nem criar contas/serviços sem o usuário dizer "pode construir"; o desenho tem de estar
+  aprovado antes. (O "pode construir" do painel de leads, parte 1, foi dado em 03/10/2026; as próximas partes
+  — acessos, anúncios, divulgação, impulsionar vendas — pedem desenho e "pode construir" próprios.)
 - Nunca pedir nem receber senhas ou chaves pelo chat; o usuário cola as variáveis direto na Vercel.
 - **Cada sessão mexe só no seu projeto.** Aqui é só o Site Chiado; não ler nem alterar o Site Financeiro sem o
   usuário autorizar expressamente naquele momento.

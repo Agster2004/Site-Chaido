@@ -1,6 +1,6 @@
 # Painel de leads da Chiado Construtora — desenho da versão 1
 
-Data: 03/10/2026 · Projeto: Site-Chaido (separado do Site Financeiro) · Estado: aprovado pelo usuário em 03/10/2026; plano de implementação em `docs/superpowers/plans/2026-10-03-painel-leads-plano.md` (nada construído)
+Data: 03/10/2026 · Projeto: Site-Chaido (separado do Site Financeiro) · Estado: aprovado em 03/10/2026 e construído na branch `trabalho` (ainda não está no ar); ver `resumo-tecnico-sessao.md` e o plano em `docs/superpowers/plans/2026-10-03-painel-leads-plano.md`
 
 ## 1. Objetivo
 

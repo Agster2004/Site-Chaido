@@ -2,6 +2,8 @@
 
 > **Para quem for executar:** usar a skill `subagent-driven-development` (recomendado) ou `executing-plans`, tarefa por tarefa. Os passos usam caixas `- [ ]` para acompanhar. **Nada deste plano é executado antes de o usuário dizer "pode construir".**
 
+> **Estado (03/10/2026):** Tarefas 0 a 9 executadas na branch `trabalho`, com os desvios registrados nos commits e no `resumo-tecnico-sessao.md` (retirada do `pgcrypto`, `urlBase` do Supabase, `motivoRobo`, link do consentimento, CSV do telefone). Pendente para ir ao ar: Resend (DNS), decisões do usuário e "podemos colocar no ar".
+
 **Objetivo:** captar leads pelo site, guardá-los num banco só do Chiado e dar à equipe um painel (`/painel`) para acompanhar cada lead até a venda.
 
 **Arquitetura:** o formulário do site envia para `POST /api/lead` (função da Vercel), que valida, barra robôs, grava no Supabase e avisa por e-mail (Resend). O painel é uma página estática em `site/painel/` que lê e edita os leads pelo Supabase, sob regras de acesso (RLS) que só liberam usuários cadastrados. Tudo no repositório Site-Chaido, sem build e sem `package.json`.
