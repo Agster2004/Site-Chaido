@@ -9,6 +9,51 @@ lançamentos, contas, vendas por unidade). Ficam em repositórios, bancos e chav
 misturam**. Qualquer ligação entre os dois no futuro (por exemplo, uma venda fechada no painel de leads
 virar venda no financeiro) é uma decisão à parte, tomada com o usuário e desenhada antes.
 
+## COMECE POR AQUI (estado em 04/10/2026)
+
+**Antes de tudo, em qualquer computador:** este projeto trabalha na branch **`trabalho`**, não no `main` (o `main` é o
+site no ar). Este arquivo e o `CLAUDE.md` **só existem na `trabalho`**. Se você não os vê, está no `main`: rode
+`git fetch` e `git checkout trabalho` (uma vez só) e depois use "puxe do github" normalmente.
+
+**Os dois branches: o que cada um tem (conferido em 04/10/2026)**
+
+| | `main` | `trabalho` |
+|---|---|---|
+| Para que serve | O **site oficial no ar** (`www.chiadoconstrutora.com.br`). O `/admin` grava aqui | Onde **trabalhamos**; gera a **prévia** (`site-chaido-git-trabalho-chiado.vercel.app`) |
+| Último commit | `1ac5569` Etapa 2: SEO e acessibilidade básica | `4858871` regra "tudo dentro de `site/` é público" |
+| O que tem | Só a pasta `site/`: vitrine, imóveis, `sitemap.xml`, `robots.txt`, imagens leves | Tudo do `main` **mais** formulário, painel `/painel`, `/privacidade`, banco (`supabase/`), `tests/`, `docs/`, este resumo e o `CLAUDE.md` |
+| Este resumo e o `CLAUDE.md` | **Não existem** | Existem |
+| Como muda | Só com o seu **"podemos colocar no ar"** | Commits normais ("envie para o github") |
+
+A `trabalho` está 20 commits à frente do `main` (confira: `git log --oneline origin/main..trabalho`). O `main` pode ter
+commits que a `trabalho` não tem (edições do `/admin`): o "puxe do github" confere isso. **Este arquivo fica na raiz da `trabalho`;
+no outro computador, deixe a pasta sempre na `trabalho`.**
+
+**O que está pronto**
+1. **Site no ar (`main`):** vitrine com os empreendimentos Garrett e Carmo, imagens leves, prévia certa ao compartilhar
+   (`/imovel/<slug>`), `sitemap.xml`, `robots.txt`, dados estruturados e acessibilidade básica (Etapas 1 e 2).
+2. **Painel de leads (`trabalho`, ainda NÃO no ar):** formulário "Quero saber mais" na home e nos imóveis; banco no Supabase;
+   painel `/painel` com login, lista com números e filtros, ficha do lead (fase, anotações, histórico) e "Dados da pessoa"
+   (exportar e apagar, LGPD); `/privacidade`. Testado no Supabase real e na prévia
+   `site-chaido-git-trabalho-chiado.vercel.app`.
+
+**Onde paramos:** tudo do painel está construído e testado. Falta **colocar no ar**, e isso depende de decisões e ações suas.
+
+**O que ficou pendente, nesta ordem**
+1. **Resend (e-mail de aviso de lead):** adicionar os registros de DNS no Registro.br, verificar o domínio, criar a chave
+   de envio e colar `RESEND_API_KEY`, `LEAD_FROM_EMAIL` e `LEAD_NOTIFY_EMAILS` na Vercel. Sem isso a equipe não é avisada.
+   (O DNS parou porque o login do Registro.br estava só no outro computador.)
+2. **Plano do Supabase** (o gratuito pausa por inatividade; Pro US$ 25/mês), **Vercel Pro** (o Hobby não é para uso
+   comercial) e **advogado** lendo `/privacidade`.
+3. **Apagar os leads de teste** e fazer o **teste final** no celular e no computador.
+4. O seu **"podemos colocar no ar"**: só então a `trabalho` entra no `main`.
+
+**Depois:** cadastrar o `sitemap.xml` no Google Search Console; próximos projetos do plano maior (acessos do site, tráfego
+pago, divulgação, impulsionar vendas), cada um com desenho e "pode construir" próprios. Detalhes nas seções 5 e 6.
+
+**Rotina (2 computadores):** "puxe do github" → mandar ler os `.md` → trabalhar → "terminei de trabalhar, atualize os .md"
+→ "envie para o github". Regras completas no `CLAUDE.md`.
+
 ## 1. O que é e onde está
 
 - Site institucional da Chiado Construtora & Incorporadora (Praia Grande/SP). Vende casas de
