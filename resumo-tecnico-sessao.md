@@ -51,6 +51,8 @@ no outro computador, deixe a pasta sempre na `trabalho`.**
 **Depois:** cadastrar o `sitemap.xml` no Google Search Console; próximos projetos do plano maior (acessos do site, tráfego
 pago, divulgação, impulsionar vendas), cada um com desenho e "pode construir" próprios. Detalhes nas seções 5 e 6.
 
+**Passo a passo e motivos:** a seção 9 explica **como fazer** cada coisa (Supabase, Vercel, Resend, testes, publicar) e a seção 10, **por que decidimos assim**. As conversas NÃO sincronizam entre os computadores; só o que está escrito nos arquivos do repositório.
+
 **Rotina (2 computadores):** "puxe do github" → mandar ler os `.md` → trabalhar → "terminei de trabalhar, atualize os .md"
 → "envie para o github". Regras completas no `CLAUDE.md`.
 
@@ -85,7 +87,7 @@ pago, divulgação, impulsionar vendas), cada um com desenho e "pode construir" 
 | `api/painel-config.js` | Entrega ao painel a URL e a chave **pública** do Supabase |
 | `painel/` (`index.html`, `painel.css`, `js/*.js`) | Painel de leads em `/painel` (login, lista, ficha, dados da pessoa); `noindex` |
 
-Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (banco), `tests/*.test.mjs` (`node --test`), `docs/` (desenho, plano e `docs/README-VERCEL.md`, o passo a passo original de publicação), `CLAUDE.md` e este resumo. **Tudo que está dentro de `site/` é público na internet**: por isso o `README-VERCEL.md` saiu de lá em 03/10/2026.
+Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (banco), `tests/*.test.mjs` (`node --test`), `tests/ferramentas/` (banco de teste e servidores simulados; veja o `LEIAME.md` de lá), `docs/` (desenho, plano e `docs/README-VERCEL.md`, o passo a passo original de publicação), `CLAUDE.md` e este resumo. **Tudo que está dentro de `site/` é público na internet**: por isso o `README-VERCEL.md` saiu de lá em 03/10/2026.
 
 ## 3. Como funciona (o que não é óbvio)
 
@@ -231,6 +233,18 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   endereço antigo dá 404 e o resto segue funcionando. No site oficial o guia antigo continua público até a `trabalho` ir
   ao ar. **Regra:** nada interno (guias, planos, notas) vai dentro de `site/`.
 
+### 04/10/2026
+- No outro computador a sincronização deixou o usuário confuso: o resumo e o `CLAUDE.md` **só existem na `trabalho`** (na raiz
+  do `main` só há `site/`) e as conversas e a memória do Claude **não sincronizam entre computadores**. Soluções: bloco
+  "COMECE POR AQUI" no topo deste resumo (com a tabela do que cada branch tem), instrução para deixar o outro computador
+  sempre na `trabalho` (`git fetch` e `git checkout trabalho`, uma vez só) e passar para os arquivos do repositório tudo o que
+  só existia na conversa.
+- Guardadas no repositório as ferramentas de teste que estavam numa pasta temporária: `tests/ferramentas/` (banco de teste com
+  42 cenários e dois servidores simulados, com `LEIAME.md`), mais um `.gitignore` na raiz (`node_modules/`).
+- Acrescentadas as seções 9 (como fazer: testes, Supabase, Vercel, Resend, publicar) e 10 (por que decidimos assim).
+- **Nada novo foi colocado no ar.** Pendências inalteradas (seção 5): Resend/DNS, plano do Supabase, Vercel Pro, advogado,
+  apagar leads de teste, teste final e o "podemos colocar no ar".
+
 ## 8. Regras de trabalho
 
 - Só mexer neste projeto; nunca no Site Financeiro (repositório, pasta, banco ou chaves).
@@ -238,3 +252,81 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - Commits e explicações em português. Nunca pedir nem receber senhas ou chaves pelo chat.
 - **Rotina diária, em 2 computadores, sempre na branch `trabalho`:** começar com "puxe do github" (mostra onde parou e confere se o `main` tem edições do `/admin`) e terminar com "envie para o github" (atualiza este arquivo, faz commit e push **da branch atual**; no `main` o Claude para e pergunta, porque publica o site). Detalhes no `CLAUDE.md`.
 - No fim de cada sessão: atualizar a seção 7 (e as seções 4 a 6 se algo mudou) antes de encerrar.
+
+## 9. Como fazer (passo a passo)
+
+### Testes
+- **Todos os testes automáticos:** `node --test` na raiz do repositório (45 testes; 6 ficam "pulados" porque pedem chaves).
+- **Banco (42 cenários) e telas do painel/formulário sem o Supabase real:** `tests/ferramentas/LEIAME.md`.
+- **Acesso ao Supabase real, de fora (opcional):** no terminal do próprio usuário, defina `TESTE_SUPABASE_URL`,
+  `TESTE_ANON_KEY` e `TESTE_SERVICE_KEY` e rode `node --test tests/rls.test.mjs`. As chaves nunca vão para o chat nem para arquivos.
+- **Na prévia:** depois de cada `git push` da `trabalho`, a Vercel gera `site-chaido-git-trabalho-chiado.vercel.app` em cerca de
+  30 segundos; testar `/painel/`, `/privacidade`, o formulário em `/imovel/carmo` e `curl` nas funções `/api/*`.
+
+### Supabase (organização `Chiado Site`, projeto `Chiado Leads`, região São Paulo)
+- **Rodar SQL:** ícone `>_` na barra da esquerda (SQL Editor) → *New query* → colar → *Run*. Pode aparecer "Potential issue /
+  destructive operations" por causa de um `delete` dentro de uma função: confirmar. Sucesso aparece como "Success. No rows returned".
+- **Conferir o banco (esperado 6, 5, 1, 1):** `select (select count(*) from public.fases) as fases, (select count(*) from
+  public.motivos_perda) as motivos, (select count(*) from public.textos_consentimento) as consentimentos, (select count(*)
+  from public.usuarios_painel) as usuarios;`
+- **Ver os leads:** `select criado_em, nome, telefone, empreendimento_slug, fase, origem_fonte, retornos, aviso_email_ok from
+  public.leads order by criado_em desc;`
+- **Criar um usuário do painel:** *Authentication → Users → Add user → Create new user* (e-mail, senha forte, "Auto Confirm User"
+  marcado) e depois liberar: `insert into public.usuarios_painel (user_id, nome) select id, 'Nome' from auth.users where email =
+  'email@exemplo.com';` (o "Success" não diz quantas linhas entraram: conferir com a consulta de contagem).
+- **Cadastro aberto desligado:** *Authentication → Sign In / Providers → "Allow new users to sign up"* desligado.
+- **Chaves e endereço:** *Project Settings → API Keys* ("Publishable"/"Secret", ou "anon"/"service_role" no formato antigo) e
+  *Project Settings → Data API* (endereço do projeto). **Nunca** em captura de tela, no chat ou em arquivo do repositório.
+- **Apagar os leads de teste (antes de ir ao ar):** `truncate public.leads, public.envios_recentes cascade;`.
+- **Mudar o banco:** crie uma migração nova (`supabase/migrations/0002_...sql`), rode `banco-cenarios.mjs`, faça backup (exportar
+  `leads` em CSV pelo painel do Supabase) e só então rode no Supabase.
+
+### Vercel (projeto `site-chaido`, equipe Chiado, plano Hobby)
+- **Variável de ambiente:** *Settings → Environment Variables → Add Environment Variable*. Tipo **Config** para valores públicos
+  (`SUPABASE_URL`, `SUPABASE_ANON_KEY`) e **Secret** para os demais (`SUPABASE_SERVICE_ROLE_KEY`, `IP_HASH_SALT`, chaves do Resend).
+  *Environments*: **Production e Preview**. Variável nova só vale a partir de um novo deploy. Clicar em *Redeploy* só quando for ao ar.
+- **Gerar o `IP_HASH_SALT`** (no PowerShell do próprio usuário, nunca no chat; copiar sem tirar captura):
+  `$b = New-Object byte[] 24; [System.Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($b); ($b | ForEach-Object { $_.ToString('x2') }) -join ''`
+- **Ver o que as funções registraram:** painel da Vercel → *Logs*, ou pelo Claude (`get_runtime_logs`). Os erros mostram status, rota,
+  código e mensagem do Supabase, sem dados de pessoas.
+- **Voltar atrás se algo der errado no ar:** *Overview → Instant Rollback* na Vercel (volta o site oficial ao deploy anterior) e, no
+  git, `git revert` do commit no `main`.
+
+### Resend (conta `cv.cvwill@gmail.com`)
+- *Domains → Add Domain* → `chiadoconstrutora.com.br` (região São Paulo). Ele mostra os registros de DNS: TXT `resend._domainkey`,
+  CNAME `rsend`, CNAME `send` e, opcional, TXT `_dmarc` (só se ainda não existir um). Copiar os valores pelo **ícone de copiar** (a tela
+  os mostra cortados). **Não ligar "Enable Receiving"** (pediria um MX no domínio principal e poderia derrubar o e-mail da empresa).
+- Antes de adicionar, olhar a zona atual no Registro.br para não duplicar nem apagar nada. Depois: "I've added the records", esperar
+  verificar, criar uma *API key* só de envio e colar na Vercel como `RESEND_API_KEY`; `LEAD_FROM_EMAIL` (ex.: `Chiado leads
+  <leads@chiadoconstrutora.com.br>`, endereço que só envia) e `LEAD_NOTIFY_EMAILS` (um ou vários, separados por vírgula).
+
+### Colocar no ar
+1. Fazer os 6 itens de "Antes de colocar no ar" (seção 5).
+2. O usuário diz **"podemos colocar no ar"**. O Claude então traz o `main` para a `trabalho` (`git merge origin/main`, por causa das
+   edições do `/admin`), confere que nada mudou depois da validação, junta no `main` com `--ff-only`, envia, espera a Vercel publicar e
+   confere o site oficial: home, `/imovel/carmo`, `/privacidade`, `/sitemap.xml`, `/painel/` e um lead real enviado pelo celular.
+3. Depois do ar: cadastrar o `sitemap.xml` no Google Search Console e testar a prévia do link no WhatsApp.
+
+## 10. Por que decidimos assim
+
+- **`trabalho` e `main`:** o `main` é o site no ar (cada push publica) e o `/admin` grava direto nele. Trabalhar numa branch própria
+  protege o site, dá uma prévia para testar e deixa o "puxe/envie" igual nos dois computadores. O `main` só recebe com o ok do usuário.
+- **Supabase só do Chiado, separado do Financeiro:** dados, acessos e cobrança não se misturam, e um vendedor futuro vê só os leads.
+- **O formulário nunca fala com o banco:** só `/api/lead` grava, com a chave de servidor (que só existe na Vercel). Assim ninguém de fora
+  consegue gravar ou ler leads pelo navegador.
+- **Regras de acesso (RLS) em todas as tabelas:** o painel usa só a chave pública, e o banco decide quem lê. Sem política = ninguém acessa.
+  `registrar_lead` e `permitir_envio` só rodam pelo servidor.
+- **Telefone único e `retornos`:** a mesma pessoa que volta a preencher não vira outro lead; fica registrado que ela voltou.
+- **Anti-robô em duas camadas:** campo-isca invisível (robô recebe "sucesso" falso e nada é gravado) e limite de 5 envios por hora por IP
+  (guardado só como código embaralhado, `IP_HASH_SALT`). Envio em menos de 3 s devolve erro, e não sucesso falso, porque pode ser uma
+  pessoa com preenchimento automático e o lead não pode se perder em silêncio.
+- **LGPD:** consentimento desmarcado, nome e WhatsApp obrigatórios, versão e data do consentimento guardadas, exportar e apagar os dados
+  de uma pessoa no painel. O texto `v1` é igual no site e no banco (há teste).
+- **`urlBase`:** a tela "Data API" do Supabase mostra o endereço com `/rest/v1`; o código aceita com ou sem isso (erro PGRST125).
+- **CSV:** textos digitados por visitantes começam com apóstrofo se começarem com `= + - @` (proteção contra fórmulas de planilha); o
+  telefone é isento porque o banco só aceita `+55` e dígitos.
+- **Tudo dentro de `site/` é público:** por isso guias e planos ficam em `docs/`.
+- **Resend com domínio verificado:** o remetente de teste (`onboarding@resend.dev`) só envia para o dono da conta; para a equipe receber,
+  o domínio precisa estar verificado.
+- **Supabase Pro e Vercel Pro antes de ir ao ar:** o gratuito do Supabase pausa por inatividade e tem backup limitado; o Hobby da Vercel
+  não permite uso comercial.
