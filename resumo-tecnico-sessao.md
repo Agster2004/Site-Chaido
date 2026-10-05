@@ -43,6 +43,8 @@ no outro computador, deixe a pasta sempre na `trabalho`.**
 1. **Resend (e-mail de aviso de lead):** adicionar os registros de DNS no Registro.br, verificar o domínio, criar a chave
    de envio e colar `RESEND_API_KEY`, `LEAD_FROM_EMAIL` e `LEAD_NOTIFY_EMAILS` na Vercel. Sem isso a equipe não é avisada.
    (O DNS parou porque o login do Registro.br estava só no outro computador.)
+   **Atualização 05/10/2026:** CNAMEs `send` e `rsend` já estão no ar; falta o TXT `resend._domainkey` (a chave `p=` foi
+   colocada no domínio raiz por engano) e a verificação no Resend. Detalhes na seção 7, entrada de 05/10/2026.
 2. **Plano do Supabase** (o gratuito pausa por inatividade; Pro US$ 25/mês), **Vercel Pro** (o Hobby não é para uso
    comercial) e **advogado** lendo `/privacidade`.
 3. **Apagar os leads de teste** e fazer o **teste final** no celular e no computador.
@@ -244,6 +246,23 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - Acrescentadas as seções 9 (como fazer: testes, Supabase, Vercel, Resend, publicar) e 10 (por que decidimos assim).
 - **Nada novo foi colocado no ar.** Pendências inalteradas (seção 5): Resend/DNS, plano do Supabase, Vercel Pro, advogado,
   apagar leads de teste, teste final e o "podemos colocar no ar".
+
+### 05/10/2026
+- Computador trocado: feitos `git fetch` e `git checkout trabalho`; este computador passou a ficar na `trabalho` (commit `e9442c5`).
+- **DNS do Resend no Registro.br (em andamento).** O DNS do domínio é do próprio Registro.br (servidores `d.sec.dns.br` e
+  `e.sec.dns.br`); o MX do domínio raiz é do Google (`smtp.google.com`): por isso **"Enable Receiving" fica desligado** no Resend.
+  Estado conferido por consulta aos servidores do Registro.br:
+  - CNAME `send` -> `send.forge.rmta.net` e CNAME `rsend` -> `rsend-sae1.forge.rmta.net`: **no ar**.
+  - TXT `resend._domainkey` (chave DKIM, valor `p=MIGf...`): **ainda NÃO existe nesse nome.** O valor foi colocado por engano
+    no **domínio raiz** (TXT em `chiadoconstrutora.com.br`). **Falta criar** um TXT com Nome `resend._domainkey` e o mesmo valor.
+    Só depois de o Resend verificar o domínio, remover o TXT do raiz (conferir antes por consulta).
+  - TXT `_dmarc`: não criado (opcional; usar o valor do Resend, em `p=none`).
+  - Erro que apareceu ao criar os CNAMEs: campo **Nome vazio** (tentava criar no domínio raiz, que já tem A, MX e TXT). Nome certo:
+    só `send` / `rsend`, sem o domínio.
+  - Registros que **não** se mexe: A do raiz, MX do Google, TXT `_vercel`, CNAME `www` (Vercel).
+- Como saber se deu certo: no Resend, *Domains* -> o domínio -> *Verify DNS Records*; tudo verde = **Verified**. Depois, criar a API
+  key só de envio e colar na Vercel `RESEND_API_KEY`, `LEAD_FROM_EMAIL` e `LEAD_NOTIFY_EMAILS`.
+- **Onde parou:** retomar amanhã pela criação do TXT `resend._domainkey` e a verificação no Resend. Nada novo no ar.
 
 ## 8. Regras de trabalho
 
