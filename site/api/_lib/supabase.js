@@ -41,6 +41,8 @@ async function chamar(caminho, opcoes = {}) {
   return bruto ? JSON.parse(bruto) : null;
 }
 
+export const ler = (caminho) => chamar(caminho);
+
 export const rpc = (nome, args) =>
   chamar('/rest/v1/rpc/' + nome, { method: 'POST', body: JSON.stringify(args) });
 
