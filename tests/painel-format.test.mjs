@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  escapeHtml, tempoRelativo, horasDesde, aguardandoContato, resumoNumeros,
+  escapeHtml, tempoRelativo, horasDesde, aguardandoContato, textoAguardando, resumoNumeros,
   filtrarLeads, valorOrigem, telefoneBonito, linkWhatsapp, linkTelefone, gerarCsv,
 } from '../site/painel/js/format.js';
 
@@ -33,6 +33,14 @@ test('aguardandoContato: só lead novo, sem contato, com mais de 24 h', () => {
   assert.equal(aguardandoContato(lead({ criado_em: antes(23 * 60) }), AGORA), false);
   assert.equal(aguardandoContato(lead({ criado_em: antes(26 * 60), ultimo_contato_em: antes(60) }), AGORA), false);
   assert.equal(aguardandoContato(lead({ criado_em: antes(26 * 60), fase: 'contatado' }), AGORA), false);
+});
+
+test('textoAguardando mostra dias, não horas', () => {
+  assert.equal(textoAguardando(antes(25 * 60), AGORA), 'aguardando contato há 1 dia');
+  assert.equal(textoAguardando(antes(47 * 60), AGORA), 'aguardando contato há 1 dia');
+  assert.equal(textoAguardando(antes(48 * 60), AGORA), 'aguardando contato há 2 dias');
+  assert.equal(textoAguardando(antes(232 * 60), AGORA), 'aguardando contato há 9 dias');
+  assert.doesNotMatch(textoAguardando(antes(232 * 60), AGORA), /\d+ h\b/);
 });
 
 test('resumoNumeros', () => {

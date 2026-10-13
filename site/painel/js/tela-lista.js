@@ -1,6 +1,6 @@
 import { estado, moldura, mensagemErro, nomeFase, nomeEmp, baixar, h } from './ui.js';
 import * as api from './api.js';
-import { tempoRelativo, horasDesde, aguardandoContato, resumoNumeros, filtrarLeads, valorOrigem, gerarCsv } from './format.js';
+import { tempoRelativo, textoAguardando, aguardandoContato, resumoNumeros, filtrarLeads, valorOrigem, gerarCsv } from './format.js';
 
 export async function telaLista() {
   moldura('<p class="carregando">Carregando…</p>');
@@ -13,7 +13,7 @@ export async function telaLista() {
 }
 
 function quando(l, agora) {
-  const texto = aguardandoContato(l, agora) ? 'aguardando contato há ' + horasDesde(l.criado_em, agora) + ' h' : tempoRelativo(l.criado_em, agora);
+  const texto = aguardandoContato(l, agora) ? textoAguardando(l.criado_em, agora) : tempoRelativo(l.criado_em, agora);
   const voltou = l.retornos ? ' · voltou ' + l.retornos + (l.retornos === 1 ? ' vez' : ' vezes') : '';
   return h(nomeEmp(l.empreendimento_slug)) + ' · ' + h(valorOrigem(l)) + ' · ' + h(texto) + h(voltou);
 }
@@ -49,7 +49,7 @@ function desenhar() {
     '<tr class="' + classes(l, agora) + '"><td><a href="#/lead/' + h(l.id) + '"><strong>' + h(l.nome) + '</strong></a></td>' +
     '<td>' + h(nomeEmp(l.empreendimento_slug)) + '</td><td>' + h(valorOrigem(l)) + '</td>' +
     '<td><span class="fase fase-' + h(l.fase) + '">' + h(nomeFase(l.fase)) + '</span></td>' +
-    '<td>' + h(aguardandoContato(l, agora) ? 'aguardando contato há ' + horasDesde(l.criado_em, agora) + ' h' : tempoRelativo(l.criado_em, agora)) + '</td></tr>').join('');
+    '<td>' + h(aguardandoContato(l, agora) ? textoAguardando(l.criado_em, agora) : tempoRelativo(l.criado_em, agora)) + '</td></tr>').join('');
 
   moldura(
     '<div class="numeros">' +

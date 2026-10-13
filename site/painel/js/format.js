@@ -28,6 +28,11 @@ export function aguardandoContato(lead, agora = Date.now()) {
   return lead.fase === 'novo' && !lead.ultimo_contato_em && agora - Date.parse(lead.criado_em) > 24 * 3600000;
 }
 
+// "aguardando contato há 9 dias": só é usado depois de 24 h, então o tempo sai sempre em dias.
+export function textoAguardando(iso, agora = Date.now()) {
+  return 'aguardando contato ' + tempoRelativo(iso, agora);
+}
+
 export function resumoNumeros(leads, agora = Date.now()) {
   const ref = new Date(agora);
   const mesmoMes = (iso) => {
