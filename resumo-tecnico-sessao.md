@@ -87,6 +87,7 @@ pago, divulgação, impulsionar vendas), cada um com desenho e "pode construir" 
 | `assets/utm.js`, `assets/lead-form.js`, `data/consentimento.json` | Formulário de interesse, origem da visita e texto de consentimento (`v1`) |
 | `api/lead.js`, `api/_lib/*.js` | Recebe o lead (`POST /api/lead`): validação, anti-robô, Supabase e e-mail (Resend) |
 | `api/painel-config.js` | Entrega ao painel a URL e a chave **pública** do Supabase |
+| `api/keep-alive.js` | Leitura diária em `fases` para o Supabase gratuito não pausar; chamada pelo cron do `vercel.json` (`0 12 * * *`). Cron só roda em **Produção** (o `main`), não nas prévias. Aceita `CRON_SECRET` se existir |
 | `painel/` (`index.html`, `painel.css`, `js/*.js`) | Painel de leads em `/painel` (login, lista, ficha, dados da pessoa); `noindex` |
 
 Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (banco), `tests/*.test.mjs` (`node --test`), `tests/ferramentas/` (banco de teste e servidores simulados; veja o `LEIAME.md` de lá), `docs/` (desenho, plano e `docs/README-VERCEL.md`, o passo a passo original de publicação), `CLAUDE.md` e este resumo. **Tudo que está dentro de `site/` é público na internet**: por isso o `README-VERCEL.md` saiu de lá em 03/10/2026.
@@ -108,7 +109,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - Fotos do Carmo foram reduzidas a 1400 px (a página do Carmo foi de 4,3 MB para 1,8 MB). Os originais
   de 2000 px só existem no histórico do git. **Fotos novas enviadas pelo painel não são reduzidas.**
 - Sem build e sem `package.json`: HTML/CSS/JS puros e funções da Vercel que usam só `fetch`.
-- Testes automáticos: `node --test` na raiz (sem instalar nada; 45 testes, 39 passam e 6 são pulados porque precisam de
+- Testes automáticos: `node --test` na raiz (sem instalar nada; 50 testes, 44 passam e 6 são pulados porque precisam de
   chaves do Supabase: `tests/rls.test.mjs`). Além deles, as telas foram testadas num servidor local com Supabase
   simulado e as funções, com `curl` na prévia da Vercel.
 
@@ -139,8 +140,8 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   `supabase/migrations/0001_leads.sql` aplicada e o usuário William liberado em `usuarios_painel`; funções
   `/api/lead`, `/api/painel-config` e `/api/sitemap` (com `/privacidade`); formulário "Quero saber mais" na home e nas
   páginas dos imóveis; painel `/painel` (login, lista com 4 números e filtros, exportar CSV, ficha do lead com
-  fase/anotações/histórico, "Dados da pessoa" com exportar e apagar); `/privacidade`; 45 testes automáticos
-  (`node --test`: 39 passam, 6 pulados que precisam de chaves: `tests/rls.test.mjs`).
+  fase/anotações/histórico, "Dados da pessoa" com exportar e apagar); `/privacidade`; 50 testes automáticos
+  (`node --test`: 44 passam, 6 pulados que precisam de chaves: `tests/rls.test.mjs`).
 - **Verificado no Supabase real:** contagens 6/5/1/1 (fases, motivos, consentimento, usuário); RLS ligada nas 7
   tabelas; visitante sem permissão nas funções `registrar_lead` e `permitir_envio`; lead enviado pelo celular gravado;
   repetir o telefone soma `retornos`; login, lista, mudar fase, anotar e exportar pelo painel (arquivo JSON com lead e
@@ -293,7 +294,22 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   (Murray Lançamentos e HLA Construtora): dados práticos nos cards (entrada, renda necessária, distância do mar, ano de entrega),
   selo de status e "atualizado em", UTMs nos links dos anúncios, e blog como projeto à parte; filtros só com muitos imóveis. Nada disso
   foi construído ainda (pedem desenho e "pode construir"), à exceção da medição de visitas.
-- **Onde parou:** item 1 de "Antes de colocar no ar" feito (Resend). Faltam os itens 2 a 6 da seção 5. Medição de visitas no ar.
+- **Supabase pausou por inatividade (aconteceu de verdade, ~13/10/2026).** O projeto `Chiado Leads` (organização `Chiado Site`, plano
+  Free) ficou pausado; o endereço do projeto deixou de resolver no DNS (NXDOMAIN) e o formulário/painel da prévia pararam. Dados
+  seguros; a tela do Supabase diz que dá para retomar até 16/11/2027. Retomado pelo usuário com **Resume project** (gratuito); depois de
+  alguns minutos o login (`/auth/v1/health`) voltou a responder 200 (antes, 502 enquanto subia). O site oficial e os anúncios (que vão ao
+  WhatsApp) não foram afetados. **Lição:** confirma o risco do plano gratuito; Pro (a partir de US$ 25/mês por organização, conferido em
+  supabase.com/pricing) nunca pausa. Cuidado: o outro projeto do Supabase (`chiado-financeiro-teste`, organização `Chiado Construtora`) é
+  do Site Financeiro e não se mexe.
+- **Decisão: seguir no plano gratuito do Supabase por enquanto** (Pro a partir de US$ 25/mês por organização fica para antes de ir ao ar).
+  Construído o **keep-alive** (pedido "pode construir", 13/10/2026): `site/api/keep-alive.js` (GET; lê `fases?select=id&limit=1`; 401 se
+  `CRON_SECRET` existir e não bater; 500 sem vazar detalhes), `ler()` em `api/_lib/supabase.js`, `crons` diário em `site/vercel.json` e
+  `tests/keep-alive.test.mjs` (5 testes; total 50, 44 passam, 6 pulados). Testado na prévia: `GET /api/keep-alive` -> 200 `{"ok":true}`,
+  `POST` -> 405. Commit `7ac41d8` na `trabalho`. **Limite importante:** o cron só dispara no deploy de Produção; como o `main` ainda não
+  tem este código, **só funciona sozinho depois do "podemos colocar no ar"** do painel. Alternativa oferecida (não decidida): publicar antes
+  só um keep-alive mínimo no `main`, em pacote separado. O Supabase não garante que a leitura conte como atividade (relato da comunidade).
+- **Onde parou:** item 1 de "Antes de colocar no ar" feito (Resend). Faltam os itens 2 a 6 da seção 5 (no item 2, a decisão atual é ficar no
+  plano gratuito do Supabase com o keep-alive, e rever o Pro antes de ir ao ar). Medição de visitas no ar; keep-alive pronto na `trabalho`.
 
 ## 8. Regras de trabalho
 
@@ -306,7 +322,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 ## 9. Como fazer (passo a passo)
 
 ### Testes
-- **Todos os testes automáticos:** `node --test` na raiz do repositório (45 testes; 6 ficam "pulados" porque pedem chaves).
+- **Todos os testes automáticos:** `node --test` na raiz do repositório (50 testes; 6 ficam "pulados" porque pedem chaves).
 - **Banco (42 cenários) e telas do painel/formulário sem o Supabase real:** `tests/ferramentas/LEIAME.md`.
 - **Acesso ao Supabase real, de fora (opcional):** no terminal do próprio usuário, defina `TESTE_SUPABASE_URL`,
   `TESTE_ANON_KEY` e `TESTE_SERVICE_KEY` e rode `node --test tests/rls.test.mjs`. As chaves nunca vão para o chat nem para arquivos.

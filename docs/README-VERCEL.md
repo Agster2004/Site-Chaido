@@ -12,7 +12,8 @@ existem só para o login do painel administrativo funcionar. Siga na ordem.
 > **Variáveis de ambiente do projeto na Vercel** (só os nomes; os valores ficam na Vercel, nunca no repositório):
 > `OAUTH_CLIENT_ID`, `OAUTH_CLIENT_SECRET` (login do `/admin`); `SUPABASE_URL`, `SUPABASE_ANON_KEY`,
 > `SUPABASE_SERVICE_ROLE_KEY`, `IP_HASH_SALT` (painel de leads); `RESEND_API_KEY`, `LEAD_FROM_EMAIL`,
-> `LEAD_NOTIFY_EMAILS` (e-mail de aviso de lead, ainda não criadas); `SITE_URL` (opcional, domínio oficial).
+> `LEAD_NOTIFY_EMAILS` (e-mail de aviso de lead, criadas em 09/10/2026); `SITE_URL` (opcional, domínio oficial);
+> `CRON_SECRET` (opcional: se existir, `/api/keep-alive` só aceita a chamada do cron da Vercel, que já envia essa senha).
 
 ## 1. Subir o código pro GitHub
 
