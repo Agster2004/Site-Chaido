@@ -3,9 +3,10 @@ import assert from 'node:assert/strict';
 
 process.env.SUPABASE_URL = 'https://proj.supabase.co';
 process.env.SUPABASE_SERVICE_ROLE_KEY = 'chave-de-teste';
+process.env.VISITA_HOSTS = 'site.test'; // endereço extra aceito só nos testes
 
 const { default: handler } = await import('../site/api/visita.js');
-const { ehBot, limparTexto, caminhoPermitido } = await import('../site/api/_lib/visita.js');
+const { ehBot, limparTexto, caminhoPermitido, hostContavel } = await import('../site/api/_lib/visita.js');
 
 function criarRes() {
   const r = {
@@ -145,6 +146,39 @@ test('corpo que chega como texto (sendBeacon) também funciona', async () => {
   const chamadas = instalarFetch();
   const res = criarRes();
   await handler(req(JSON.stringify(corpoOk())), res);
+  assert.equal(res.statusCode, 204);
+  assert.equal(chamadasRpc(chamadas).length, 1);
+});
+
+test('hostContavel: só o site oficial (www e sem www) e os endereços extras de teste', () => {
+  assert.equal(hostContavel('www.chiadoconstrutora.com.br'), true);
+  assert.equal(hostContavel('chiadoconstrutora.com.br'), true);
+  assert.equal(hostContavel('WWW.ChiadoConstrutora.com.br:443'), true);
+  assert.equal(hostContavel('site-chaido-git-trabalho-chiado.vercel.app'), false);
+  assert.equal(hostContavel('site-chaido-abc123-chiado.vercel.app'), false);
+  assert.equal(hostContavel('localhost:4173'), false);
+  assert.equal(hostContavel('chiadoconstrutora.com.br.evil.com'), false);
+  assert.equal(hostContavel(''), false);
+  assert.equal(hostContavel(undefined), false);
+  assert.equal(hostContavel('site.test', 'site.test'), true);
+  assert.equal(hostContavel('outro.test', 'site.test, localhost:4173'), false);
+  assert.equal(hostContavel('localhost:4173', 'site.test, localhost:4173'), true);
+});
+
+test('visita feita na prévia (endereço que não é o oficial) é ignorada e não grava', async () => {
+  const chamadas = instalarFetch();
+  const res = criarRes();
+  const previa = 'site-chaido-git-trabalho-chiado.vercel.app';
+  await handler(req(corpoOk(), { headers: { host: previa, origin: 'https://' + previa, 'x-forwarded-proto': 'https', 'user-agent': NAV } }), res);
+  assert.equal(res.statusCode, 204);
+  assert.equal(chamadasRpc(chamadas).length, 0);
+});
+
+test('visita feita no site oficial é gravada', async () => {
+  const chamadas = instalarFetch();
+  const res = criarRes();
+  const oficial = 'www.chiadoconstrutora.com.br';
+  await handler(req(corpoOk(), { headers: { host: oficial, origin: 'https://' + oficial, 'x-forwarded-proto': 'https', 'user-agent': NAV } }), res);
   assert.equal(res.statusCode, 204);
   assert.equal(chamadasRpc(chamadas).length, 1);
 });

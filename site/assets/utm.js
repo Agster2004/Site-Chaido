@@ -62,6 +62,11 @@
     return { caminho: caminho, fonte: fonte, meio: meio, campanha: campanha };
   }
 
+  // Só o site oficial conta visitas; a prévia da Vercel e o computador de teste não entram nos números.
+  function enderecoContavel(host) {
+    return host === 'www.chiadoconstrutora.com.br' || host === 'chiadoconstrutora.com.br';
+  }
+
   // Quem não quer ser contado (a equipe testando) abre o site uma vez com ?nao_contar=1 (e ?nao_contar=0 desfaz).
   function acaoNaoContar(busca) {
     var v = '';
@@ -72,7 +77,7 @@
   }
 
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { rotuloOrigem: rotuloOrigem, comOrigem: comOrigem, corpoVisita: corpoVisita, acaoNaoContar: acaoNaoContar };
+    module.exports = { rotuloOrigem: rotuloOrigem, comOrigem: comOrigem, corpoVisita: corpoVisita, acaoNaoContar: acaoNaoContar, enderecoContavel: enderecoContavel };
   }
   if (typeof document === 'undefined') return;
 
@@ -86,6 +91,7 @@
   function contarVisita(origem) {
     try {
       if (location.protocol.indexOf('http') !== 0) return;
+      if (!enderecoContavel(location.hostname)) return;
       if (localStorage.getItem('chiado_nao_contar')) return;
       var corpo = JSON.stringify(corpoVisita(origem, location.search));
       if (navigator.sendBeacon) {

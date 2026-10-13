@@ -12,6 +12,7 @@ process.env.RESEND_API_KEY = 're_teste';
 process.env.LEAD_NOTIFY_EMAILS = 'dono@exemplo.com';
 process.env.LEAD_FROM_EMAIL = 'Chiado <onboarding@resend.dev>';
 process.env.IP_HASH_SALT = 'sal-de-teste';
+process.env.VISITA_HOSTS = 'localhost:4173'; // a contagem real só vale no site oficial
 
 const chamadas = [];
 const fetchReal = globalThis.fetch;

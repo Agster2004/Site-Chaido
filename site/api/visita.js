@@ -2,7 +2,7 @@
 // nenhum IP, nome ou cookie. O visitante nunca vê erro daqui: se o banco falhar, a visita só não é contada.
 import { rpc } from './_lib/supabase.js';
 import { lerJsonProprio } from './_lib/proprio.js';
-import { ehBot, limparTexto, caminhoPermitido } from './_lib/visita.js';
+import { ehBot, limparTexto, caminhoPermitido, hostContavel } from './_lib/visita.js';
 
 function lerCorpo(req) {
   if (req.body && typeof req.body === 'object') return req.body;
@@ -32,6 +32,9 @@ export default async function handler(req, res) {
     }
     if (host !== req.headers.host) return res.status(403).json({ ok: false });
   }
+
+  // Só o site oficial conta: visitas na prévia da Vercel e em testes ficam de fora dos números.
+  if (!hostContavel(req.headers.host, process.env.VISITA_HOSTS)) return res.status(204).end();
 
   // Robôs e prévias de link (WhatsApp, Facebook, etc.) não são visitas.
   if (ehBot(req.headers['user-agent'])) return res.status(204).end();

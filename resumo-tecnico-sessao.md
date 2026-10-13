@@ -13,7 +13,7 @@ virar venda no financeiro) é uma decisão à parte, tomada com o usuário e des
 
 > **NO AR desde 13/10/2026:** a `trabalho` foi publicada no `main` (commit `ddb4082`, avanço simples) com o "podemos colocar no ar" do usuário. O site
 > oficial agora tem formulário, `/painel`, `/privacidade`, contador de visitas, origem no WhatsApp e keep-alive. No momento da publicação `main` e `trabalho` estavam no mesmo
-> commit (`ddb4082`); depois a `trabalho` andou à frente com o ajuste do menu, que foi publicado no segundo "podemos colocar no ar" (seção 7, "Ajustes depois de ir ao ar"); confira sempre com `git log --oneline origin/main..trabalho`; o `main` passa a ter também este resumo, o `CLAUDE.md`, `docs/`, `tests/` e `supabase/` (fora de `site/`, não ficam públicos). Detalhes e
+> commit (`ddb4082`); depois a `trabalho` andou à frente com o ajuste do menu e o botão "Quero saber mais", publicados no segundo e no terceiro "podemos colocar no ar" (seção 7, "Ajustes depois de ir ao ar"); confira sempre com `git log --oneline origin/main..trabalho`; o `main` passa a ter também este resumo, o `CLAUDE.md`, `docs/`, `tests/` e `supabase/` (fora de `site/`, não ficam públicos). Detalhes e
 > o que ainda falta: veja "O que ficou pendente" e a seção 7 (entrada "13/10/2026, no ar"). Onde o texto abaixo disser "ainda NÃO no ar", leia "agora no ar".
 
 **Antes de tudo, em qualquer computador:** este projeto trabalha na branch **`trabalho`**, não no `main` (o `main` é o
@@ -25,7 +25,7 @@ site no ar). Este arquivo e o `CLAUDE.md` **só existem na `trabalho`**. Se voc�
 | | `main` | `trabalho` |
 |---|---|---|
 | Para que serve | O **site oficial no ar** (`www.chiadoconstrutora.com.br`). O `/admin` grava aqui | Onde **trabalhamos**; gera a **prévia** (`site-chaido-git-trabalho-chiado.vercel.app`) |
-| Último commit | `44518dd` (13/10/2026): painel completo, contador de visitas e menu com a aba Visitas ao lado de Leads | o mais recente da `trabalho` (`git log -1`); igual ao `main` até o próximo ajuste |
+| Último commit | `91aa9ad` (13/10/2026): painel completo, contador de visitas, menu com a aba Visitas ao lado de Leads e botão "Quero saber mais" | o mais recente da `trabalho` (`git log -1`); igual ao `main` até o próximo ajuste |
 | O que tem | A pasta `site/` (vitrine, imóveis, formulário, `/painel`, `/privacidade`, funções `api/`, `sitemap.xml`, `robots.txt`) e, fora dela, `supabase/`, `tests/`, `docs/`, este resumo e o `CLAUDE.md` | O mesmo que o `main`, mais o que estiver sendo feito e ainda não foi publicado |
 | Este resumo e o `CLAUDE.md` | Existem (desde que a `trabalho` entrou no `main`) | Existem |
 | Como muda | Só com o seu **"podemos colocar no ar"** | Commits normais ("envie para o github") |
@@ -381,10 +381,17 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - Regra reforçada pelo uso: depois de ir ao ar, o fluxo continua o mesmo (mudar na `trabalho`, testar na prévia, esperar o "podemos colocar no ar" para o `main`);
   o `/admin` continua gravando direto no `main`, então o "puxe do github" confere o `main` antes de qualquer publicação.
 
-- **Botão "Quero saber mais" (13/10/2026, na `trabalho`):** o usuário não achava o formulário no site oficial: ele existe (conferido em navegador limpo), mas fica no meio da
+- **Botão "Quero saber mais" (13/10/2026, NO AR):** o usuário não achava o formulário no site oficial: ele existe (conferido em navegador limpo), mas fica no meio da
   home e nenhum item de cima levava até ele ("Contato" e "Fale conosco" vão ao WhatsApp). Acrescentado o link **Quero saber mais** (`#interesse`) no menu da home e da página dos
   imóveis e um botão no início da home, ao lado de "Ver Residencial Garrett/Carmo" (`site/index.html`, `site/imovel.html`). Testado no navegador (computador e celular): leva ao
-  formulário, o menu do celular fecha ao clicar. **Só na prévia até o próximo "podemos colocar no ar".** Se alguém ainda não vir o formulário, pode ser versão antiga no navegador (atualização forçada).
+  formulário, o menu do celular fecha ao clicar. **Publicado no oficial (terceiro "podemos colocar no ar" do dia, `main` em `91aa9ad`, avanço simples, nada novo do `/admin`)**; conferido no ar: home, imóveis, privacidade, painel e sitemap
+  com 200, 2 links `#interesse` na home, 1 no menu do Carmo, keep-alive ok, e o clique do botão no site real desce até o formulário. Se alguém ainda não vir o formulário, pode ser versão antiga no navegador (atualização forçada).
+
+- **Contador só conta no site oficial (13/10/2026, na `trabalho`):** as visitas feitas na prévia da Vercel e em testes estavam sendo somadas às reais (mesmo banco). Agora o
+  navegador (`utm.js`, `enderecoContavel`) só manda a visita se o endereço for `www.chiadoconstrutora.com.br` ou `chiadoconstrutora.com.br`, e o servidor (`api/visita.js`,
+  `hostContavel`) também ignora qualquer outro endereço (204, sem gravar). `VISITA_HOSTS` (variável, só para testes/simulações; o servidor de simulação usa `localhost:4173`)
+  permite endereços extras. 82 testes (76 passam, 6 pulados). **Só vale no oficial depois do próximo "podemos colocar no ar".** As linhas de teste que já estão no banco continuam
+  (`delete from public.visitas_diarias where fonte = 'teste-claude';`).
 
 ## 8. Regras de trabalho
 

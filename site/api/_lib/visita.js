@@ -25,3 +25,19 @@ export function caminhoPermitido(caminho, slugsValidos) {
   const m = c.match(/^\/imovel\/([A-Za-z0-9_-]+)$/);
   return m && slugsValidos.includes(m[1]) ? c : null;
 }
+
+// Só conta no site oficial. A prévia da Vercel e os testes não entram nos números.
+// `extras` (variável VISITA_HOSTS, separada por vírgula) existe só para testes e simulações locais.
+const HOSTS_OFICIAIS = ['www.chiadoconstrutora.com.br', 'chiadoconstrutora.com.br'];
+
+export function hostContavel(host, extras = '') {
+  const h = String(host ?? '').trim().toLowerCase();
+  if (!h) return false;
+  const semPorta = h.replace(/:\d+$/, '');
+  if (HOSTS_OFICIAIS.includes(semPorta)) return true;
+  return String(extras ?? '')
+    .split(',')
+    .map((x) => x.trim().toLowerCase())
+    .filter(Boolean)
+    .some((x) => x === h || x === semPorta);
+}
