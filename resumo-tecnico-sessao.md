@@ -9,7 +9,12 @@ lançamentos, contas, vendas por unidade). Ficam em repositórios, bancos e chav
 misturam**. Qualquer ligação entre os dois no futuro (por exemplo, uma venda fechada no painel de leads
 virar venda no financeiro) é uma decisão à parte, tomada com o usuário e desenhada antes.
 
-## COMECE POR AQUI (estado em 13/10/2026)
+## COMECE POR AQUI (estado em 13/10/2026, depois de colocar no ar)
+
+> **NO AR desde 13/10/2026:** a `trabalho` foi publicada no `main` (commit `ddb4082`, avanço simples) com o "podemos colocar no ar" do usuário. O site
+> oficial agora tem formulário, `/painel`, `/privacidade`, contador de visitas, origem no WhatsApp e keep-alive. No momento da publicação `main` e `trabalho` estavam no mesmo
+> commit (`ddb4082`); depois a `trabalho` voltou a andar à frente (veja "Ajustes depois de ir ao ar" na seção 7; confira com `git log --oneline origin/main..trabalho`); o `main` passa a ter também este resumo, o `CLAUDE.md`, `docs/`, `tests/` e `supabase/` (fora de `site/`, não ficam públicos). Detalhes e
+> o que ainda falta: veja "O que ficou pendente" e a seção 7 (entrada "13/10/2026, no ar"). Onde o texto abaixo disser "ainda NÃO no ar", leia "agora no ar".
 
 **Antes de tudo, em qualquer computador:** este projeto trabalha na branch **`trabalho`**, não no `main` (o `main` é o
 site no ar). Este arquivo e o `CLAUDE.md` **só existem na `trabalho`**. Se você não os vê, está no `main`: rode
@@ -22,7 +27,7 @@ site no ar). Este arquivo e o `CLAUDE.md` **só existem na `trabalho`**. Se voc�
 | Para que serve | O **site oficial no ar** (`www.chiadoconstrutora.com.br`). O `/admin` grava aqui | Onde **trabalhamos**; gera a **prévia** (`site-chaido-git-trabalho-chiado.vercel.app`) |
 | Último commit | `61b86b6` medição de visitas (Vercel Web Analytics, no ar desde 13/10/2026) | o mais recente da `trabalho` (`git log -1`); já contém o `main` |
 | O que tem | Só a pasta `site/`: vitrine, imóveis, `sitemap.xml`, `robots.txt`, imagens leves | Tudo do `main` **mais** formulário, painel `/painel`, `/privacidade`, banco (`supabase/`), `tests/`, `docs/`, este resumo e o `CLAUDE.md` |
-| Este resumo e o `CLAUDE.md` | **Não existem** | Existem |
+| Este resumo e o `CLAUDE.md` | Existem (desde que a `trabalho` entrou no `main`) | Existem |
 | Como muda | Só com o seu **"podemos colocar no ar"** | Commits normais ("envie para o github") |
 
 A `trabalho` está à frente do `main` (confira: `git log --oneline origin/main..trabalho`). O `main` pode ter
@@ -32,11 +37,11 @@ no outro computador, deixe a pasta sempre na `trabalho`.**
 **O que está pronto**
 1. **Site no ar (`main`):** vitrine com os empreendimentos Garrett e Carmo, imagens leves, prévia certa ao compartilhar
    (`/imovel/<slug>`), `sitemap.xml`, `robots.txt`, dados estruturados e acessibilidade básica (Etapas 1 e 2).
-2. **Painel de leads (`trabalho`, ainda NÃO no ar):** formulário "Quero saber mais" na home e nos imóveis; banco no Supabase;
+2. **Painel de leads (NO AR desde 13/10/2026):** formulário "Quero saber mais" na home e nos imóveis; banco no Supabase;
    painel `/painel` com login, lista com números e filtros, ficha do lead (fase, anotações, histórico) e "Dados da pessoa"
    (exportar e apagar, LGPD; na ficha há os botões **Exportar dados** e **Apagar dados**); `/privacidade`. Testado no Supabase real e na prévia
    `site-chaido-git-trabalho-chiado.vercel.app`.
-3. **Contador de visitas dentro do painel (`trabalho`, ainda NÃO no ar):** tela `#/visitas` com visitas hoje, 7 e 30 dias, por dia, por origem
+3. **Contador de visitas dentro do painel (NO AR desde 13/10/2026):** tela `#/visitas` com visitas hoje, 7 e 30 dias, por dia, por origem
    (instagram/bio, anúncio pago, Google, direto), por página de entrada e conversão em lead. Migração `0002_visitas.sql` **já aplicada** no
    Supabase e verificada (13/10/2026). Equipe se exclui abrindo o site uma vez com `?nao_contar=1`. Seção "Contagem de visitas" na `/privacidade`.
 4. **Origem na mensagem do WhatsApp (`trabalho`):** quem entra por link com UTM (ex.: bio do Instagram) e clica em um botão de WhatsApp do site envia
@@ -137,7 +142,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   apagadas `docs-continuidade` e `painel-leads` (nada se perdeu: tudo está na `trabalho`). Hoje existem só `main`
   (site no ar) e `trabalho` (branch de trabalho nos dois computadores).
 
-## 5. Painel de leads (construído na `trabalho`; ainda NÃO está no ar)
+## 5. Painel de leads (NO AR desde 13/10/2026; o texto desta seção foi escrito antes de publicar)
 
 - Parte 1 de 5 do plano "painel da Chiado": **captar leads e acompanhar a venda**. As outras, nesta
   ordem: 2 acessos do site → 5 tráfego pago → 3 divulgação → 4 impulsionar vendas.
@@ -148,7 +153,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   Novo → Contatado → Visita agendada → Proposta → Vendido (+ Perdido), lead com o mesmo telefone não duplica
   (soma `retornos`).
 - **Estado (03/10/2026):** Tarefas 1 a 8 do plano **construídas e testadas** na branch `trabalho` (à frente do `main`: veja `git log --oneline origin/main..trabalho`); a Tarefa 9 (verificação final) foi feita, falta decidir/fazer os itens abaixo antes de ir ao ar.
-  **O site oficial (`main`) ainda NÃO tem o formulário, o `/painel` nem o `/privacidade`.**
+  *(Escrito antes de publicar: então o `main` ainda não tinha o formulário, o `/painel` nem o `/privacidade`. Agora tem.)*
 - **O que existe:** banco no Supabase (projeto `Chiado Leads`, organização `Chiado Site`, São Paulo) com
   `supabase/migrations/0001_leads.sql` aplicada e o usuário William liberado em `usuarios_painel`; funções
   `/api/lead`, `/api/painel-config` e `/api/sitemap` (com `/privacidade`); formulário "Quero saber mais" na home e nas
@@ -349,6 +354,29 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   com servidores simulados: o beacon chega em `/api/visita`, só 1 visita por sessão, e a opção de não contar funciona. **Migração 0002 aplicada no Supabase pelo usuário (13/10/2026) e verificada:** a tabela existe (leitura anônima devolve lista vazia pelas regras de acesso) e `registrar_visita` nega execução a anônimo (42501). Uma visita de teste (origem `teste-claude / teste`, página `/privacidade`) apareceu na tela Visitas do painel da prévia: o contador funciona de ponta a ponta. Para limpar o teste: `delete from public.visitas_diarias where fonte = 'teste-claude';`. Os números podem diferir do Vercel Analytics. Material do advogado (`docs/politica-privacidade-para-revisao-juridica.pdf`) regenerado com a nova seção.
 - **Onde parou:** item 1 de "Antes de colocar no ar" feito (Resend). Faltam os itens 2 a 6 da seção 5 (no item 2, a decisão atual é ficar no
   plano gratuito do Supabase com o keep-alive, e rever o Pro antes de ir ao ar). Medição de visitas no ar; keep-alive pronto na `trabalho`.
+
+### 13/10/2026, no ar
+- **Colocado no ar** por ordem do usuário ("podemos colocar no ar"), seguindo o roteiro: `git fetch`, conferido que o `main` (em `61b86b6`) não tinha nada novo
+  além da `trabalho` (nenhuma edição do `/admin`), árvore limpa e 78 testes sem falhas (72 passam, 6 pulados), e `git push origin HEAD:main` como avanço simples
+  (`61b86b6..ddb4082`; 34 commits). Sem merge forçado.
+- **Conferido no ar (www.chiadoconstrutora.com.br):** `/`, `/imovel/carmo`, `/imovel/garrett`, `/privacidade`, `/painel/`, `/sitemap.xml` (inclui `/privacidade`) e
+  `/robots.txt` respondem 200; `GET /api/lead` e `GET /api/visita` dão 405 (só aceitam POST); `GET /api/keep-alive` dá `{"ok":true}` 200, o que prova que as
+  variáveis de Produção chegam ao Supabase; o formulário e o `utm.js` (com a contagem) estão na home; o painel tem `X-Robots-Tag: noindex`; consentimento `v1`;
+  `/README-VERCEL.md` dá 404 (o guia fica em `docs/`).
+- **NÃO verificado no ar (precisa do usuário):** um lead de verdade enviado pelo celular no site oficial (grava no painel e o e-mail de aviso chega); login no
+  `/painel` do site oficial; a visita de verdade aparecendo em Visitas; o cron diário do keep-alive disparando (só se vê no dia seguinte, nos Logs da Vercel).
+- **Decisões que seguem em aberto, mesmo com o site no ar:** plano do Supabase (segue o gratuito, com keep-alive; já pausou uma vez), Vercel Pro (o Hobby não é para
+  uso comercial), revisão do advogado da `/privacidade` (PDF pronto em `docs/`), e **apagar os leads e as visitas de teste** que estão no mesmo banco:
+  `truncate public.leads, public.envios_recentes cascade;` e `delete from public.visitas_diarias where fonte = 'teste-claude';`.
+- **Como voltar atrás:** na Vercel, *Overview → Instant Rollback* (volta o site ao deploy anterior, de antes do painel); no git, `git revert` do(s) commit(s) no `main`.
+- Cadastrar o `sitemap.xml` no Google Search Console e abrir `https://www.chiadoconstrutora.com.br/?nao_contar=1` em cada navegador da equipe continuam como ações do usuário.
+
+### Ajustes depois de ir ao ar (13/10/2026)
+- **Menu do painel:** a aba **Visitas** passou a ficar ao lado de **Leads** (grupo da esquerda), com a aba atual sublinhada em dourado; "Dados da pessoa" e "Sair"
+  ficaram à direita e os itens do topo não quebram mais de linha no celular (`site/painel/js/ui.js` e `painel.css`, commit `63e543c`). Testado no painel simulado;
+  78 testes sem falhas (72 passam, 6 pulados). **Só está na `trabalho`/prévia**: o site oficial ainda tem o menu antigo até o próximo "podemos colocar no ar".
+- Regra reforçada pelo uso: depois de ir ao ar, o fluxo continua o mesmo (mudar na `trabalho`, testar na prévia, esperar o "podemos colocar no ar" para o `main`);
+  o `/admin` continua gravando direto no `main`, então o "puxe do github" confere o `main` antes de qualquer publicação.
 
 ## 8. Regras de trabalho
 
