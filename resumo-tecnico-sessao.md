@@ -169,9 +169,11 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 ### Antes de colocar no ar (decisões e ações do usuário)
 1. ~~**Resend**~~ **FEITO** (07 e 09/10/2026): DNS verificado, `RESEND_API_KEY`, `LEAD_FROM_EMAIL` e `LEAD_NOTIFY_EMAILS` na Vercel e
    e-mail de aviso testado na prévia (Tarefa 4, passo 9). Resta decidir os destinatários definitivos de `LEAD_NOTIFY_EMAILS`.
-2. **Plano do Supabase:** o gratuito pausa por inatividade e tem backup limitado; Pro US$ 25/mês (valor do plano do
-   Financeiro, a reconfirmar).
-3. **Vercel Pro** na equipe Chiado (o plano Hobby atual não permite uso comercial).
+2. **Plano do Supabase:** o gratuito pausa por inatividade e tem backup limitado; **Pro US$ 25/mês por organização** (conferido em
+   supabase.com/pricing em 13/10/2026). Decisão atual: seguir no gratuito com o keep-alive e rever o Pro antes de ir ao ar.
+3. **Vercel Pro** na equipe Chiado (o plano Hobby atual não permite uso comercial): **US$ 20/mês por assento de desenvolvedor**, com
+   US$ 20 de crédito de uso e assentos de visualização gratuitos (conferido em vercel.com/pricing em 13/10/2026). Orçamento em PDF:
+   `docs/orcamento-infraestrutura-site-chiado.pdf` (total US$ 45/mês, cerca de R$ 225,59 pela cotação de 13/10/2026; sem o Web Analytics Plus).
 4. **Advogado** revisa `/privacidade` (texto base; prazo de guarda sem número; sugestão: 24 meses).
 5. **Apagar os leads de teste** (SQL Editor): `truncate public.leads, public.envios_recentes cascade;`.
 6. Teste final no celular e no computador e o **"podemos colocar no ar"**; depois, conferir o site oficial.
@@ -308,6 +310,13 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   `POST` -> 405. Commit `7ac41d8` na `trabalho`. **Limite importante:** o cron só dispara no deploy de Produção; como o `main` ainda não
   tem este código, **só funciona sozinho depois do "podemos colocar no ar"** do painel. Alternativa oferecida (não decidida): publicar antes
   só um keep-alive mínimo no `main`, em pacote separado. O Supabase não garante que a leitura conte como atividade (relato da comunidade).
+- **Orçamento em PDF para apresentar** (`docs/orcamento-infraestrutura-site-chiado.pdf`, 2 páginas, gerado com reportlab; fica em `docs/`, fora
+  do site público): Supabase Pro US$ 25 + Vercel Pro US$ 20 = **US$ 45/mês (US$ 540/ano)**; estimativa em reais pela cotação do dólar comercial
+  de venda de 13/10/2026 às 11h02 (**R$ 5,0130**, AwesomeAPI; a PTAX do dia ainda não tinha saído, a última era 09/10: R$ 4,9892): **R$ 225,59/mês,
+  R$ 2.707,02/ano** (Supabase R$ 125,33; Vercel R$ 100,26). O quadro de resumo mostra US$ e R$ lado a lado. Decidido **não incluir o Web Analytics
+  Plus** (US$ 10/mês; só serve para UTM e histórico de 24 meses, e os anúncios vão ao WhatsApp, sem passar pelo site); dá para contratar depois.
+  Fora do orçamento: IOF/impostos, Resend (gratuito, preço não verificado), anúncios, renovação do domínio e revisão do advogado. Se for
+  reapresentar, atualizar a cotação (o script que gera o PDF não está no repositório).
 - **Onde parou:** item 1 de "Antes de colocar no ar" feito (Resend). Faltam os itens 2 a 6 da seção 5 (no item 2, a decisão atual é ficar no
   plano gratuito do Supabase com o keep-alive, e rever o Pro antes de ir ao ar). Medição de visitas no ar; keep-alive pronto na `trabalho`.
 
