@@ -33,6 +33,53 @@ export function textoAguardando(iso, agora = Date.now()) {
   return 'aguardando contato ' + tempoRelativo(iso, agora);
 }
 
+// ---- visitas (contador próprio; só somas, sem dado pessoal) ----
+
+// "2026-10-13": o dia em São Paulo, que é o mesmo que o banco usa para somar as visitas.
+export function diaSP(ms) {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(ms));
+}
+
+export function rotuloVisita(l) {
+  if (!l.fonte) return 'direto';
+  return l.meio ? l.fonte + ' / ' + l.meio : l.fonte;
+}
+
+function agrupar(linhas, chave, total) {
+  const mapa = new Map();
+  for (const l of linhas) mapa.set(chave(l), (mapa.get(chave(l)) || 0) + l.total);
+  return [...mapa.entries()].map(([k, t]) => ({ chave: k, total: t, pct: total ? (t / total) * 100 : 0 })).sort((a, b) => b.total - a.total);
+}
+
+export function resumoVisitas(linhas, leads, agora = Date.now()) {
+  const DIA = 86400000;
+  const hoje = diaSP(agora);
+  const d7 = diaSP(agora - 6 * DIA);
+  const d30 = diaSP(agora - 29 * DIA);
+  const soma = (l) => l.reduce((t, x) => t + x.total, 0);
+  const dentro = (de) => linhas.filter((l) => l.dia >= de && l.dia <= hoje);
+  const ult30 = dentro(d30);
+  const ultimos30 = soma(ult30);
+  const leads30 = leads.filter((l) => diaSP(Date.parse(l.criado_em)) >= d30).length;
+
+  const porDia = [];
+  for (let i = 6; i >= 0; i--) {
+    const dia = diaSP(agora - i * DIA);
+    porDia.push({ dia, total: soma(linhas.filter((l) => l.dia === dia)) });
+  }
+
+  return {
+    hoje: soma(linhas.filter((l) => l.dia === hoje)),
+    ultimos7: soma(dentro(d7)),
+    ultimos30,
+    leads30,
+    conversao: ultimos30 ? leads30 / ultimos30 : null,
+    porOrigem: agrupar(ult30, rotuloVisita, ultimos30).map((o) => ({ rotulo: o.chave, total: o.total, pct: o.pct })),
+    porPagina: agrupar(ult30, (l) => l.caminho, ultimos30).map((o) => ({ caminho: o.chave, total: o.total, pct: o.pct })),
+    porDia,
+  };
+}
+
 export function resumoNumeros(leads, agora = Date.now()) {
   const ref = new Date(agora);
   const mesmoMes = (iso) => {

@@ -1,8 +1,17 @@
-// Guarda de onde o visitante veio (primeira visita da sessão), para ir junto com o lead
-// e com a mensagem de WhatsApp. As funções puras ficam fora do navegador também (testes em Node).
+// Guarda de onde o visitante veio (primeira visita da sessão), para ir junto com o lead e com a mensagem de
+// WhatsApp, e conta a visita (uma por sessão, só somas, sem dado pessoal). As funções puras ficam expostas
+// também fora do navegador (testes em Node).
 (function () {
   function limpo(v) {
     return String(v == null ? '' : v).toLowerCase().replace(/[^a-z0-9_.\-\/ ]/g, '').trim();
+  }
+
+  function hostDe(referrer) {
+    try {
+      return limpo(new URL(referrer).host.replace(/^www\./, ''));
+    } catch (e) {
+      return '';
+    }
   }
 
   // "instagram/bio" (fonte/meio/campanha); sem UTM, usa o site de origem; sem nada, vazio.
@@ -10,11 +19,7 @@
     if (!o) return '';
     var partes = [o.fonte, o.meio, o.campanha].map(limpo).filter(Boolean);
     var r = partes.join('/');
-    if (!r && o.referrer) {
-      try {
-        r = limpo(new URL(o.referrer).host.replace(/^www\./, ''));
-      } catch (e) {}
-    }
+    if (!r && o.referrer) r = hostDe(o.referrer);
     return r.slice(0, 60);
   }
 
@@ -35,10 +40,47 @@
     return 'https://wa.me' + u.pathname + '?text=' + encodeURIComponent(texto);
   }
 
+  // O que vai para /api/visita: a página de entrada e a origem (UTM; sem UTM, o site de origem; sem nada, direto).
+  function corpoVisita(o, busca) {
+    o = o || {};
+    var caminho = o.entrada || '/';
+    if (caminho === '/index.html') caminho = '/';
+    if (caminho === '/imovel.html') {
+      var slug = '';
+      try {
+        slug = new URLSearchParams(busca || '').get('slug') || '';
+      } catch (e) {}
+      caminho = '/imovel/' + slug;
+    }
+    var fonte = limpo(o.fonte);
+    var meio = limpo(o.meio);
+    var campanha = limpo(o.campanha);
+    if (!fonte && !meio && !campanha && o.referrer) {
+      fonte = hostDe(o.referrer);
+      meio = fonte ? 'referencia' : '';
+    }
+    return { caminho: caminho, fonte: fonte, meio: meio, campanha: campanha };
+  }
+
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { rotuloOrigem: rotuloOrigem, comOrigem: comOrigem };
+    module.exports = { rotuloOrigem: rotuloOrigem, comOrigem: comOrigem, corpoVisita: corpoVisita };
   }
   if (typeof document === 'undefined') return;
+
+  // Conta a visita. Quem não quer ser contado (a equipe testando) roda uma vez no console:
+  // localStorage.setItem('chiado_nao_contar', '1')
+  function contarVisita(origem) {
+    try {
+      if (location.protocol.indexOf('http') !== 0) return;
+      if (localStorage.getItem('chiado_nao_contar')) return;
+      var corpo = JSON.stringify(corpoVisita(origem, location.search));
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon('/api/visita', new Blob([corpo], { type: 'application/json' }));
+      } else {
+        fetch('/api/visita', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: corpo, keepalive: true });
+      }
+    } catch (e) {}
+  }
 
   try {
     if (!sessionStorage.getItem('chiado_origem')) {
@@ -49,16 +91,15 @@
           if (new URL(document.referrer).host !== location.host) ref = document.referrer;
         } catch (e) {}
       }
-      sessionStorage.setItem(
-        'chiado_origem',
-        JSON.stringify({
-          fonte: p.get('utm_source') || '',
-          meio: p.get('utm_medium') || '',
-          campanha: p.get('utm_campaign') || '',
-          referrer: ref,
-          entrada: location.pathname,
-        })
-      );
+      var origem = {
+        fonte: p.get('utm_source') || '',
+        meio: p.get('utm_medium') || '',
+        campanha: p.get('utm_campaign') || '',
+        referrer: ref,
+        entrada: location.pathname,
+      };
+      sessionStorage.setItem('chiado_origem', JSON.stringify(origem));
+      contarVisita(origem);
     }
   } catch (e) {}
 

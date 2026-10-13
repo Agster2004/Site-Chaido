@@ -17,7 +17,7 @@ export const mensagemErro = (e) => {
 
 export function moldura(conteudo) {
   app.innerHTML =
-    '<header class="topo"><a class="marca" href="#/">Leads</a><nav><a href="#/pessoa">Dados da pessoa</a>' +
+    '<header class="topo"><a class="marca" href="#/">Leads</a><nav><a href="#/visitas">Visitas</a><a href="#/pessoa">Dados da pessoa</a>' +
     '<button id="sair" class="link" type="button">Sair</button></nav></header>' +
     '<main class="conteudo">' + conteudo + '</main>';
   document.getElementById('sair').addEventListener('click', async () => {

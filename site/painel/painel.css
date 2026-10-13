@@ -81,3 +81,13 @@ button[disabled]{ opacity:.6; cursor:default; }
 .busca input{ flex:1; }
 button.perigo{ border-color:var(--perigo); color:var(--perigo); }
 .historico .acoes{ margin:6px 0 0; }
+
+/* Tela de visitas */
+.titulo-tela{ font-size:20px; margin:4px 0 0; }
+.tabela-simples{ width:100%; border-collapse:collapse; background:var(--paper); border:1px solid var(--line); border-radius:8px; overflow:hidden; margin:6px 0 4px; }
+.tabela-simples td{ padding:9px 12px; border-bottom:1px solid var(--line); font-size:14px; }
+.tabela-simples tr:last-child td{ border-bottom:0; }
+.tabela-simples td.n{ text-align:right; white-space:nowrap; }
+.tabela-simples .barra-celula{ width:34%; padding-left:0; }
+.barra-visita{ display:block; height:8px; background:var(--green-800); border-radius:4px; }
+.nota-visitas{ margin-top:18px; }

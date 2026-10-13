@@ -1,4 +1,4 @@
-// Roda supabase/migrations/0001_leads.sql num Postgres de teste (PGlite, em memória) que imita o Supabase
+// Roda supabase/migrations/0001_leads.sql e 0002_visitas.sql num Postgres de teste (PGlite, em memória) que imita o Supabase
 // (papéis anon/authenticated/service_role, auth.uid(), permissões padrão) e confere as regras de acesso.
 // Como rodar: veja tests/ferramentas/LEIAME.md
 import { PGlite } from '@electric-sql/pglite';
@@ -37,6 +37,8 @@ await db.exec(
 );
 await db.exec(sqlMigracao);
 marca('migração roda sem erro', true);
+await db.exec(fs.readFileSync(new URL('../../supabase/migrations/0002_visitas.sql', import.meta.url), 'utf8'));
+marca('migração 0002 (visitas) roda sem erro', true);
 
 const cont = async (t) => (await db.query('select count(*)::int c from public.' + t)).rows[0].c;
 marca('6 fases, 5 motivos e 1 consentimento', (await cont('fases')) === 6 && (await cont('motivos_perda')) === 5 && (await cont('textos_consentimento')) === 1);
@@ -117,6 +119,51 @@ await como('authenticated', A, async () => {
   marca('A apaga o lead (LGPD)', del.affectedRows === 1);
 });
 marca('apagar o lead leva o histórico junto', (await cont('lead_eventos')) === 0 && (await cont('leads')) === 0);
+
+// ---- 0002: contador de visitas ----
+const visita = (extra = {}) => JSON.stringify({ caminho: '/', fonte: 'instagram', meio: 'bio', campanha: '', ...extra });
+const linhasVisitas = async () => (await db.query('select * from public.visitas_diarias order by caminho, fonte')).rows;
+
+await como('anon', null, async () => {
+  marca('visitas: anônimo não lê', (await db.query('select * from public.visitas_diarias')).rows.length === 0);
+  marca('visitas: anônimo não grava direto', !!(await erro(() => db.query("insert into public.visitas_diarias (dia, caminho, total) values (current_date, '/', 1)"))));
+  marca('visitas: anônimo não executa registrar_visita', !!(await erro(() => db.query('select public.registrar_visita($1::jsonb)', [visita()]))));
+});
+
+await como('service_role', null, async () => {
+  await db.query('select public.registrar_visita($1::jsonb)', [visita()]);
+  await db.query('select public.registrar_visita($1::jsonb)', [visita()]);
+  await db.query('select public.registrar_visita($1::jsonb)', [visita({ caminho: '/imovel/carmo', fonte: '', meio: '' })]);
+  const l = await linhasVisitas();
+  marca('visitas: soma na mesma linha (2) e cria outra para outra página/origem', l.length === 2 && l.find((r) => r.caminho === '/' && r.fonte === 'instagram').total === 2 && l.find((r) => r.caminho === '/imovel/carmo').total === 1);
+  const hoje = (await db.query("select (now() at time zone 'America/Sao_Paulo')::date d")).rows[0].d.toISOString().slice(0, 10);
+  marca('visitas: o dia é o de São Paulo', l.every((r) => new Date(r.dia).toISOString().slice(0, 10) === hoje));
+  await db.query('select public.registrar_visita($1::jsonb)', [JSON.stringify({ caminho: 'x'.repeat(300), fonte: 'y'.repeat(300) })]);
+  const g = (await linhasVisitas()).find((r) => r.caminho.startsWith('xxx'));
+  marca('visitas: textos longos são cortados (120 e 50)', g.caminho.length === 120 && g.fonte.length === 50);
+  await db.query('select public.registrar_visita($1::jsonb)', [JSON.stringify({})]);
+  marca('visitas: corpo vazio vira "/" sem origem', (await linhasVisitas()).some((r) => r.caminho === '/' && r.fonte === '' && r.total === 1));
+  // limite de 500 combinações por dia: as novas origens entram como "outros"
+  await db.exec("insert into public.visitas_diarias (dia, caminho, fonte, total) select (now() at time zone 'America/Sao_Paulo')::date, '/', 'origem' || g, 1 from generate_series(1, 600) g");
+  await db.query('select public.registrar_visita($1::jsonb)', [visita({ fonte: 'inventada-1' })]);
+  await db.query('select public.registrar_visita($1::jsonb)', [visita({ fonte: 'inventada-2' })]);
+  const o = (await db.query("select total from public.visitas_diarias where fonte = 'outros'")).rows;
+  marca('visitas: passou de 500 combinações no dia, as novas viram "outros"', o.length === 1 && o[0].total === 2);
+  marca('visitas: origem já existente continua somando mesmo com o limite', (await (async () => {
+    await db.query('select public.registrar_visita($1::jsonb)', [visita()]);
+    return (await db.query("select total from public.visitas_diarias where caminho = '/' and fonte = 'instagram' and meio = 'bio'")).rows[0].total === 3;
+  })()));
+});
+
+await como('authenticated', A, async () => {
+  marca('visitas: usuário do painel lê', (await db.query('select * from public.visitas_diarias')).rows.length > 0);
+  marca('visitas: usuário do painel não grava direto', !!(await erro(() => db.query("insert into public.visitas_diarias (dia, caminho, total) values (current_date, '/z', 1)"))));
+  marca('visitas: usuário do painel não apaga', (await db.query('delete from public.visitas_diarias')).affectedRows === 0);
+  marca('visitas: usuário do painel não executa registrar_visita', !!(await erro(() => db.query('select public.registrar_visita($1::jsonb)', [visita()]))));
+});
+await como('authenticated', B, async () => {
+  marca('visitas: conta sem permissão não lê', (await db.query('select * from public.visitas_diarias')).rows.length === 0);
+});
 
 console.log('\n' + ok + ' ok, ' + falha + ' falhas');
 process.exit(falha ? 1 : 0);

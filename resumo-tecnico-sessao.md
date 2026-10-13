@@ -87,6 +87,9 @@ pago, divulgação, impulsionar vendas), cada um com desenho e "pode construir" 
 | `assets/utm.js`, `assets/lead-form.js`, `data/consentimento.json` | Formulário de interesse, origem da visita e texto de consentimento (`v1`) |
 | `api/lead.js`, `api/_lib/*.js` | Recebe o lead (`POST /api/lead`): validação, anti-robô, Supabase e e-mail (Resend) |
 | `api/painel-config.js` | Entrega ao painel a URL e a chave **pública** do Supabase |
+| `api/visita.js`, `api/_lib/visita.js` | Contador de visitas (`POST /api/visita`): uma por sessão, na página de entrada; só somas por dia, página e origem (sem IP, nome ou cookie). Ignora robôs e prévias de link, só aceita caminhos conhecidos (`/`, `/privacidade`, `/imovel/<slug>`) e responde 204 mesmo se o banco falhar. Grava com `registrar_visita` (migração `0002_visitas.sql`, tabela `visitas_diarias`) |
+| `painel/js/tela-visitas.js` | Tela `#/visitas` do painel: visitas hoje, 7 e 30 dias, por dia, por origem, por página de entrada e conversão (leads ÷ visitas em 30 dias) |
+| `assets/utm.js` | Guarda a origem da visita na sessão, manda a contagem para `/api/visita` e acrescenta "(origem: ...)" às mensagens dos botões de WhatsApp. Opt-out: `localStorage.setItem('chiado_nao_contar','1')` no navegador |
 | `api/keep-alive.js` | Leitura diária em `fases` para o Supabase gratuito não pausar; chamada pelo cron do `vercel.json` (`0 12 * * *`). Cron só roda em **Produção** (o `main`), não nas prévias. Aceita `CRON_SECRET` se existir |
 | `painel/` (`index.html`, `painel.css`, `js/*.js`) | Painel de leads em `/painel` (login, lista, ficha, dados da pessoa); `noindex` |
 
@@ -109,7 +112,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - Fotos do Carmo foram reduzidas a 1400 px (a página do Carmo foi de 4,3 MB para 1,8 MB). Os originais
   de 2000 px só existem no histórico do git. **Fotos novas enviadas pelo painel não são reduzidas.**
 - Sem build e sem `package.json`: HTML/CSS/JS puros e funções da Vercel que usam só `fetch`.
-- Testes automáticos: `node --test` na raiz (sem instalar nada; 50 testes, 44 passam e 6 são pulados porque precisam de
+- Testes automáticos: `node --test` na raiz (sem instalar nada; 77 testes, 71 passam e 6 são pulados porque precisam de
   chaves do Supabase: `tests/rls.test.mjs`). Além deles, as telas foram testadas num servidor local com Supabase
   simulado e as funções, com `curl` na prévia da Vercel.
 
@@ -140,8 +143,8 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   `supabase/migrations/0001_leads.sql` aplicada e o usuário William liberado em `usuarios_painel`; funções
   `/api/lead`, `/api/painel-config` e `/api/sitemap` (com `/privacidade`); formulário "Quero saber mais" na home e nas
   páginas dos imóveis; painel `/painel` (login, lista com 4 números e filtros, exportar CSV, ficha do lead com
-  fase/anotações/histórico, "Dados da pessoa" com exportar e apagar); `/privacidade`; 50 testes automáticos
-  (`node --test`: 44 passam, 6 pulados que precisam de chaves: `tests/rls.test.mjs`).
+  fase/anotações/histórico, "Dados da pessoa" com exportar e apagar); `/privacidade`; 77 testes automáticos
+  (`node --test`: 71 passam, 6 pulados que precisam de chaves: `tests/rls.test.mjs`).
 - **Verificado no Supabase real:** contagens 6/5/1/1 (fases, motivos, consentimento, usuário); RLS ligada nas 7
   tabelas; visitante sem permissão nas funções `registrar_lead` e `permitir_envio`; lead enviado pelo celular gravado;
   repetir o telefone soma `retornos`; login, lista, mudar fase, anotar e exportar pelo painel (arquivo JSON com lead e
@@ -317,6 +320,18 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   Plus** (US$ 10/mês; só serve para UTM e histórico de 24 meses, e os anúncios vão ao WhatsApp, sem passar pelo site); dá para contratar depois.
   Fora do orçamento: IOF/impostos, Resend (gratuito, preço não verificado), anúncios, renovação do domínio e revisão do advogado. Se for
   reapresentar, atualizar a cotação (o script que gera o PDF não está no repositório).
+- **Ajustes no painel (13/10/2026, na `trabalho`):** o contador "aguardando contato" passou de horas para dias (`textoAguardando`, commit `24fdf98`);
+  na ficha do lead, botões separados **Exportar dados** e **Apagar dados** (commit `e9ce098`; o link "Dados da pessoa" do menu continua para buscar
+  outra pessoa); a origem do visitante vai na mensagem de WhatsApp dos botões do site (`utm.js`, commit `48f10e4`; link da bio do Instagram:
+  `https://www.chiadoconstrutora.com.br/?utm_source=instagram&utm_medium=bio`; só vale no oficial depois do "podemos colocar no ar").
+- **Contador de visitas próprio, dentro do painel (pedido "pode construir a opção 2", 13/10/2026).** Motivo: dar a quebra por origem (instagram/bio,
+  anúncio pago, Google, direto) que no Vercel Analytics exigiria Pro + Web Analytics Plus (US$ 10/mês). Feito: migração `supabase/migrations/0002_visitas.sql`
+  (tabela `visitas_diarias`; função `registrar_visita` só para `service_role`; 500 combinações novas por dia no máximo, o excesso vira "outros"; leitura só
+  para `usuarios_painel`), `site/api/visita.js` + `_lib/visita.js`, contagem em `utm.js`, tela `#/visitas` (link "Visitas" no menu), seção "Contagem de
+  visitas" na `/privacidade`. Testes: 77 no total (71 passam, 6 pulados), mais `banco-cenarios.mjs` com **57 cenários** (15 novos). Conferido no navegador
+  com servidores simulados: o beacon chega em `/api/visita`, só 1 visita por sessão, e a opção de não contar funciona. **Pendente para funcionar na prévia:
+  o usuário rodar `0002_visitas.sql` no SQL Editor do Supabase** (sem isso `/api/visita` só registra erro no log e a tela Visitas avisa que falta a migração).
+  Os números podem diferir do Vercel Analytics. Material do advogado (`docs/politica-privacidade-para-revisao-juridica.pdf`) regenerado com a nova seção.
 - **Onde parou:** item 1 de "Antes de colocar no ar" feito (Resend). Faltam os itens 2 a 6 da seção 5 (no item 2, a decisão atual é ficar no
   plano gratuito do Supabase com o keep-alive, e rever o Pro antes de ir ao ar). Medição de visitas no ar; keep-alive pronto na `trabalho`.
 
@@ -331,7 +346,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 ## 9. Como fazer (passo a passo)
 
 ### Testes
-- **Todos os testes automáticos:** `node --test` na raiz do repositório (50 testes; 6 ficam "pulados" porque pedem chaves).
+- **Todos os testes automáticos:** `node --test` na raiz do repositório (77 testes; 6 ficam "pulados" porque pedem chaves).
 - **Banco (42 cenários) e telas do painel/formulário sem o Supabase real:** `tests/ferramentas/LEIAME.md`.
 - **Acesso ao Supabase real, de fora (opcional):** no terminal do próprio usuário, defina `TESTE_SUPABASE_URL`,
   `TESTE_ANON_KEY` e `TESTE_SERVICE_KEY` e rode `node --test tests/rls.test.mjs`. As chaves nunca vão para o chat nem para arquivos.
@@ -341,6 +356,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 ### Supabase (organização `Chiado Site`, projeto `Chiado Leads`, região São Paulo)
 - **Rodar SQL:** ícone `>_` na barra da esquerda (SQL Editor) → *New query* → colar → *Run*. Pode aparecer "Potential issue /
   destructive operations" por causa de um `delete` dentro de uma função: confirmar. Sucesso aparece como "Success. No rows returned".
+- **Migração 0002 (visitas):** copiar o conteúdo de `supabase/migrations/0002_visitas.sql`, colar no SQL Editor e rodar (sucesso: "Success. No rows returned"). Conferir: `select count(*) from public.visitas_diarias;` (0 no começo). A `0001` já foi aplicada; nunca rodar de novo.
 - **Conferir o banco (esperado 6, 5, 1, 1):** `select (select count(*) from public.fases) as fases, (select count(*) from
   public.motivos_perda) as motivos, (select count(*) from public.textos_consentimento) as consentimentos, (select count(*)
   from public.usuarios_painel) as usuarios;`

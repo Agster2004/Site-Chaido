@@ -1,4 +1,4 @@
-// Sobe o site (porta 4173) com a função REAL /api/lead; o Supabase e o Resend são simulados no próprio servidor.
+// Sobe o site (porta 4173) com as funções REAIS /api/lead e /api/visita; o Supabase e o Resend são simulados no próprio servidor.
 // GET /__debug mostra o que a função mandou ao banco e ao e-mail. Como rodar: veja tests/ferramentas/LEIAME.md
 import http from 'node:http';
 import fs from 'node:fs';
@@ -33,6 +33,7 @@ globalThis.fetch = async (url, opcoes = {}) => {
 };
 
 const lead = (await import(pathToFileURL(path.join(root, 'api/lead.js')).href)).default;
+const visita = (await import(pathToFileURL(path.join(root, 'api/visita.js')).href)).default;
 const tipos = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.png': 'image/png', '.mp4': 'video/mp4' };
 
 http.createServer(async (req, res) => {
@@ -43,12 +44,12 @@ http.createServer(async (req, res) => {
   req.headers['x-forwarded-proto'] = 'http';
 
   if (u.pathname === '/__debug') return res.json(chamadas);
-  if (u.pathname === '/api/lead') {
+  if (u.pathname === '/api/lead' || u.pathname === '/api/visita') {
     const partes = [];
     for await (const p of req) partes.push(p);
     const bruto = Buffer.concat(partes).toString('utf8');
     try { req.body = bruto ? JSON.parse(bruto) : {}; } catch { req.body = bruto; }
-    return lead(req, res);
+    return (u.pathname === '/api/visita' ? visita : lead)(req, res);
   }
   let p = decodeURIComponent(u.pathname);
   if (p === '/') p = '/index.html';

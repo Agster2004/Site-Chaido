@@ -8,19 +8,19 @@ Supabase de verdade**. Nenhuma ferramenta usa chave real, e nunca devem receber 
 
 ## 1. `banco-cenarios.mjs`: confere o banco e as regras de acesso
 
-Roda `supabase/migrations/0001_leads.sql` num Postgres de teste em memória (PGlite) que imita o Supabase (papéis
-`anon`, `authenticated` e `service_role`, `auth.uid()` e as permissões padrão) e confere **42 cenários**: visitante sem
+Roda `supabase/migrations/0001_leads.sql` e `0002_visitas.sql` num Postgres de teste em memória (PGlite) que imita o Supabase (papéis
+`anon`, `authenticated` e `service_role`, `auth.uid()` e as permissões padrão) e confere **57 cenários** (42 do banco de leads e 15 do contador de visitas): visitante sem
 acesso, lead repetido que não duplica, limite de envios por IP, fases, "perdido" exigindo motivo, `vendido_em`,
 usuário fora de `usuarios_painel` sem acesso a nada, apagar uma pessoa levando o histórico.
 
 ```bash
 cd tests/ferramentas
 npm i --no-save @electric-sql/pglite     # só na primeira vez; a pasta node_modules não vai para o GitHub
-node banco-cenarios.mjs                  # esperado no fim: "42 ok, 0 falhas"
+node banco-cenarios.mjs                  # esperado no fim: "57 ok, 0 falhas"
 ```
 
-Rode de novo **sempre que mudar a migração** (e crie uma migração nova, `0002_...sql`, em vez de editar a `0001`, que já
-foi aplicada no Supabase).
+Rode de novo **sempre que mudar a migração** (e crie uma migração nova, `0003_...sql`, em vez de editar as que já
+foram aplicadas no Supabase).
 
 ## 2. `servidor-painel-simulado.mjs`: testa o `/painel` no navegador
 

@@ -66,3 +66,8 @@ export async function apagarLead(id) {
   const { error } = await cliente.from('leads').delete().eq('id', id);
   return ou(error, true);
 }
+
+export async function listarVisitas(desdeDia) {
+  const { data, error } = await cliente.from('visitas_diarias').select('*').gte('dia', desdeDia).order('dia');
+  return ou(error, data);
+}

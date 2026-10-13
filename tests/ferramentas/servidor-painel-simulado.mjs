@@ -37,6 +37,18 @@ const motivos = [['preco', 'Preço'], ['localizacao', 'Localização'], ['sem_re
 
 const b64 = (o) => Buffer.from(JSON.stringify(o)).toString('base64url');
 const jwt = (id, email) => b64({ alg: 'HS256', typ: 'JWT' }) + '.' + b64({ sub: id, email, role: 'authenticated', aud: 'authenticated', exp: Math.floor(agora / 1000) + 7200 }) + '.assinatura';
+// visitas de exemplo (últimos 9 dias, dia de São Paulo), para a tela "Visitas"
+const diaSP = (ms) => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(ms));
+const visitas = [];
+for (let i = 8; i >= 0; i--) {
+  const dia = diaSP(Date.now() - i * 86400000);
+  const base = 3 + ((i * 7) % 5);
+  visitas.push({ dia, caminho: '/', fonte: 'instagram', meio: 'bio', campanha: '', total: base + 4 });
+  visitas.push({ dia, caminho: '/', fonte: '', meio: '', campanha: '', total: base });
+  visitas.push({ dia, caminho: '/imovel/carmo', fonte: 'instagram', meio: 'paid_social', campanha: 'carmo-out', total: base + 2 });
+  if (i % 2 === 0) visitas.push({ dia, caminho: '/imovel/garrett', fonte: 'l.instagram.com', meio: 'referencia', campanha: '', total: 2 });
+}
+
 const subDoToken = (req) => { const h = String(req.headers.authorization || '').replace('Bearer ', ''); try { return JSON.parse(Buffer.from(h.split('.')[1], 'base64url').toString()).sub; } catch { return null; } };
 const cors = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': 'GET,POST,PATCH,DELETE,OPTIONS' };
 const json = (res, status, corpo) => { res.writeHead(status, { ...cors, 'Content-Type': 'application/json' }); res.end(JSON.stringify(corpo)); };
@@ -61,6 +73,7 @@ http.createServer(async (req, res) => {
 
   if (u.pathname === '/rest/v1/fases') return json(res, 200, fases);
   if (u.pathname === '/rest/v1/motivos_perda') return json(res, 200, motivos);
+  if (u.pathname === '/rest/v1/visitas_diarias') return json(res, 200, visitas);
 
   if (u.pathname === '/rest/v1/leads' && req.method === 'GET') {
     const id = eq(u, 'id');

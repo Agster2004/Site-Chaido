@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  escapeHtml, tempoRelativo, horasDesde, aguardandoContato, textoAguardando, resumoNumeros,
+  escapeHtml, tempoRelativo, horasDesde, aguardandoContato, textoAguardando, diaSP, rotuloVisita, resumoVisitas, resumoNumeros,
   filtrarLeads, valorOrigem, telefoneBonito, linkWhatsapp, linkTelefone, gerarCsv,
 } from '../site/painel/js/format.js';
 
@@ -94,4 +94,71 @@ test('gerarCsv: cabeçalho, escape de aspas e proteção contra fórmulas de pla
   assert.match(csv, /Residencial Carmo/);
   assert.match(csv, /;"\+5513997770974";/);
   assert.equal(csv.includes("\"'+5513997770974"), false);
+});
+
+// ---- visitas ----
+const AGORA_V = Date.parse('2026-10-13T15:00:00Z'); // 12h em São Paulo
+const v = (dia, caminho, fonte, meio, total) => ({ dia, caminho, fonte, meio, campanha: '', total });
+
+test('diaSP usa o dia de São Paulo, não o do UTC', () => {
+  assert.equal(diaSP(Date.parse('2026-10-13T15:00:00Z')), '2026-10-13');
+  assert.equal(diaSP(Date.parse('2026-10-14T01:30:00Z')), '2026-10-13'); // 22h30 em SP ainda é dia 13
+  assert.equal(diaSP(Date.parse('2026-10-14T03:30:00Z')), '2026-10-14');
+});
+
+test('rotuloVisita: fonte / meio, ou direto', () => {
+  assert.equal(rotuloVisita({ fonte: 'instagram', meio: 'bio' }), 'instagram / bio');
+  assert.equal(rotuloVisita({ fonte: 'google', meio: '' }), 'google');
+  assert.equal(rotuloVisita({ fonte: '', meio: '' }), 'direto');
+});
+
+test('resumoVisitas soma hoje, 7 e 30 dias e ignora o que passou de 30 dias', () => {
+  const linhas = [
+    v('2026-10-13', '/', 'instagram', 'bio', 5),
+    v('2026-10-13', '/imovel/carmo', '', '', 2),
+    v('2026-10-10', '/', 'google', 'organic', 3),
+    v('2026-10-07', '/', 'instagram', 'bio', 4),   // 6 dias atrás: dentro dos 7
+    v('2026-10-06', '/', 'instagram', 'bio', 10),  // 7 dias atrás: fora dos 7, dentro dos 30
+    v('2026-09-15', '/', 'instagram', 'bio', 1),   // 28 dias atrás: dentro dos 30
+    v('2026-09-14', '/', 'instagram', 'bio', 100), // 29 dias atrás: último dia dos 30
+    v('2026-09-13', '/', 'instagram', 'bio', 999), // 30 dias atrás: fora
+  ];
+  const r = resumoVisitas(linhas, [], AGORA_V);
+  assert.equal(r.hoje, 7);
+  assert.equal(r.ultimos7, 7 + 3 + 4);
+  assert.equal(r.ultimos30, 7 + 3 + 4 + 10 + 1 + 100);
+});
+
+test('resumoVisitas agrupa por origem e por página, do maior para o menor', () => {
+  const linhas = [
+    v('2026-10-13', '/', 'instagram', 'bio', 5),
+    v('2026-10-12', '/imovel/carmo', 'instagram', 'bio', 3),
+    v('2026-10-12', '/', '', '', 4),
+    v('2026-10-11', '/', 'google', '', 1),
+  ];
+  const r = resumoVisitas(linhas, [], AGORA_V);
+  assert.deepEqual(r.porOrigem.map((o) => [o.rotulo, o.total]), [['instagram / bio', 8], ['direto', 4], ['google', 1]]);
+  assert.deepEqual(r.porPagina.map((o) => [o.caminho, o.total]), [['/', 10], ['/imovel/carmo', 3]]);
+  assert.equal(Math.round(r.porOrigem[0].pct), 62);
+});
+
+test('resumoVisitas: conversão = leads dos últimos 30 dias ÷ visitas dos últimos 30 dias', () => {
+  const linhas = [v('2026-10-13', '/', '', '', 40), v('2026-10-01', '/', '', '', 60)];
+  const leads = [
+    { criado_em: '2026-10-13T12:00:00Z' }, { criado_em: '2026-10-02T12:00:00Z' },
+    { criado_em: '2026-10-01T12:00:00Z' }, { criado_em: '2026-08-01T12:00:00Z' }, // este está fora dos 30 dias
+  ];
+  const r = resumoVisitas(linhas, leads, AGORA_V);
+  assert.equal(r.leads30, 3);
+  assert.equal(r.conversao, 3 / 100);
+  assert.equal(resumoVisitas([], leads, AGORA_V).conversao, null); // sem visitas não divide por zero
+});
+
+test('resumoVisitas: porDia traz os últimos 7 dias, do mais antigo ao de hoje, com zero onde não houve visita', () => {
+  const r = resumoVisitas([v('2026-10-13', '/', '', '', 5), v('2026-10-11', '/', '', '', 2)], [], AGORA_V);
+  assert.deepEqual(r.porDia, [
+    { dia: '2026-10-07', total: 0 }, { dia: '2026-10-08', total: 0 }, { dia: '2026-10-09', total: 0 },
+    { dia: '2026-10-10', total: 0 }, { dia: '2026-10-11', total: 2 }, { dia: '2026-10-12', total: 0 },
+    { dia: '2026-10-13', total: 5 },
+  ]);
 });

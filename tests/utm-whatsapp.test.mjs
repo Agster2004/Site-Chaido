@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 
 // utm.js é um script de navegador (sem módulos); quando carregado no Node ele só exporta as funções puras.
-const { rotuloOrigem, comOrigem } = createRequire(import.meta.url)('../site/assets/utm.js');
+const { rotuloOrigem, comOrigem, corpoVisita } = createRequire(import.meta.url)('../site/assets/utm.js');
 
 const insta = { fonte: 'instagram', meio: 'bio', campanha: '', referrer: '' };
 const link = (texto) => 'https://wa.me/5513997770974' + (texto == null ? '' : '?text=' + encodeURIComponent(texto));
@@ -42,4 +42,25 @@ test('comOrigem não repete a origem nem mexe sem origem ou em outros links', ()
   assert.equal(comOrigem(link('Oi'), { fonte: '', meio: '', campanha: '', referrer: '' }), link('Oi'));
   assert.equal(comOrigem('https://exemplo.com/?text=Oi', insta), 'https://exemplo.com/?text=Oi');
   assert.equal(comOrigem('not a url', insta), 'not a url');
+});
+
+test('corpoVisita usa a UTM quando existe', () => {
+  assert.deepEqual(corpoVisita({ fonte: 'instagram', meio: 'bio', campanha: '', referrer: '', entrada: '/' }),
+    { caminho: '/', fonte: 'instagram', meio: 'bio', campanha: '' });
+});
+
+test('corpoVisita sem UTM usa o site de origem como "referencia"; sem nada fica em branco (direto)', () => {
+  assert.deepEqual(corpoVisita({ fonte: '', meio: '', campanha: '', referrer: 'https://l.instagram.com/?u=x', entrada: '/' }),
+    { caminho: '/', fonte: 'l.instagram.com', meio: 'referencia', campanha: '' });
+  assert.equal(corpoVisita({ fonte: '', meio: '', campanha: '', referrer: 'https://www.google.com/', entrada: '/' }).fonte, 'google.com');
+  assert.deepEqual(corpoVisita({ fonte: '', meio: '', campanha: '', referrer: '', entrada: '/' }),
+    { caminho: '/', fonte: '', meio: '', campanha: '' });
+});
+
+test('corpoVisita converte o endereço antigo do imóvel e a página inicial', () => {
+  assert.equal(corpoVisita({ entrada: '/imovel.html' }, '?slug=carmo').caminho, '/imovel/carmo');
+  assert.equal(corpoVisita({ entrada: '/imovel/garrett' }, '').caminho, '/imovel/garrett');
+  assert.equal(corpoVisita({ entrada: '/index.html' }, '').caminho, '/');
+  assert.equal(corpoVisita({ entrada: '/privacidade' }, '').caminho, '/privacidade');
+  assert.equal(corpoVisita(null).caminho, '/');
 });

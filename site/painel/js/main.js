@@ -19,6 +19,7 @@ async function rotear() {
   const ficha = hash.match(/^#\/lead\/([0-9a-f-]{36})$/i);
   if (ficha) return (await import('./tela-ficha.js')).telaFicha(ficha[1]);
   if (hash === '#/pessoa') return (await import('./tela-pessoa.js')).telaPessoa();
+  if (hash === '#/visitas') return (await import('./tela-visitas.js')).telaVisitas();
   return telaLista();
 }
 
