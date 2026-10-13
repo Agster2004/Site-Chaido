@@ -13,7 +13,7 @@ virar venda no financeiro) é uma decisão à parte, tomada com o usuário e des
 
 > **NO AR desde 13/10/2026:** a `trabalho` foi publicada no `main` (commit `ddb4082`, avanço simples) com o "podemos colocar no ar" do usuário. O site
 > oficial agora tem formulário, `/painel`, `/privacidade`, contador de visitas, origem no WhatsApp e keep-alive. No momento da publicação `main` e `trabalho` estavam no mesmo
-> commit (`ddb4082`); depois a `trabalho` voltou a andar à frente (veja "Ajustes depois de ir ao ar" na seção 7; confira com `git log --oneline origin/main..trabalho`); o `main` passa a ter também este resumo, o `CLAUDE.md`, `docs/`, `tests/` e `supabase/` (fora de `site/`, não ficam públicos). Detalhes e
+> commit (`ddb4082`); depois a `trabalho` andou à frente com o ajuste do menu, que foi publicado no segundo "podemos colocar no ar" (seção 7, "Ajustes depois de ir ao ar"); confira sempre com `git log --oneline origin/main..trabalho`; o `main` passa a ter também este resumo, o `CLAUDE.md`, `docs/`, `tests/` e `supabase/` (fora de `site/`, não ficam públicos). Detalhes e
 > o que ainda falta: veja "O que ficou pendente" e a seção 7 (entrada "13/10/2026, no ar"). Onde o texto abaixo disser "ainda NÃO no ar", leia "agora no ar".
 
 **Antes de tudo, em qualquer computador:** este projeto trabalha na branch **`trabalho`**, não no `main` (o `main` é o
@@ -25,8 +25,8 @@ site no ar). Este arquivo e o `CLAUDE.md` **só existem na `trabalho`**. Se voc�
 | | `main` | `trabalho` |
 |---|---|---|
 | Para que serve | O **site oficial no ar** (`www.chiadoconstrutora.com.br`). O `/admin` grava aqui | Onde **trabalhamos**; gera a **prévia** (`site-chaido-git-trabalho-chiado.vercel.app`) |
-| Último commit | `61b86b6` medição de visitas (Vercel Web Analytics, no ar desde 13/10/2026) | o mais recente da `trabalho` (`git log -1`); já contém o `main` |
-| O que tem | Só a pasta `site/`: vitrine, imóveis, `sitemap.xml`, `robots.txt`, imagens leves | Tudo do `main` **mais** formulário, painel `/painel`, `/privacidade`, banco (`supabase/`), `tests/`, `docs/`, este resumo e o `CLAUDE.md` |
+| Último commit | `44518dd` (13/10/2026): painel completo, contador de visitas e menu com a aba Visitas ao lado de Leads | o mais recente da `trabalho` (`git log -1`); igual ao `main` até o próximo ajuste |
+| O que tem | A pasta `site/` (vitrine, imóveis, formulário, `/painel`, `/privacidade`, funções `api/`, `sitemap.xml`, `robots.txt`) e, fora dela, `supabase/`, `tests/`, `docs/`, este resumo e o `CLAUDE.md` | O mesmo que o `main`, mais o que estiver sendo feito e ainda não foi publicado |
 | Este resumo e o `CLAUDE.md` | Existem (desde que a `trabalho` entrou no `main`) | Existem |
 | Como muda | Só com o seu **"podemos colocar no ar"** | Commits normais ("envie para o github") |
 
@@ -372,6 +372,9 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - Cadastrar o `sitemap.xml` no Google Search Console e abrir `https://www.chiadoconstrutora.com.br/?nao_contar=1` em cada navegador da equipe continuam como ações do usuário.
 
 ### Ajustes depois de ir ao ar (13/10/2026)
+- **Publicado no ar em 13/10/2026 (segundo "podemos colocar no ar")**: o `main` foi para `44518dd` (avanço simples, sem nada novo do `/admin`); conferidos no oficial
+  `/`, `/painel/`, `/privacidade`, `/imovel/carmo`, `/sitemap.xml`, o menu novo (`ui.js` e `painel.css`), `keep-alive` ok, `GET /api/visita` 405 e o resumo não público (404).
+  Neste ponto `main` e `trabalho` estão iguais.
 - **Menu do painel:** a aba **Visitas** passou a ficar ao lado de **Leads** (grupo da esquerda), com a aba atual sublinhada em dourado; "Dados da pessoa" e "Sair"
   ficaram à direita e os itens do topo não quebram mais de linha no celular (`site/painel/js/ui.js` e `painel.css`, commit `63e543c`). Testado no painel simulado;
   78 testes sem falhas (72 passam, 6 pulados). **Só está na `trabalho`/prévia**: o site oficial ainda tem o menu antigo até o próximo "podemos colocar no ar".
