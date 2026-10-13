@@ -1,4 +1,4 @@
-import { estado, moldura, mensagemErro, nomeFase, nomeEmp, h } from './ui.js';
+import { estado, moldura, baixar, mensagemErro, nomeFase, nomeEmp, h } from './ui.js';
 import * as api from './api.js';
 import { tempoRelativo, telefoneBonito, linkWhatsapp, linkTelefone } from './format.js';
 
@@ -58,7 +58,11 @@ function desenhar(lead, eventos, aviso = '') {
     '<form id="form-nota"><label class="sr-bloco">Nova anotação<textarea id="nota" rows="3" maxlength="2000">' + h(rascunho) + '</textarea></label>' +
     '<button type="submit" class="primario">Salvar anotação</button></form>' +
     '<h2>Histórico</h2><ul class="historico">' + historico + '</ul>' +
-    '<p class="sub"><a href="#/pessoa">Dados da pessoa (LGPD): exportar ou apagar</a></p>' +
+    '<h2>Dados da pessoa (LGPD)</h2>' +
+    '<p class="sub">Para atender um pedido de ' + h(lead.nome) + ': receber uma cópia dos dados ou apagar o cadastro.</p>' +
+    '<div class="acoes"><button type="button" id="exportar-dados">Exportar dados</button>' +
+    '<button type="button" id="apagar-dados" class="perigo">Apagar dados</button></div>' +
+    '<p class="sub"><a href="#/pessoa">Buscar outra pessoa por telefone ou e-mail</a></p>' +
     '</section>'
   );
 
@@ -78,6 +82,21 @@ function desenhar(lead, eventos, aviso = '') {
     }
     recarregar();
   }
+
+  document.getElementById('exportar-dados').addEventListener('click', () => {
+    baixar('dados-' + lead.id + '.json', JSON.stringify({ lead, eventos }, null, 2), 'application/json');
+  });
+  document.getElementById('apagar-dados').addEventListener('click', async () => {
+    if (!window.confirm('Apagar todos os dados de ' + lead.nome + '? Isso não pode ser desfeito.')) return;
+    try {
+      await api.apagarLead(lead.id);
+    } catch (e) {
+      console.error(e);
+      return recarregar('Não foi possível apagar. Tente de novo.');
+    }
+    try { localStorage.removeItem(chaveRascunho(lead.id)); } catch (e) {}
+    location.hash = '#/';
+  });
 
   document.getElementById('fases').addEventListener('click', (ev) => {
     const b = ev.target.closest('[data-fase]');
