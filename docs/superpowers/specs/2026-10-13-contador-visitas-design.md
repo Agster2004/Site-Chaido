@@ -11,6 +11,11 @@ conversão (leads ÷ visitas).
 Uma sessão do navegador, contada **uma vez**, na página em que a pessoa entrou. Quem abre várias páginas na mesma visita conta 1.
 Robôs e prévias de link (WhatsApp, Facebook etc.) não contam. A equipe pode se excluir abrindo o site uma vez com `?nao_contar=1` (`?nao_contar=0` desfaz); a marca fica no navegador e vale só para aquele endereço.
 
+## Onde conta
+**Só no site oficial** (`www.chiadoconstrutora.com.br` e `chiadoconstrutora.com.br`). O navegador (`utm.js`, `enderecoContavel`) só envia a contagem nesses endereços e o
+servidor (`api/visita.js`, `hostContavel`) também ignora qualquer outro (204, sem gravar). Assim a prévia da Vercel e os testes não entram nos números.
+`VISITA_HOSTS` (variável) aceita endereços extras só para testes e simulações locais.
+
 ## Dados
 Tabela `visitas_diarias (dia, caminho, fonte, meio, campanha, total)`, uma linha por combinação por dia (fuso de São Paulo).
 **Nenhum dado pessoal:** sem IP, sem nome, sem cookie. Origem = UTM do link; sem UTM, o site de origem (meio `referencia`); sem nada, direto.

@@ -13,7 +13,7 @@ virar venda no financeiro) é uma decisão à parte, tomada com o usuário e des
 
 > **NO AR desde 13/10/2026:** a `trabalho` foi publicada no `main` (commit `ddb4082`, avanço simples) com o "podemos colocar no ar" do usuário. O site
 > oficial agora tem formulário, `/painel`, `/privacidade`, contador de visitas, origem no WhatsApp e keep-alive. No momento da publicação `main` e `trabalho` estavam no mesmo
-> commit (`ddb4082`); depois a `trabalho` andou à frente com o ajuste do menu e o botão "Quero saber mais", publicados no segundo e no terceiro "podemos colocar no ar" (seção 7, "Ajustes depois de ir ao ar"); confira sempre com `git log --oneline origin/main..trabalho`; o `main` passa a ter também este resumo, o `CLAUDE.md`, `docs/`, `tests/` e `supabase/` (fora de `site/`, não ficam públicos). Detalhes e
+> commit (`ddb4082`); depois a `trabalho` andou à frente com o ajuste do menu, o botão "Quero saber mais" e a trava de contagem só no site oficial, publicados nos "podemos colocar no ar" seguintes (seção 7, "Ajustes depois de ir ao ar"); confira sempre com `git log --oneline origin/main..trabalho`; o `main` passa a ter também este resumo, o `CLAUDE.md`, `docs/`, `tests/` e `supabase/` (fora de `site/`, não ficam públicos). Detalhes e
 > o que ainda falta: veja "O que ficou pendente" e a seção 7 (entrada "13/10/2026, no ar"). Onde o texto abaixo disser "ainda NÃO no ar", leia "agora no ar".
 
 **Antes de tudo, em qualquer computador:** este projeto trabalha na branch **`trabalho`**, não no `main` (o `main` é o
@@ -25,7 +25,7 @@ site no ar). Este arquivo e o `CLAUDE.md` **só existem na `trabalho`**. Se voc�
 | | `main` | `trabalho` |
 |---|---|---|
 | Para que serve | O **site oficial no ar** (`www.chiadoconstrutora.com.br`). O `/admin` grava aqui | Onde **trabalhamos**; gera a **prévia** (`site-chaido-git-trabalho-chiado.vercel.app`) |
-| Último commit | `91aa9ad` (13/10/2026): painel completo, contador de visitas, menu com a aba Visitas ao lado de Leads e botão "Quero saber mais" | o mais recente da `trabalho` (`git log -1`); igual ao `main` até o próximo ajuste |
+| Último commit | `ee80abf` (13/10/2026): painel completo, contador de visitas (só conta no site oficial), menu com a aba Visitas ao lado de Leads e botão "Quero saber mais" | o mais recente da `trabalho` (`git log -1`); igual ao `main` até o próximo ajuste |
 | O que tem | A pasta `site/` (vitrine, imóveis, formulário, `/painel`, `/privacidade`, funções `api/`, `sitemap.xml`, `robots.txt`) e, fora dela, `supabase/`, `tests/`, `docs/`, este resumo e o `CLAUDE.md` | O mesmo que o `main`, mais o que estiver sendo feito e ainda não foi publicado |
 | Este resumo e o `CLAUDE.md` | Existem (desde que a `trabalho` entrou no `main`) | Existem |
 | Como muda | Só com o seu **"podemos colocar no ar"** | Commits normais ("envie para o github") |
@@ -127,7 +127,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - Fotos do Carmo foram reduzidas a 1400 px (a página do Carmo foi de 4,3 MB para 1,8 MB). Os originais
   de 2000 px só existem no histórico do git. **Fotos novas enviadas pelo painel não são reduzidas.**
 - Sem build e sem `package.json`: HTML/CSS/JS puros e funções da Vercel que usam só `fetch`.
-- Testes automáticos: `node --test` na raiz (sem instalar nada; 77 testes, 71 passam e 6 são pulados porque precisam de
+- Testes automáticos: `node --test` na raiz (sem instalar nada; 82 testes, 76 passam e 6 são pulados porque precisam de
   chaves do Supabase: `tests/rls.test.mjs`). Além deles, as telas foram testadas num servidor local com Supabase
   simulado e as funções, com `curl` na prévia da Vercel.
 
@@ -158,8 +158,8 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   `supabase/migrations/0001_leads.sql` aplicada e o usuário William liberado em `usuarios_painel`; funções
   `/api/lead`, `/api/painel-config` e `/api/sitemap` (com `/privacidade`); formulário "Quero saber mais" na home e nas
   páginas dos imóveis; painel `/painel` (login, lista com 4 números e filtros, exportar CSV, ficha do lead com
-  fase/anotações/histórico, "Dados da pessoa" com exportar e apagar); `/privacidade`; 77 testes automáticos
-  (`node --test`: 71 passam, 6 pulados que precisam de chaves: `tests/rls.test.mjs`).
+  fase/anotações/histórico, "Dados da pessoa" com exportar e apagar); `/privacidade`; 82 testes automáticos
+  (`node --test`: 76 passam, 6 pulados que precisam de chaves: `tests/rls.test.mjs`).
 - **Verificado no Supabase real:** contagens 6/5/1/1 (fases, motivos, consentimento, usuário); RLS ligada nas 7
   tabelas; visitante sem permissão nas funções `registrar_lead` e `permitir_envio`; lead enviado pelo celular gravado;
   repetir o telefone soma `retornos`; login, lista, mudar fase, anotar e exportar pelo painel (arquivo JSON com lead e
@@ -377,7 +377,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   Neste ponto `main` e `trabalho` estão iguais.
 - **Menu do painel:** a aba **Visitas** passou a ficar ao lado de **Leads** (grupo da esquerda), com a aba atual sublinhada em dourado; "Dados da pessoa" e "Sair"
   ficaram à direita e os itens do topo não quebram mais de linha no celular (`site/painel/js/ui.js` e `painel.css`, commit `63e543c`). Testado no painel simulado;
-  78 testes sem falhas (72 passam, 6 pulados). **Só está na `trabalho`/prévia**: o site oficial ainda tem o menu antigo até o próximo "podemos colocar no ar".
+  78 testes sem falhas (72 passam, 6 pulados). (Na hora estava só na prévia; **foi publicado logo em seguida**, veja a linha "Publicado no ar em 13/10/2026 (segundo ...)" acima.)
 - Regra reforçada pelo uso: depois de ir ao ar, o fluxo continua o mesmo (mudar na `trabalho`, testar na prévia, esperar o "podemos colocar no ar" para o `main`);
   o `/admin` continua gravando direto no `main`, então o "puxe do github" confere o `main` antes de qualquer publicação.
 
@@ -387,11 +387,12 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   formulário, o menu do celular fecha ao clicar. **Publicado no oficial (terceiro "podemos colocar no ar" do dia, `main` em `91aa9ad`, avanço simples, nada novo do `/admin`)**; conferido no ar: home, imóveis, privacidade, painel e sitemap
   com 200, 2 links `#interesse` na home, 1 no menu do Carmo, keep-alive ok, e o clique do botão no site real desce até o formulário. Se alguém ainda não vir o formulário, pode ser versão antiga no navegador (atualização forçada).
 
-- **Contador só conta no site oficial (13/10/2026, na `trabalho`):** as visitas feitas na prévia da Vercel e em testes estavam sendo somadas às reais (mesmo banco). Agora o
+- **Contador só conta no site oficial (13/10/2026, NO AR):** as visitas feitas na prévia da Vercel e em testes estavam sendo somadas às reais (mesmo banco). Agora o
   navegador (`utm.js`, `enderecoContavel`) só manda a visita se o endereço for `www.chiadoconstrutora.com.br` ou `chiadoconstrutora.com.br`, e o servidor (`api/visita.js`,
   `hostContavel`) também ignora qualquer outro endereço (204, sem gravar). `VISITA_HOSTS` (variável, só para testes/simulações; o servidor de simulação usa `localhost:4173`)
-  permite endereços extras. 82 testes (76 passam, 6 pulados). **Só vale no oficial depois do próximo "podemos colocar no ar".** As linhas de teste que já estão no banco continuam
-  (`delete from public.visitas_diarias where fonte = 'teste-claude';`).
+  permite endereços extras. 82 testes (76 passam, 6 pulados). **Publicado no oficial (quarto "podemos colocar no ar" do dia, `main` em `ee80abf`, avanço simples, nada novo do `/admin`).** Conferido no ar: home, Carmo, privacidade, painel e sitemap 200; o script
+  oficial tem a trava; keep-alive ok; `GET /api/visita` 405; um POST vindo da prévia dá 204 (ignorado). **O usuário zerou a tabela de visitas no Supabase** (`truncate public.visitas_diarias;`)
+  para tirar os testes; a aba Visitas deve mostrar 0 até chegarem visitas reais do oficial. Antes de divulgar o link da bio, abrir `?nao_contar=1` nos aparelhos da equipe.
 
 ## 8. Regras de trabalho
 
@@ -404,7 +405,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 ## 9. Como fazer (passo a passo)
 
 ### Testes
-- **Todos os testes automáticos:** `node --test` na raiz do repositório (77 testes; 6 ficam "pulados" porque pedem chaves).
+- **Todos os testes automáticos:** `node --test` na raiz do repositório (82 testes; 6 ficam "pulados" porque pedem chaves).
 - **Banco (42 cenários) e telas do painel/formulário sem o Supabase real:** `tests/ferramentas/LEIAME.md`.
 - **Acesso ao Supabase real, de fora (opcional):** no terminal do próprio usuário, defina `TESTE_SUPABASE_URL`,
   `TESTE_ANON_KEY` e `TESTE_SERVICE_KEY` e rode `node --test tests/rls.test.mjs`. As chaves nunca vão para o chat nem para arquivos.
