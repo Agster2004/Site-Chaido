@@ -213,6 +213,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   renda necessária, distância do mar, ano de entrega) e selo de status com "atualizado em" (inspirado em Murray Lançamentos e HLA Construtora; falta
   decidir o que mostrar publicamente); blog como projeto à parte; textos prontos do WhatsApp Business (saudação, ausência, respostas rápidas do Garrett
   e do Carmo e uma mensagem pré-preenchida diferente por anúncio); `va-disable` para o Vercel Analytics ignorar as visitas da equipe (exigiria mudança no `main`).
+- **Perfil somente leitura para quem só acompanha o painel** (hoje todo usuário liberado pode apagar e exportar); pede desenho e "pode construir".
 - **Opções para antecipar valor sem esperar o painel:** publicar só no `main`, em pacote separado, o `utm.js` (origem no WhatsApp) e/ou um keep-alive mínimo.
 - Anotado: `OAUTH_CLIENT_SECRET` aparece na Vercel com "Needs Attention" (valor sem proteção Sensitive); ver com calma.
 - No ar, repetir `?nao_contar=1` em cada navegador da equipe no endereço oficial (`https://www.chiadoconstrutora.com.br/?nao_contar=1`).
@@ -394,6 +395,14 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   oficial tem a trava; keep-alive ok; `GET /api/visita` 405; um POST vindo da prévia dá 204 (ignorado). **O usuário zerou a tabela de visitas no Supabase** (`truncate public.visitas_diarias;`)
   para tirar os testes; a aba Visitas deve mostrar 0 até chegarem visitas reais do oficial. Antes de divulgar o link da bio, abrir `?nao_contar=1` nos aparelhos da equipe.
 
+### Segundo usuário do painel (13/10/2026)
+- Criado no Supabase (*Authentication → Users*, com "Auto Confirm User") e liberado em `usuarios_painel` o usuário **`contato@chiadoconstrutora.com.br`**, para uma segunda pessoa
+  acompanhar o painel. A senha foi definida pelo usuário e **não está em nenhum arquivo nem no chat**. Na primeira tentativa o `insert` não achou o e-mail (nenhuma linha entrou, e o
+  Supabase mostrou "Success" mesmo assim); resolvido conferindo `auth.users` e refazendo com o e-mail exato; depois o usuário confirmou que deu certo. Agora há **2 usuários** no painel
+  (o do usuário William, `cv.cvwill@gmail.com`, e este).
+- **Cuidado combinado:** o acesso é total (inclui apagar leads). Se o objetivo for só acompanhar, a opção é construir um perfil **somente leitura** (regra nova no banco e ajuste dos botões do
+  painel; esforço médio; pede "pode construir"). Ainda não foi pedido.
+
 ## 8. Regras de trabalho
 
 - Só mexer neste projeto; nunca no Site Financeiro (repositório, pasta, banco ou chaves).
@@ -423,7 +432,12 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   public.leads order by criado_em desc;`
 - **Criar um usuário do painel:** *Authentication → Users → Add user → Create new user* (e-mail, senha forte, "Auto Confirm User"
   marcado) e depois liberar: `insert into public.usuarios_painel (user_id, nome) select id, 'Nome' from auth.users where email =
-  'email@exemplo.com';` (o "Success" não diz quantas linhas entraram: conferir com a consulta de contagem).
+  'email@exemplo.com';` (o "Success" não diz quantas linhas entraram: conferir com `select nome from public.usuarios_painel;`).
+  **Se o nome não aparecer**, o e-mail do SQL não bate com o do usuário (maiúscula, espaço, `.com` x `.com.br`): rodar
+  `select id, email, email_confirmed_at from auth.users order by created_at desc;`, copiar o e-mail exatamente como está e refazer o `insert` com
+  `lower(email) = lower('...')`. Se `email_confirmed_at` estiver vazio, faltou "Auto Confirm User". Teste do acesso: janela anônima em `/painel/`.
+  **Hoje todo usuário liberado tem acesso total** (ver tudo, mudar fase, anotar, exportar CSV e **apagar leads**); não existe perfil só de leitura.
+  Esqueci a senha: não há tela no painel; o admin redefine em *Authentication → Users → o usuário → Send password recovery*.
 - **Cadastro aberto desligado:** *Authentication → Sign In / Providers → "Allow new users to sign up"* desligado.
 - **Chaves e endereço:** *Project Settings → API Keys* ("Publishable"/"Secret", ou "anon"/"service_role" no formato antigo) e
   *Project Settings → Data API* (endereço do projeto). **Nunca** em captura de tela, no chat ou em arquivo do repositório.
