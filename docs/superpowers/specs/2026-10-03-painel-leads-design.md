@@ -244,3 +244,9 @@ Não bloqueiam a revisão deste desenho. Cada uma tem um valor padrão sugerido.
 - Plano do Supabase: pago (recomendado) ou gratuito.
 - Prazo de retenção de leads parados: 24 meses (sugerido).
 - E-mail da empresa para pedidos de privacidade.
+
+## Atualização de 13/10/2026
+- Plano do Supabase: por enquanto segue o **gratuito**, com um keep-alive diário (`api/keep-alive.js`); o Pro (US$ 25/mês) volta à decisão antes de ir ao ar.
+- Prazo de retenção: ainda **sem número**; a sugestão de 24 meses depende do advogado, e o apagamento automático ainda não existe (é manual, pelo painel).
+- O painel ganhou a tela **Visitas** (contador próprio): ver `2026-10-13-contador-visitas-design.md`.
+- A origem do visitante também vai na mensagem de WhatsApp dos botões do site (`assets/utm.js`).

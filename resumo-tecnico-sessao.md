@@ -15,7 +15,7 @@ virar venda no financeiro) é uma decisão à parte, tomada com o usuário e des
 site no ar). Este arquivo e o `CLAUDE.md` **só existem na `trabalho`**. Se você não os vê, está no `main`: rode
 `git fetch` e `git checkout trabalho` (uma vez só) e depois use "puxe do github" normalmente.
 
-**Os dois branches: o que cada um tem (conferido em 04/10/2026)**
+**Os dois branches: o que cada um tem (conferido em 13/10/2026)**
 
 | | `main` | `trabalho` |
 |---|---|---|
@@ -34,18 +34,28 @@ no outro computador, deixe a pasta sempre na `trabalho`.**
    (`/imovel/<slug>`), `sitemap.xml`, `robots.txt`, dados estruturados e acessibilidade básica (Etapas 1 e 2).
 2. **Painel de leads (`trabalho`, ainda NÃO no ar):** formulário "Quero saber mais" na home e nos imóveis; banco no Supabase;
    painel `/painel` com login, lista com números e filtros, ficha do lead (fase, anotações, histórico) e "Dados da pessoa"
-   (exportar e apagar, LGPD); `/privacidade`. Testado no Supabase real e na prévia
+   (exportar e apagar, LGPD; na ficha há os botões **Exportar dados** e **Apagar dados**); `/privacidade`. Testado no Supabase real e na prévia
    `site-chaido-git-trabalho-chiado.vercel.app`.
+3. **Contador de visitas dentro do painel (`trabalho`, ainda NÃO no ar):** tela `#/visitas` com visitas hoje, 7 e 30 dias, por dia, por origem
+   (instagram/bio, anúncio pago, Google, direto), por página de entrada e conversão em lead. Migração `0002_visitas.sql` **já aplicada** no
+   Supabase e verificada (13/10/2026). Equipe se exclui abrindo o site uma vez com `?nao_contar=1`. Seção "Contagem de visitas" na `/privacidade`.
+4. **Origem na mensagem do WhatsApp (`trabalho`):** quem entra por link com UTM (ex.: bio do Instagram) e clica em um botão de WhatsApp do site envia
+   "(origem: instagram/bio)" na mensagem. Só vale no oficial depois do "podemos colocar no ar".
+5. **Keep-alive do Supabase (`trabalho`):** `api/keep-alive.js` + cron diário; só roda em Produção, então só funciona sozinho depois do "podemos colocar no ar".
+6. **Medição de visitas da Vercel (`main`, no ar):** Vercel Web Analytics (plano Hobby, sem UTM).
 
-**Onde paramos:** tudo do painel está construído e testado, e o aviso por e-mail (Resend) está funcionando. A medição de visitas já
-está no ar (`main`). Falta **colocar o painel no ar**, e isso depende de decisões e ações suas (itens 2 a 4 abaixo).
+**Onde paramos (13/10/2026):** tudo do painel, do contador de visitas e do aviso por e-mail está construído e testado na `trabalho`. A
+medição de visitas da Vercel já está no ar (`main`). Falta **colocar o painel no ar**, e isso depende de decisões e ações suas (itens 2 a 4 abaixo).
+Material pronto para apresentar/enviar: `docs/orcamento-infraestrutura-site-chiado.pdf` (US$ 45/mês) e
+`docs/politica-privacidade-para-revisao-juridica.pdf` (para o advogado). Os anúncios do Instagram vão direto ao WhatsApp Business (não passam pelo site).
 
 **O que ficou pendente, nesta ordem**
 1. ~~**Resend (e-mail de aviso de lead)**~~ **FEITO em 07 e 09/10/2026:** DNS verificado, variáveis na Vercel e aviso testado e
    recebido nos dois e-mails. (Texto original: adicionar DNS no Registro.br, verificar, criar a chave e colar as três variáveis.)
    Detalhes na seção 7 (entradas de 05/10 e 07/10 a 13/10/2026).
-2. **Plano do Supabase** (o gratuito pausa por inatividade; Pro US$ 25/mês), **Vercel Pro** (o Hobby não é para uso
-   comercial) e **advogado** lendo `/privacidade`.
+2. **Plano do Supabase** (o gratuito pausa por inatividade, e já pausou uma vez; Pro US$ 25/mês; decisão atual: seguir no gratuito com o
+   keep-alive e rever antes de ir ao ar), **Vercel Pro** (o Hobby não é para uso comercial; US$ 20/mês por assento) e **advogado** lendo a
+   `/privacidade` (levar o PDF `docs/politica-privacidade-para-revisao-juridica.pdf`, que lista 13 pontos de dúvida).
 3. **Apagar os leads de teste** e fazer o **teste final** no celular e no computador.
 4. O seu **"podemos colocar no ar"**: só então a `trabalho` entra no `main`.
 
@@ -184,7 +194,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 ## 6. Pendências e próximos passos
 
 - **Para ir ao ar:** os itens 2 a 6 da seção 5 ("Antes de colocar no ar"); o item 1 (Resend) já está feito.
-- **Frase sobre a medição de visitas (sem cookies) em `/privacidade`**, ao colocar o painel no ar.
+- ~~Frase sobre a medição de visitas em `/privacidade`~~ **feita** (seção "Contagem de visitas", 13/10/2026); o advogado ainda deve revisar a redação.
 - **Painel de leads, opcionais:** segundo usuário sem permissão no Supabase real para ver a mensagem de bloqueio;
   `tests/rls.test.mjs` com chaves de teste no terminal do usuário; paginar a lista quando passar de 1000 leads (limite
   padrão do Supabase); aviso por WhatsApp; atribuir leads a vários vendedores (o campo `atribuido_a` já existe);
@@ -194,8 +204,15 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - Opcionais do site: reduzir o escopo do login do painel `/admin` (hoje `repo,user`) e adicionar `state` — risco de
   travar o acesso; legenda no vídeo do Garrett; tirar o `?slug=` duplicado do redirect; medição oficial do PageSpeed
   (a cota gratuita estava esgotada); limite de tamanho de imagem no `admin/config.yml`.
-- Próximos projetos do plano maior: 2 acessos do site, 5 tráfego pago, 3 divulgação, 4 impulsionar vendas (cada um com
-  desenho e "pode construir" próprios).
+- **Ideias combinadas, ainda não construídas** (cada uma pede desenho e "pode construir"): dados práticos nos cards dos empreendimentos (entrada,
+  renda necessária, distância do mar, ano de entrega) e selo de status com "atualizado em" (inspirado em Murray Lançamentos e HLA Construtora; falta
+  decidir o que mostrar publicamente); blog como projeto à parte; textos prontos do WhatsApp Business (saudação, ausência, respostas rápidas do Garrett
+  e do Carmo e uma mensagem pré-preenchida diferente por anúncio); `va-disable` para o Vercel Analytics ignorar as visitas da equipe (exigiria mudança no `main`).
+- **Opções para antecipar valor sem esperar o painel:** publicar só no `main`, em pacote separado, o `utm.js` (origem no WhatsApp) e/ou um keep-alive mínimo.
+- Anotado: `OAUTH_CLIENT_SECRET` aparece na Vercel com "Needs Attention" (valor sem proteção Sensitive); ver com calma.
+- No ar, repetir `?nao_contar=1` em cada navegador da equipe no endereço oficial (`https://www.chiadoconstrutora.com.br/?nao_contar=1`).
+- Próximos projetos do plano maior: **2 acessos do site** (feito em parte: Vercel Analytics no `main` e contador próprio na `trabalho`), 5 tráfego pago
+  (hoje: anúncios no Instagram direto ao WhatsApp), 3 divulgação, 4 impulsionar vendas (cada um com desenho e "pode construir" próprios).
 
 ## 7. Registro por sessão
 

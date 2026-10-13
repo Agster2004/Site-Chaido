@@ -3,10 +3,10 @@
 Este site é só HTML/CSS/JS estático + duas funções pequenas (em `/api`) que
 existem só para o login do painel administrativo funcionar. Siga na ordem.
 
-> **Estado atual (03/10/2026).** Este guia é o passo a passo original de publicação e continua valendo para o
+> **Estado atual (13/10/2026).** Este guia é o passo a passo original de publicação e continua valendo para o
 > painel `/admin` (empreendimentos). O projeto real é o repositório `Agster2004/Site-Chaido`, publicado na Vercel
 > como `site-chaido` em `www.chiadoconstrutora.com.br`. Hoje existem **dois painéis**: `/admin` (Decap CMS: edita os
-> empreendimentos) e `/painel` (leads e vendas, em construção na branch `trabalho`). Para o estado completo, as regras
+> empreendimentos) e `/painel` (leads, vendas e visitas ao site; pronto na branch `trabalho`, ainda não está no ar). Para o estado completo, as regras
 > de trabalho e as pendências, leia `resumo-tecnico-sessao.md` e `CLAUDE.md` na raiz do repositório.
 >
 > **Variáveis de ambiente do projeto na Vercel** (só os nomes; os valores ficam na Vercel, nunca no repositório):
