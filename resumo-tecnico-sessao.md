@@ -381,6 +381,11 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - Regra reforçada pelo uso: depois de ir ao ar, o fluxo continua o mesmo (mudar na `trabalho`, testar na prévia, esperar o "podemos colocar no ar" para o `main`);
   o `/admin` continua gravando direto no `main`, então o "puxe do github" confere o `main` antes de qualquer publicação.
 
+- **Botão "Quero saber mais" (13/10/2026, na `trabalho`):** o usuário não achava o formulário no site oficial: ele existe (conferido em navegador limpo), mas fica no meio da
+  home e nenhum item de cima levava até ele ("Contato" e "Fale conosco" vão ao WhatsApp). Acrescentado o link **Quero saber mais** (`#interesse`) no menu da home e da página dos
+  imóveis e um botão no início da home, ao lado de "Ver Residencial Garrett/Carmo" (`site/index.html`, `site/imovel.html`). Testado no navegador (computador e celular): leva ao
+  formulário, o menu do celular fecha ao clicar. **Só na prévia até o próximo "podemos colocar no ar".** Se alguém ainda não vir o formulário, pode ser versão antiga no navegador (atualização forçada).
+
 ## 8. Regras de trabalho
 
 - Só mexer neste projeto; nunca no Site Financeiro (repositório, pasta, banco ou chaves).
