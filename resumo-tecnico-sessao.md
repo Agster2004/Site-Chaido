@@ -89,7 +89,7 @@ pago, divulgação, impulsionar vendas), cada um com desenho e "pode construir" 
 | `api/painel-config.js` | Entrega ao painel a URL e a chave **pública** do Supabase |
 | `api/visita.js`, `api/_lib/visita.js` | Contador de visitas (`POST /api/visita`): uma por sessão, na página de entrada; só somas por dia, página e origem (sem IP, nome ou cookie). Ignora robôs e prévias de link, só aceita caminhos conhecidos (`/`, `/privacidade`, `/imovel/<slug>`) e responde 204 mesmo se o banco falhar. Grava com `registrar_visita` (migração `0002_visitas.sql`, tabela `visitas_diarias`) |
 | `painel/js/tela-visitas.js` | Tela `#/visitas` do painel: visitas hoje, 7 e 30 dias, por dia, por origem, por página de entrada e conversão (leads ÷ visitas em 30 dias) |
-| `assets/utm.js` | Guarda a origem da visita na sessão, manda a contagem para `/api/visita` e acrescenta "(origem: ...)" às mensagens dos botões de WhatsApp. Opt-out: `localStorage.setItem('chiado_nao_contar','1')` no navegador |
+| `assets/utm.js` | Guarda a origem da visita na sessão, manda a contagem para `/api/visita` e acrescenta "(origem: ...)" às mensagens dos botões de WhatsApp. Opt-out da equipe: abrir o site uma vez com `?nao_contar=1` (e `?nao_contar=0` desfaz); vale só para aquele navegador e aquele endereço (a prévia e o site oficial são separados); ou `localStorage.setItem('chiado_nao_contar','1')` no console |
 | `api/keep-alive.js` | Leitura diária em `fases` para o Supabase gratuito não pausar; chamada pelo cron do `vercel.json` (`0 12 * * *`). Cron só roda em **Produção** (o `main`), não nas prévias. Aceita `CRON_SECRET` se existir |
 | `painel/` (`index.html`, `painel.css`, `js/*.js`) | Painel de leads em `/painel` (login, lista, ficha, dados da pessoa); `noindex` |
 
@@ -329,9 +329,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   (tabela `visitas_diarias`; função `registrar_visita` só para `service_role`; 500 combinações novas por dia no máximo, o excesso vira "outros"; leitura só
   para `usuarios_painel`), `site/api/visita.js` + `_lib/visita.js`, contagem em `utm.js`, tela `#/visitas` (link "Visitas" no menu), seção "Contagem de
   visitas" na `/privacidade`. Testes: 77 no total (71 passam, 6 pulados), mais `banco-cenarios.mjs` com **57 cenários** (15 novos). Conferido no navegador
-  com servidores simulados: o beacon chega em `/api/visita`, só 1 visita por sessão, e a opção de não contar funciona. **Pendente para funcionar na prévia:
-  o usuário rodar `0002_visitas.sql` no SQL Editor do Supabase** (sem isso `/api/visita` só registra erro no log e a tela Visitas avisa que falta a migração).
-  Os números podem diferir do Vercel Analytics. Material do advogado (`docs/politica-privacidade-para-revisao-juridica.pdf`) regenerado com a nova seção.
+  com servidores simulados: o beacon chega em `/api/visita`, só 1 visita por sessão, e a opção de não contar funciona. **Migração 0002 aplicada no Supabase pelo usuário (13/10/2026) e verificada:** a tabela existe (leitura anônima devolve lista vazia pelas regras de acesso) e `registrar_visita` nega execução a anônimo (42501). Uma visita de teste (origem `teste-claude / teste`, página `/privacidade`) apareceu na tela Visitas do painel da prévia: o contador funciona de ponta a ponta. Para limpar o teste: `delete from public.visitas_diarias where fonte = 'teste-claude';`. Os números podem diferir do Vercel Analytics. Material do advogado (`docs/politica-privacidade-para-revisao-juridica.pdf`) regenerado com a nova seção.
 - **Onde parou:** item 1 de "Antes de colocar no ar" feito (Resend). Faltam os itens 2 a 6 da seção 5 (no item 2, a decisão atual é ficar no
   plano gratuito do Supabase com o keep-alive, e rever o Pro antes de ir ao ar). Medição de visitas no ar; keep-alive pronto na `trabalho`.
 

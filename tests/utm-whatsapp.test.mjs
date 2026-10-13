@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 
 // utm.js é um script de navegador (sem módulos); quando carregado no Node ele só exporta as funções puras.
-const { rotuloOrigem, comOrigem, corpoVisita } = createRequire(import.meta.url)('../site/assets/utm.js');
+const { rotuloOrigem, comOrigem, corpoVisita, acaoNaoContar } = createRequire(import.meta.url)('../site/assets/utm.js');
 
 const insta = { fonte: 'instagram', meio: 'bio', campanha: '', referrer: '' };
 const link = (texto) => 'https://wa.me/5513997770974' + (texto == null ? '' : '?text=' + encodeURIComponent(texto));
@@ -63,4 +63,14 @@ test('corpoVisita converte o endereço antigo do imóvel e a página inicial', (
   assert.equal(corpoVisita({ entrada: '/index.html' }, '').caminho, '/');
   assert.equal(corpoVisita({ entrada: '/privacidade' }, '').caminho, '/privacidade');
   assert.equal(corpoVisita(null).caminho, '/');
+});
+
+test('acaoNaoContar: ?nao_contar=1 liga, ?nao_contar=0 desliga, qualquer outra coisa não faz nada', () => {
+  assert.equal(acaoNaoContar('?nao_contar=1'), 'ligar');
+  assert.equal(acaoNaoContar('?utm_source=x&nao_contar=1'), 'ligar');
+  assert.equal(acaoNaoContar('?nao_contar=0'), 'desligar');
+  assert.equal(acaoNaoContar('?nao_contar=2'), null);
+  assert.equal(acaoNaoContar('?utm_source=instagram'), null);
+  assert.equal(acaoNaoContar(''), null);
+  assert.equal(acaoNaoContar(undefined), null);
 });

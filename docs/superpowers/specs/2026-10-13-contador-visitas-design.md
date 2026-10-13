@@ -9,7 +9,7 @@ conversão (leads ÷ visitas).
 
 ## O que é uma "visita"
 Uma sessão do navegador, contada **uma vez**, na página em que a pessoa entrou. Quem abre várias páginas na mesma visita conta 1.
-Robôs e prévias de link (WhatsApp, Facebook etc.) não contam. A equipe pode se excluir com `localStorage.setItem('chiado_nao_contar','1')`.
+Robôs e prévias de link (WhatsApp, Facebook etc.) não contam. A equipe pode se excluir abrindo o site uma vez com `?nao_contar=1` (`?nao_contar=0` desfaz); a marca fica no navegador e vale só para aquele endereço.
 
 ## Dados
 Tabela `visitas_diarias (dia, caminho, fonte, meio, campanha, total)`, uma linha por combinação por dia (fuso de São Paulo).

@@ -62,13 +62,27 @@
     return { caminho: caminho, fonte: fonte, meio: meio, campanha: campanha };
   }
 
+  // Quem não quer ser contado (a equipe testando) abre o site uma vez com ?nao_contar=1 (e ?nao_contar=0 desfaz).
+  function acaoNaoContar(busca) {
+    var v = '';
+    try {
+      v = new URLSearchParams(busca || '').get('nao_contar');
+    } catch (e) {}
+    return v === '1' ? 'ligar' : v === '0' ? 'desligar' : null;
+  }
+
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { rotuloOrigem: rotuloOrigem, comOrigem: comOrigem, corpoVisita: corpoVisita };
+    module.exports = { rotuloOrigem: rotuloOrigem, comOrigem: comOrigem, corpoVisita: corpoVisita, acaoNaoContar: acaoNaoContar };
   }
   if (typeof document === 'undefined') return;
 
-  // Conta a visita. Quem não quer ser contado (a equipe testando) roda uma vez no console:
-  // localStorage.setItem('chiado_nao_contar', '1')
+  // Conta a visita, a menos que este navegador tenha pedido para não ser contado (veja acaoNaoContar).
+  try {
+    var acao = acaoNaoContar(location.search);
+    if (acao === 'ligar') localStorage.setItem('chiado_nao_contar', '1');
+    if (acao === 'desligar') localStorage.removeItem('chiado_nao_contar');
+  } catch (e) {}
+
   function contarVisita(origem) {
     try {
       if (location.protocol.indexOf('http') !== 0) return;
