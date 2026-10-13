@@ -9,7 +9,7 @@ lançamentos, contas, vendas por unidade). Ficam em repositórios, bancos e chav
 misturam**. Qualquer ligação entre os dois no futuro (por exemplo, uma venda fechada no painel de leads
 virar venda no financeiro) é uma decisão à parte, tomada com o usuário e desenhada antes.
 
-## COMECE POR AQUI (estado em 04/10/2026)
+## COMECE POR AQUI (estado em 13/10/2026)
 
 **Antes de tudo, em qualquer computador:** este projeto trabalha na branch **`trabalho`**, não no `main` (o `main` é o
 site no ar). Este arquivo e o `CLAUDE.md` **só existem na `trabalho`**. Se você não os vê, está no `main`: rode
@@ -20,12 +20,12 @@ site no ar). Este arquivo e o `CLAUDE.md` **só existem na `trabalho`**. Se voc�
 | | `main` | `trabalho` |
 |---|---|---|
 | Para que serve | O **site oficial no ar** (`www.chiadoconstrutora.com.br`). O `/admin` grava aqui | Onde **trabalhamos**; gera a **prévia** (`site-chaido-git-trabalho-chiado.vercel.app`) |
-| Último commit | `1ac5569` Etapa 2: SEO e acessibilidade básica | `4858871` regra "tudo dentro de `site/` é público" |
+| Último commit | `61b86b6` medição de visitas (Vercel Web Analytics, no ar desde 13/10/2026) | o mais recente da `trabalho` (`git log -1`); já contém o `main` |
 | O que tem | Só a pasta `site/`: vitrine, imóveis, `sitemap.xml`, `robots.txt`, imagens leves | Tudo do `main` **mais** formulário, painel `/painel`, `/privacidade`, banco (`supabase/`), `tests/`, `docs/`, este resumo e o `CLAUDE.md` |
 | Este resumo e o `CLAUDE.md` | **Não existem** | Existem |
 | Como muda | Só com o seu **"podemos colocar no ar"** | Commits normais ("envie para o github") |
 
-A `trabalho` está 20 commits à frente do `main` (confira: `git log --oneline origin/main..trabalho`). O `main` pode ter
+A `trabalho` está à frente do `main` (confira: `git log --oneline origin/main..trabalho`). O `main` pode ter
 commits que a `trabalho` não tem (edições do `/admin`): o "puxe do github" confere isso. **Este arquivo fica na raiz da `trabalho`;
 no outro computador, deixe a pasta sempre na `trabalho`.**
 
@@ -37,14 +37,13 @@ no outro computador, deixe a pasta sempre na `trabalho`.**
    (exportar e apagar, LGPD); `/privacidade`. Testado no Supabase real e na prévia
    `site-chaido-git-trabalho-chiado.vercel.app`.
 
-**Onde paramos:** tudo do painel está construído e testado. Falta **colocar no ar**, e isso depende de decisões e ações suas.
+**Onde paramos:** tudo do painel está construído e testado, e o aviso por e-mail (Resend) está funcionando. A medição de visitas já
+está no ar (`main`). Falta **colocar o painel no ar**, e isso depende de decisões e ações suas (itens 2 a 4 abaixo).
 
 **O que ficou pendente, nesta ordem**
-1. **Resend (e-mail de aviso de lead):** adicionar os registros de DNS no Registro.br, verificar o domínio, criar a chave
-   de envio e colar `RESEND_API_KEY`, `LEAD_FROM_EMAIL` e `LEAD_NOTIFY_EMAILS` na Vercel. Sem isso a equipe não é avisada.
-   (O DNS parou porque o login do Registro.br estava só no outro computador.)
-   **Atualização 05/10/2026:** CNAMEs `send` e `rsend` já estão no ar; falta o TXT `resend._domainkey` (a chave `p=` foi
-   colocada no domínio raiz por engano) e a verificação no Resend. Detalhes na seção 7, entrada de 05/10/2026.
+1. ~~**Resend (e-mail de aviso de lead)**~~ **FEITO em 07 e 09/10/2026:** DNS verificado, variáveis na Vercel e aviso testado e
+   recebido nos dois e-mails. (Texto original: adicionar DNS no Registro.br, verificar, criar a chave e colar as três variáveis.)
+   Detalhes na seção 7 (entradas de 05/10 e 07/10 a 13/10/2026).
 2. **Plano do Supabase** (o gratuito pausa por inatividade; Pro US$ 25/mês), **Vercel Pro** (o Hobby não é para uso
    comercial) e **advogado** lendo `/privacidade`.
 3. **Apagar os leads de teste** e fazer o **teste final** no celular e no computador.
@@ -83,6 +82,7 @@ pago, divulgação, impulsionar vendas), cada um com desenho e "pode construir" 
 | `api/imovel.js` | Serve `/imovel/<slug>` com title, canonical, og:*, JSON-LD e `<base href="/">` |
 | `api/sitemap.js` | Gera `/sitemap.xml` a partir do JSON |
 | `robots.txt`, `vercel.json` | Robots, redirecionamentos, rewrites e cabeçalhos de cache |
+| (fim de `index.html` e `imovel.html`) | Duas linhas do script do Vercel Web Analytics (`/_vercel/insights/script.js`); só funciona em deploys feitos depois de ligar o Analytics na Vercel |
 | `privacidade.html`, `assets/privacidade.js`, `data/empresa.json` | Política de privacidade (dados da empresa escritos na página e no JSON) |
 | `assets/utm.js`, `assets/lead-form.js`, `data/consentimento.json` | Formulário de interesse, origem da visita e texto de consentimento (`v1`) |
 | `api/lead.js`, `api/_lib/*.js` | Recebe o lead (`POST /api/lead`): validação, anti-robô, Supabase e e-mail (Resend) |
@@ -148,14 +148,13 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   permissão (só simulado), `tests/rls.test.mjs` com chaves. As telas foram testadas em celular e computador num
   Supabase simulado local e na prévia da Vercel.
 - **Variáveis na Vercel (Production e Preview):** `SUPABASE_URL`, `SUPABASE_ANON_KEY` (Config),
-  `SUPABASE_SERVICE_ROLE_KEY`, `IP_HASH_SALT` (Secret). **Faltam** `RESEND_API_KEY`, `LEAD_FROM_EMAIL`,
-  `LEAD_NOTIFY_EMAILS`. A `SUPABASE_URL` foi colada com `/rest/v1` no fim; o código aceita (`urlBase`), pode ficar.
+  `SUPABASE_SERVICE_ROLE_KEY`, `IP_HASH_SALT` (Secret), e desde 09/10/2026 `RESEND_API_KEY` (Secret), `LEAD_FROM_EMAIL` e
+  `LEAD_NOTIFY_EMAILS` (`contato@chiadoconstrutora.com.br` e `cv.cvwill@gmail.com`). A `SUPABASE_URL` foi colada com `/rest/v1` no fim; o código aceita (`urlBase`), pode ficar.
   O código aceita os dois formatos de chave do Supabase (antigas JWT e novas `sb_secret_`).
-- **Resend:** conta criada com `cv.cvwill@gmail.com`, domínio `chiadoconstrutora.com.br` adicionado; **DNS pendente**
-  (o usuário não tinha a senha do Registro.br neste computador): TXT `resend._domainkey`, CNAME `rsend`, CNAME `send`
-  e, opcional, TXT `_dmarc`; **deixar "Enable Receiving" desligado**; antes de adicionar, conferir a zona atual no
-  Registro.br. O e-mail definitivo que recebe o aviso de lead (`LEAD_NOTIFY_EMAILS`) **ficou em aberto de propósito**;
-  nos testes o aviso iria para `cv.cvwill@gmail.com` com o remetente de teste `onboarding@resend.dev`.
+- **Resend (CONCLUÍDO em 07 e 09/10/2026):** conta `cv.cvwill@gmail.com`, domínio `chiadoconstrutora.com.br` **Verified** (TXT
+  `resend._domainkey`, CNAME `rsend` e CNAME `send` no Registro.br; `_dmarc` opcional, não criado); **"Enable Receiving" fica
+  desligado** (o MX do domínio é do Google). Aviso de lead testado de ponta a ponta na prévia: chegou nos dois e-mails.
+  Falta só decidir se o `LEAD_NOTIFY_EMAILS` definitivo é esse (hoje: `contato@` e `cv.cvwill@gmail.com`).
 - **Dados da empresa em `/privacidade` (confirmados pelo usuário):** CHIADO CONSTRUTORA E INCORPORADORA LTDA - EPP;
   CNPJ 57.026.203/0001-74; Rua Jaú, 955, 2º andar, escritório 26 a 16, CEP 11701-190, Praia Grande/SP; e-mail para
   pedidos de privacidade chiadoconstrutora@gmail.com. Estão em `site/data/empresa.json` e escritos na página.
@@ -167,9 +166,8 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   (6) um valor de `IP_HASH_SALT` apareceu numa captura de tela e foi descartado antes de ser salvo; o salvo é outro.
 
 ### Antes de colocar no ar (decisões e ações do usuário)
-1. **Resend:** adicionar os registros de DNS no Registro.br, verificar o domínio, criar a chave de envio (só envio) e
-   colar `RESEND_API_KEY`, `LEAD_FROM_EMAIL` (ex.: `Chiado leads <leads@chiadoconstrutora.com.br>`) e
-   `LEAD_NOTIFY_EMAILS` na Vercel; testar o e-mail de aviso na prévia (Tarefa 4, passo 9).
+1. ~~**Resend**~~ **FEITO** (07 e 09/10/2026): DNS verificado, `RESEND_API_KEY`, `LEAD_FROM_EMAIL` e `LEAD_NOTIFY_EMAILS` na Vercel e
+   e-mail de aviso testado na prévia (Tarefa 4, passo 9). Resta decidir os destinatários definitivos de `LEAD_NOTIFY_EMAILS`.
 2. **Plano do Supabase:** o gratuito pausa por inatividade e tem backup limitado; Pro US$ 25/mês (valor do plano do
    Financeiro, a reconfirmar).
 3. **Vercel Pro** na equipe Chiado (o plano Hobby atual não permite uso comercial).
@@ -179,7 +177,8 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 
 ## 6. Pendências e próximos passos
 
-- **Para ir ao ar:** os 6 itens da seção 5 ("Antes de colocar no ar").
+- **Para ir ao ar:** os itens 2 a 6 da seção 5 ("Antes de colocar no ar"); o item 1 (Resend) já está feito.
+- **Frase sobre a medição de visitas (sem cookies) em `/privacidade`**, ao colocar o painel no ar.
 - **Painel de leads, opcionais:** segundo usuário sem permissão no Supabase real para ver a mensagem de bloqueio;
   `tests/rls.test.mjs` com chaves de teste no terminal do usuário; paginar a lista quando passar de 1000 leads (limite
   padrão do Supabase); aviso por WhatsApp; atribuir leads a vários vendedores (o campo `atribuido_a` já existe);
@@ -263,6 +262,38 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - Como saber se deu certo: no Resend, *Domains* -> o domínio -> *Verify DNS Records*; tudo verde = **Verified**. Depois, criar a API
   key só de envio e colar na Vercel `RESEND_API_KEY`, `LEAD_FROM_EMAIL` e `LEAD_NOTIFY_EMAILS`.
 - **Onde parou:** retomar amanhã pela criação do TXT `resend._domainkey` e a verificação no Resend. Nada novo no ar.
+
+### 07/10/2026 e 09/10/2026
+- **Resend concluído.** 07/10: o TXT `resend._domainkey` foi criado no Registro.br (a chave `p=` que estava no domínio raiz foi
+  editada para o nome certo; o TXT do raiz saiu), conferido por consulta aos dois servidores (`d.sec.dns.br`, `e.sec.dns.br`), e o
+  domínio `chiadoconstrutora.com.br` ficou **Verified** no Resend. O TXT `_dmarc` continua **não criado** (opcional).
+- 09/10: criada no Resend a API key só de envio e salvas na Vercel (Production e Preview) `RESEND_API_KEY` (Secret),
+  `LEAD_FROM_EMAIL` (`Chiado leads <leads@chiadoconstrutora.com.br>`) e `LEAD_NOTIFY_EMAILS` (`contato@chiadoconstrutora.com.br` e
+  `cv.cvwill@gmail.com`; o código separa por vírgula, `api/_lib/email.js`). Redeploy da **prévia** (não da Produção) a partir do
+  commit `beb3cf0`, porque variável nova só vale depois de um novo deploy.
+- **Teste real do aviso:** lead de teste enviado por `POST /api/lead` na prévia (nome "Teste Claude (pode apagar)", telefone
+  `11900000000`, origem `teste-claude`) → resposta 200 e **o e-mail de aviso chegou nos dois endereços**. Fica verificado no real o
+  que antes era só simulado. O lead de teste está no Supabase e entra na limpeza dos leads de teste.
+- Dúvidas respondidas: medir visitas por dia/mês (opções: Vercel Web Analytics, GA4, Plausible/Umami; recomendado começar pelo Vercel
+  Web Analytics, sem cookies, e somar o GA4 quando começar o tráfego pago) e como o Claude ajuda no tráfego pago (estrutura, textos,
+  UTMs, pixels e leitura de resultados; contas, cartão e orçamento são do usuário). Ambos são projetos novos do plano maior e pedem
+  desenho e "pode construir". A medição só vale a partir do dia em que é ligada.
+- Anotado: `OAUTH_CLIENT_SECRET` aparece na Vercel com "Needs Attention" (valor visível, sem Sensitive); não mexido, ver depois.
+- **Medição de visitas NO AR (13/10/2026, `main` em `61b86b6`).** Vercel Web Analytics (plano Hobby: 50.000 eventos/mês, 30 dias de
+  histórico, sem UTM; UTM e 12 meses exigem Pro + complemento Web Analytics Plus, US$ 10/mês). Duas linhas de script no fim de
+  `site/index.html` e `site/imovel.html` (cobre `/imovel/<slug>`). Sem cookies. Feito na branch `analytics-visitas` a partir do `main`,
+  testado na prévia e publicado com o "podemos colocar no ar" do usuário (push `--ff-only`); conferido no ar: home, `chiadoconstrutora.com.br`,
+  `/imovel/carmo` e `/_vercel/insights/script.js` (200). O `main` foi trazido para a `trabalho` (merge `4a49c68`, sem conflito).
+  **Armadilha:** o script só é servido por deploys feitos DEPOIS de ligar o Analytics no painel da Vercel (antes dava 404): é
+  preciso um Redeploy (da Preview, não da Produção). A branch `analytics-visitas` continua no GitHub (apagar só se o usuário pedir).
+  **Pendente:** frase sobre a medição sem cookies em `/privacidade` (que só existe na `trabalho`).
+- **Tráfego pago:** anúncios no Instagram levam **direto para o WhatsApp** (número `(13) 99777-0974`, WhatsApp Business); uma pessoa cuida do
+  acompanhamento. Por isso o formulário e o painel de leads não participam do fluxo dos anúncios. Plano: mensagem pré-preenchida diferente
+  por anúncio (origem), etiquetas padrão no WhatsApp Business, e a medição de visitas acima. Ideias de dois sites de referência
+  (Murray Lançamentos e HLA Construtora): dados práticos nos cards (entrada, renda necessária, distância do mar, ano de entrega),
+  selo de status e "atualizado em", UTMs nos links dos anúncios, e blog como projeto à parte; filtros só com muitos imóveis. Nada disso
+  foi construído ainda (pedem desenho e "pode construir"), à exceção da medição de visitas.
+- **Onde parou:** item 1 de "Antes de colocar no ar" feito (Resend). Faltam os itens 2 a 6 da seção 5. Medição de visitas no ar.
 
 ## 8. Regras de trabalho
 
