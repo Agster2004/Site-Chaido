@@ -1,0 +1,37 @@
+CAPA EM VIDEO DO CARMO - PASTA DE TRABALHO
+
+fotos\   As 5 imagens do Carmo em tamanho original (varanda e sacadas ja sem a marca do Google).
+videos\  Salve aqui os trechos gerados na IA (Hugging Face, Kling, Runway ou Veo). Depois e so avisar o Claude.
+         Esta pasta fica fora de site, entao NAO e publica. Vai para o GitHub e aparece nos dois computadores.
+         Evite arquivos acima de 50 MB (o GitHub recusa acima de 100 MB).
+
+fotos-16x9  As mesmas fotos ja cortadas no formato largo (1280x720). Use estas na IA.
+carmo-capa-com-pessoas-rascunho.mp4  Rascunho (17/10/2026): 3 cenas com pessoas + varanda e sacadas como fotos.
+
+COMO GERAR DE GRACA (usado em 17/10/2026): Hugging Face, pagina "Wan 2.2 I2V 14B Fast"
+(huggingface.co/spaces/zerogpu-aoti/wan2-2-fp8da-aoti-faster). Enviar a foto de fotos-16x9, colar o texto da cena,
+duracao 5 s, Generate Video, baixar o MP4. Sem marca d agua. Cota gratis curta (cerca de 3 cenas por dia sem conta).
+
+Kling (pago para uso no site: o gratis tem marca d agua e nao permite uso comercial):
+klingai.com > AI Videos > Image to Video, formato 16:9, 5 ou 10 s.
+
+Textos de cada cena:
+
+1-fachada-frente.jpg
+Static camera, locked-off shot. A few people walk calmly along the sidewalk in front of the building from left to right, a woman walking a small dog. Palm trees sway gently in the breeze. Warm late afternoon light. The building, the gates and the CARMO sign stay exactly the same. Realistic, natural movement.
+
+2-fachada-lado.jpg
+Static camera, locked-off shot. A young couple walks slowly along the sidewalk toward the front gate of the building, a man rides a bicycle calmly along the street. Palm trees and plants move gently in the breeze. Warm late afternoon light. The building, the gates and the CARMO sign stay exactly the same. Realistic, natural movement.
+
+3-piscina.jpg
+Static camera, locked-off shot. A woman relaxes on one of the sun loungers reading a book, a child swims slowly in the pool, gentle water ripples and soft reflections, water keeps flowing from the stone wall waterfall. Calm, warm and realistic. The architecture stays exactly the same. Natural movement.
+
+4-varanda.jpg
+Static camera. A couple standing at the balcony railing holding coffee cups, looking at the view, plants moving lightly in the wind. Realistic, natural movement.
+
+5-sacadas.jpg
+Static camera. A person steps out onto the upper balcony and leans on the railing, another person sits in the armchair on the lower balcony, curtains and plants move slightly in the breeze. Keep the facade unchanged. Realistic, natural movement.
+
+Dicas: gere 2 ou 3 versoes de cada cena e fique com a melhor; confira se o letreiro CARMO e as janelas nao ficaram tortos.
+Nomeie os videos com o numero da foto (ex.: 1-fachada-frente.mp4).
+Feitos: 1-fachada-frente-v1, 2-fachada-lado-v1, 3-piscina-v1 (3 s). Faltam: 4-varanda e 5-sacadas.

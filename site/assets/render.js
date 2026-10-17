@@ -42,6 +42,9 @@
     return "background-image:url('" + jpgSrc + "');";
   }
 
+  // usados também por detalhe-destaque.js (página no estilo "destaque")
+  window.ChiadoRender = { esc: esc, picture: picture, waLink: waLink, waIconSvg: waIconSvg };
+
   function loadData(){
     return fetch('data/empreendimentos.json', {cache:'no-store'})
       .then(function(r){
@@ -162,6 +165,32 @@
 
     const waMsg = item.whatsapp_msg || ('Olá, tenho interesse no ' + item.nome + '.');
 
+    // Capa em apresentação: se o empreendimento tiver "capa_slides", as fotos passam em sequência (fade + zoom lento).
+    const slides = (item.capa_slides || []).filter(function(s){ return s && s.src; });
+    const heroMidia = slides.length ? (
+      '<div class="hero-slides" data-hero-slides' + (item.capa_video ? ' data-hero-video="' + esc(item.capa_video) + '"' : '') + '>' +
+        slides.map(function(s, i){
+          const foco = s.foco ? ' style="object-position:' + esc(s.foco) + '"' : '';
+          const alt = i === 0 ? ('Fachada do ' + item.nome) : '';
+          const img = '<img src="' + esc(s.src) + '" alt="' + esc(alt) + '"' + (i === 0 ? '' : ' loading="lazy"') + foco + '>';
+          return '<div class="hero-slide' + (i === 0 ? ' is-active' : '') + '"' + (i === 0 ? '' : ' aria-hidden="true"') + '>' +
+            (s.webp ? '<picture><source srcset="' + esc(s.webp) + '" type="image/webp">' + img + '</picture>' : img) +
+          '</div>';
+        }).join('') +
+      '</div>'
+    ) : (
+      '<div class="detail-hero-bg" style="' + bgImageSet(item.capa, item.capa_webp) + '"></div>' +
+      picture(item.capa, item.capa_webp, 'Fachada do ' + item.nome, {cls:'detail-hero-img', lazy:false})
+    );
+
+    // Empreendimento com layout "destaque": página em seções escuras e claras (assets/detalhe-destaque.js).
+    if(item.layout === 'destaque' && window.renderDetalheDestaque){
+      window.renderDetalheDestaque(root, item, items, {
+        heroMidia: heroMidia, temSlides: slides.length > 0, features: features, unitRows: unitRows,
+        galleryItems: galleryItems, galleryNote: galleryNote, videosHtml: videosHtml,
+        sidebarRows: sidebarRows, waHref: waLink(waMsg)
+      });
+    } else
     root.innerHTML = '' +
       '<div class="wrap">' +
         '<a class="back-link" href="index.html">' +
@@ -170,9 +199,8 @@
         '</a>' +
       '</div>' +
 
-      '<div class="detail-hero">' +
-        '<div class="detail-hero-bg" style="' + bgImageSet(item.capa, item.capa_webp) + '"></div>' +
-        picture(item.capa, item.capa_webp, 'Fachada do ' + item.nome, {cls:'detail-hero-img', lazy:false}) +
+      '<div class="detail-hero' + (slides.length ? ' detail-hero-slides' : '') + '">' +
+        heroMidia +
         '<div class="detail-hero-overlay">' +
           '<div class="wrap detail-hero-content">' +
             '<span class="detail-tag ' + tagClass + '">' + esc(item.tag_label) + '</span>' +
@@ -226,6 +254,7 @@
       renderNav(items);
       renderCards(items);
       renderDetail(items);
+      if(window.initHeroSlides) window.initHeroSlides();
       if(window.initReveal) window.initReveal();
       if(window.initLightbox) window.initLightbox();
       if(window.initLeadForm) window.initLeadForm(items);

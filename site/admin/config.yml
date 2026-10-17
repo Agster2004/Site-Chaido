@@ -40,6 +40,75 @@ collections:
               - { label: "Endereço", name: "endereco", widget: "string" }
               - { label: "Foto de capa (JPG ou PNG)", name: "capa", widget: "image" }
               - { label: "Foto de capa em WebP (opcional, mais leve)", name: "capa_webp", widget: "image", required: false, hint: "Se não tiver uma versão .webp, deixe em branco — o site usa a foto normal." }
+              - { label: "Vídeo da capa (opcional, MP4 leve)", name: "capa_video", widget: "file", required: false, hint: "Se preencher, no computador a capa toca este vídeo (sem som, em loop); no celular continuam as fotos da apresentação abaixo. Ideal: até 6 MB." }
+              - label: "Capa em apresentação (opcional)"
+                name: "capa_slides"
+                widget: "list"
+                required: false
+                hint: "Se preencher, a capa da página passa estas fotos em sequência, como um vídeo. Se deixar vazio, vale a foto de capa acima."
+                fields:
+                  - { label: "Foto (JPG ou PNG)", name: "src", widget: "image" }
+                  - { label: "Foto em WebP (opcional, mais leve)", name: "webp", widget: "image", required: false }
+                  - { label: "Parte da foto que fica à vista (opcional)", name: "foco", widget: "string", required: false, hint: "Ex: center 60% (horizontal e vertical). Deixe vazio para centralizar." }
+              - label: "Estilo da página"
+                name: "layout"
+                widget: "select"
+                required: false
+                hint: "Destaque: página com seções escuras e claras, faixa de características, mapa, obra e plantas. Vazio: página simples (a antiga)."
+                options:
+                  - { label: "Destaque (nova)", value: "destaque" }
+              - { label: "Bairro (aparece na capa da página destaque)", name: "bairro", widget: "string", required: false }
+              - label: "Sobre o empreendimento (parágrafos, página destaque)"
+                name: "sobre"
+                widget: "list"
+                required: false
+                hint: "Se ficar vazio, usa a descrição completa."
+                field: { label: "Parágrafo", name: "paragrafo", widget: "text" }
+              - label: "Faixa de características (página destaque)"
+                name: "caracteristicas"
+                widget: "list"
+                required: false
+                fields:
+                  - label: "Ícone"
+                    name: "icone"
+                    widget: "select"
+                    options:
+                      - { label: "Casa", value: "casa" }
+                      - { label: "Cama (suíte/dormitório)", value: "suite" }
+                      - { label: "Banheiro", value: "banheiro" }
+                      - { label: "Área (m²)", value: "area" }
+                      - { label: "Carro (vaga)", value: "vaga" }
+                  - { label: "Texto (ex: 2 suítes)", name: "texto", widget: "string" }
+              - label: "Plantas (página destaque)"
+                name: "plantas"
+                widget: "list"
+                required: false
+                fields:
+                  - { label: "Nome (ex: Casa 1 · térreo)", name: "nome", widget: "string" }
+                  - { label: "Imagem da planta (JPG ou PNG)", name: "src", widget: "image" }
+                  - { label: "Imagem em WebP (opcional)", name: "webp", widget: "image", required: false }
+              - label: "Mapa da região (página destaque)"
+                name: "mapa"
+                widget: "object"
+                required: false
+                fields:
+                  - { label: "Endereço para o mapa", name: "endereco", widget: "string", required: false, hint: "Se ficar vazio, a seção do mapa não aparece." }
+                  - { label: "Texto sobre a região", name: "texto", widget: "text", required: false }
+              - label: "Andamento da obra (página destaque)"
+                name: "obra"
+                widget: "object"
+                required: false
+                hint: "Se não houver etapas, a seção não aparece."
+                fields:
+                  - { label: "Atualizado em (ex: outubro/2026)", name: "atualizado_em", widget: "string", required: false }
+                  - { label: "Total geral em % (opcional; vazio = média das etapas)", name: "total", widget: "string", required: false }
+                  - label: "Etapas"
+                    name: "etapas"
+                    widget: "list"
+                    required: false
+                    fields:
+                      - { label: "Etapa (ex: Fundação)", name: "nome", widget: "string" }
+                      - { label: "Concluído (%)", name: "percentual", widget: "number", min: 0, max: 100 }
               - { label: "Resumo curto (card da home)", name: "resumo_curto", widget: "text" }
               - { label: "Descrição completa (página do imóvel)", name: "descricao", widget: "text" }
               - label: "Specs rápidas do card (2 a 3 itens curtos)"

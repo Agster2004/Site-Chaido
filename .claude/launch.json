@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "site-simulado",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["tests/ferramentas/servidor-formulario-simulado.mjs"],
+      "port": 4173
+    }
+  ]
+}

@@ -324,6 +324,19 @@ footer{ background:var(--green-900); color:rgba(255,255,255,0.6); padding:56px 0
   height:100%; width:auto; max-width:100%;
   object-fit:contain;
 }
+/* Capa em apresentação (capa_slides): fotos em tela cheia, troca com fade e zoom lento */
+.hero-slides{ position:absolute; inset:0; background:var(--green-900); }
+.hero-slide{ position:absolute; inset:0; opacity:0; transition:opacity 1.4s ease; }
+.hero-slide.is-active{ opacity:1; z-index:1; }
+.hero-slide img{ width:100%; height:100%; object-fit:cover; display:block; transform:scale(1); }
+.hero-slide.is-active img{ animation:heroZoom 8s ease-out forwards; }
+.hero-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:2; opacity:0; transition:opacity 1s ease; }
+.hero-slides.has-video .hero-video{ opacity:1; }
+@keyframes heroZoom{ from{ transform:scale(1); } to{ transform:scale(1.07); } }
+@media (prefers-reduced-motion: reduce){
+  .hero-slide{ transition:none; }
+  .hero-slide.is-active img{ animation:none; }
+}
 .detail-hero-overlay{
   position:absolute; inset:0; z-index:2;
   background:linear-gradient(0deg, rgba(15,25,17,0.78) 0%, rgba(15,25,17,0.1) 45%, rgba(15,25,17,0) 70%);
@@ -470,3 +483,143 @@ main:focus{ outline:none; }
 .lead-status{ margin-top:12px; }
 .lead-erro-geral{ color:#9B2C2C; font-size:14px; margin:0 0 10px; }
 .lead-isca{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+/* ================= PÁGINA "DESTAQUE" (layout: "destaque", assets/detalhe-destaque.js) ================= */
+/* Seções escuras e claras alternadas, inspiradas na página de empreendimento da GMV, nas cores da Chiado. */
+.dd-pagina{ --dd-escuro:#111813; --dd-escuro-2:#1A241D; --dd-claro-texto:rgba(243,240,230,0.78); }
+.dd-sec{ padding:96px 0; }
+@media(max-width:760px){ .dd-sec{ padding:64px 0; } }
+.dd-escuro{ background:var(--dd-escuro); color:var(--cream); }
+.dd-claro{ background:var(--cream); }
+.dd-claro2{ background:var(--cream-2); }
+.dd-eyebrow{
+  font-size:12px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--gold-dark); margin-bottom:14px;
+}
+.dd-escuro .dd-eyebrow{ color:var(--gold); }
+.dd-escuro h2{ color:#fff; font-size:clamp(30px, 4.6vw, 48px); }
+.dd-h2{ color:var(--green-900); font-size:clamp(28px, 4.2vw, 44px); margin-bottom:36px; }
+
+/* capa */
+.dd-hero{ height:calc(100svh - 74px); min-height:520px; max-height:860px; }
+@media(max-width:760px){ .dd-hero{ height:calc(100svh - 66px); min-height:480px; max-height:720px; } }
+.dd-hero-overlay{
+  position:absolute; inset:0; z-index:3; display:flex; align-items:flex-end;
+  background:linear-gradient(0deg, rgba(10,14,11,0.86) 0%, rgba(10,14,11,0.35) 45%, rgba(10,14,11,0.1) 75%);
+}
+.dd-hero-content{ padding-bottom:64px; color:#fff; width:100%; }
+@media(max-width:760px){ .dd-hero-content{ padding-bottom:40px; } }
+.dd-chips{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:18px; }
+.dd-chip{
+  font-size:11.5px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;
+  padding:9px 16px; border-radius:999px; color:#fff;
+  background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.28);
+  backdrop-filter:blur(4px);
+}
+.dd-chip-ouro{ background:var(--gold); border-color:var(--gold); color:var(--green-900); }
+.dd-hero h1{ font-size:clamp(40px, 7.4vw, 88px); color:#fff; line-height:1; }
+.dd-hero-end{ margin-top:14px; font-size:15px; color:rgba(255,255,255,0.85); max-width:620px; }
+.dd-hero-acoes{ display:flex; flex-wrap:wrap; gap:12px; margin-top:26px; }
+.dd-btn-ouro{ background:var(--gold); color:var(--green-900); border-radius:999px; }
+.dd-btn-ouro:hover{ background:var(--gold-hover); transform:translateY(-1px); }
+.dd-btn-vazado{ border:1px solid rgba(255,255,255,0.5); color:#fff; background:transparent; border-radius:999px; }
+.dd-btn-vazado:hover{ background:rgba(255,255,255,0.12); }
+
+/* sobre + características */
+.dd-sobre{ display:grid; grid-template-columns:1fr 1.3fr; gap:56px; align-items:start; }
+@media(max-width:860px){ .dd-sobre{ grid-template-columns:1fr; gap:22px; } }
+.dd-texto p{ font-size:16.5px; line-height:1.8; color:var(--dd-claro-texto); }
+.dd-texto p + p{ margin-top:16px; }
+.dd-caracs{
+  list-style:none; margin-top:64px; display:grid; grid-template-columns:repeat(5, 1fr);
+  border-top:1px solid rgba(243,240,230,0.16);
+}
+@media(max-width:860px){ .dd-caracs{ grid-template-columns:repeat(2, 1fr); margin-top:44px; } }
+.dd-carac{
+  display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px;
+  padding:30px 12px 4px; font-size:13px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#fff;
+}
+.dd-carac svg{ width:40px; height:40px; color:var(--gold); }
+@media(max-width:860px){ .dd-carac:last-child:nth-child(odd){ grid-column:1 / -1; } }
+
+/* galeria: cartões arredondados, a primeira foto maior */
+.dd-galeria{ grid-template-columns:repeat(4, 1fr); gap:14px; }
+.dd-galeria a{ border-radius:16px; aspect-ratio:1 / 1; }
+.dd-galeria a:first-child{ grid-column:span 2; grid-row:span 2; }
+@media(max-width:860px){ .dd-galeria{ grid-template-columns:repeat(2, 1fr); gap:10px; } .dd-galeria a{ border-radius:12px; } }
+.dd-videos{ margin-top:36px; }
+
+/* diferenciais + unidades + plantas */
+.dd-projeto{ display:grid; grid-template-columns:1.2fr 1fr; gap:22px; align-items:start; }
+@media(max-width:900px){ .dd-projeto{ grid-template-columns:1fr; } }
+.dd-cartao{ background:var(--paper); border-radius:18px; padding:30px; border:1px solid var(--line); }
+.dd-cartao .section-label{ margin-top:0; }
+.dd-plantas-label{ margin-top:44px; }
+.dd-plantas{ grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:14px; }
+.dd-plantas a{ border-radius:16px; aspect-ratio:3 / 4; background:#fff; border:1px solid var(--line); }
+.dd-plantas img{ object-fit:contain; padding:14px 14px 44px; }
+.dd-planta-nome{
+  position:absolute; left:0; right:0; bottom:0; padding:12px 16px;
+  font-size:13px; font-weight:600; color:var(--green-900); background:rgba(255,255,255,0.92);
+}
+
+/* região / mapa */
+.dd-regiao{ display:grid; grid-template-columns:1fr 1.25fr; gap:48px; align-items:center; }
+@media(max-width:900px){ .dd-regiao{ grid-template-columns:1fr; gap:28px; } }
+.dd-texto-solto{ margin-top:16px; font-size:16px; line-height:1.75; color:var(--dd-claro-texto); }
+.dd-end{ display:flex; gap:10px; align-items:flex-start; margin:22px 0 24px; font-size:14.5px; color:#fff; }
+.dd-end svg{ width:20px; height:20px; color:var(--gold); flex-shrink:0; margin-top:1px; }
+.dd-mapa{
+  border-radius:18px; overflow:hidden; aspect-ratio:4 / 3; background:var(--dd-escuro-2);
+  border:1px solid rgba(243,240,230,0.14);
+}
+.dd-mapa iframe{ width:100%; height:100%; border:0; display:block; }
+.dd-mapa-botao{
+  width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+  background:radial-gradient(circle at 50% 45%, rgba(201,162,92,0.18), transparent 60%);
+  border:0; color:#fff; font:inherit; font-size:15px; font-weight:600; cursor:pointer;
+}
+.dd-mapa-botao svg{ width:44px; height:44px; color:var(--gold); }
+.dd-mapa-botao small{ font-size:12px; font-weight:400; color:var(--dd-claro-texto); }
+.dd-mapa-botao:hover span{ text-decoration:underline; }
+
+/* andamento da obra */
+.dd-obra{ display:grid; grid-template-columns:1fr 1.3fr; gap:48px; align-items:start; }
+@media(max-width:900px){ .dd-obra{ grid-template-columns:1fr; gap:8px; } }
+.dd-etapas{ list-style:none; }
+.dd-etapa + .dd-etapa{ margin-top:22px; }
+.dd-etapa-topo{ display:flex; justify-content:space-between; font-size:13px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--green-900); margin-bottom:9px; }
+.dd-barra{ height:10px; border-radius:999px; background:var(--cream-2); overflow:hidden; }
+.dd-barra i{ display:block; height:100%; width:0; border-radius:inherit; background:linear-gradient(90deg, var(--gold-dark), var(--gold)); transition:width 1.4s ease .2s; }
+.reveal.in .dd-barra i{ width:var(--pct); }
+@media (prefers-reduced-motion: reduce){ .dd-barra i{ width:var(--pct); transition:none; } }
+.dd-total{
+  margin-top:30px; padding:20px 24px; border-radius:16px; background:var(--green-900); color:#fff;
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:13px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase;
+}
+.dd-total b{ font-family:'Fraunces', serif; font-size:30px; letter-spacing:0; color:var(--gold); }
+
+/* formulário + contato */
+.dd-interesse-grid{ display:grid; grid-template-columns:1fr 1.1fr; gap:56px; align-items:start; }
+@media(max-width:900px){ .dd-interesse-grid{ grid-template-columns:1fr; gap:36px; } }
+.dd-interesse{ background:var(--green-900); }
+.dd-interesse .lead-card{ border-radius:18px; border:0; max-width:none; }
+.dd-interesse .lead-card h2{ color:var(--green-900); font-size:clamp(24px, 3.4vw, 32px); }
+.dd-linhas{ margin:26px 0 22px; border-top:1px solid rgba(243,240,230,0.16); }
+.dd-linhas .side-row{ border-bottom:1px solid rgba(243,240,230,0.16); color:var(--dd-claro-texto); }
+.dd-linhas .side-row:last-of-type{ border-bottom:1px solid rgba(243,240,230,0.16); }
+.dd-linhas .side-row b{ color:#fff; }
+.dd-nota{ margin-top:14px; font-size:12.5px; line-height:1.55; color:var(--dd-claro-texto); max-width:440px; }
+
+/* outros empreendimentos */
+.dd-outros{ display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 380px)); gap:22px; }
+.dd-outro{ display:block; background:var(--paper); border-radius:20px; overflow:hidden; border:1px solid var(--line); transition:transform .3s ease, box-shadow .3s ease; }
+.dd-outro:hover{ transform:translateY(-4px); box-shadow:0 18px 40px rgba(22,48,31,0.14); }
+.dd-outro-foto{ aspect-ratio:4 / 5; overflow:hidden; }
+.dd-outro-foto img{ width:100%; height:100%; object-fit:cover; transition:transform .5s ease; }
+.dd-outro:hover .dd-outro-foto img{ transform:scale(1.05); }
+.dd-outro-corpo{ padding:22px 24px 26px; }
+.dd-outro-tag{ font-size:11px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold-dark); }
+.dd-outro h3{ margin-top:8px; font-size:26px; color:var(--green-900); }
+.dd-outro .card-specs{ margin-top:12px; }
+.dd-outro-link{ display:inline-block; margin-top:18px; font-size:13px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--green-800); }

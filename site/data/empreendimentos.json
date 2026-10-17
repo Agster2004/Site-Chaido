@@ -135,6 +135,72 @@
       "endereco": "Rua Dr. Freud, 161, Vila Tupy, Praia Grande - SP · 300m da praia",
       "capa": "assets/carmo-fachada.jpg",
       "capa_webp": "assets/carmo-fachada.webp",
+      "capa_video": "assets/carmo-capa.mp4",
+      "capa_slides": [
+        {
+          "src": "assets/carmo-capa-1.jpg",
+          "webp": "assets/carmo-capa-1.webp",
+          "foco": "center 62%"
+        },
+        {
+          "src": "assets/carmo-capa-2.jpg",
+          "webp": "assets/carmo-capa-2.webp",
+          "foco": "center 62%"
+        },
+        {
+          "src": "assets/carmo-capa-3.jpg",
+          "webp": "assets/carmo-capa-3.webp",
+          "foco": "center 100%"
+        },
+        {
+          "src": "assets/carmo-capa-4.jpg",
+          "webp": "assets/carmo-capa-4.webp",
+          "foco": "center 66%"
+        },
+        {
+          "src": "assets/carmo-capa-5.jpg",
+          "webp": "assets/carmo-capa-5.webp",
+          "foco": "center 42%"
+        }
+      ],
+      "layout": "destaque",
+      "bairro": "Vila Tupy",
+      "sobre": [
+        "No bairro Vila Tupy, a 300 metros da praia, o Residencial Carmo reúne apenas 5 casas triplex para quem quer morar perto do mar com privacidade e conforto.",
+        "Todas as casas têm 2 suítes, lavabo, depósito individual e garagem com entrada própria, além de infraestrutura para energia solar e para carregador de carro elétrico.",
+        "Na área comum, piscina e sauna exclusivas dos moradores. Entrega prevista para janeiro de 2027."
+      ],
+      "caracteristicas": [
+        {
+          "icone": "casa",
+          "texto": "5 casas triplex"
+        },
+        {
+          "icone": "suite",
+          "texto": "2 suítes"
+        },
+        {
+          "icone": "banheiro",
+          "texto": "Lavabo"
+        },
+        {
+          "icone": "area",
+          "texto": "92 a 103 m²"
+        },
+        {
+          "icone": "vaga",
+          "texto": "1 ou 2 vagas"
+        }
+      ],
+      "plantas": [],
+      "mapa": {
+        "endereco": "Rua Dr. Freud, 161 - Vila Tupy, Praia Grande - SP",
+        "texto": "A 300 metros da praia, no bairro Vila Tupy, em Praia Grande."
+      },
+      "obra": {
+        "atualizado_em": "",
+        "etapas": []
+      },
       "resumo_curto": "Condomínio de alto padrão com piscina e sauna exclusiva, garagem individual com infraestrutura para carro elétrico e entrada individual por unidade.",
       "descricao": "Condomínio de alto padrão: triplex com 2 suítes e garagem individual, área de lazer com piscina e sauna exclusiva do condomínio, a apenas 300 metros da praia no bairro Tupy.",
       "specs_card": [

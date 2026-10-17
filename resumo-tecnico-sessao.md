@@ -9,12 +9,19 @@ lançamentos, contas, vendas por unidade). Ficam em repositórios, bancos e chav
 misturam**. Qualquer ligação entre os dois no futuro (por exemplo, uma venda fechada no painel de leads
 virar venda no financeiro) é uma decisão à parte, tomada com o usuário e desenhada antes.
 
-## COMECE POR AQUI (estado em 13/10/2026, depois de colocar no ar)
+## COMECE POR AQUI (estado em 17/10/2026; último "no ar" em 13/10/2026)
 
 > **NO AR desde 13/10/2026:** a `trabalho` foi publicada no `main` (commit `ddb4082`, avanço simples) com o "podemos colocar no ar" do usuário. O site
 > oficial agora tem formulário, `/painel`, `/privacidade`, contador de visitas, origem no WhatsApp e keep-alive. No momento da publicação `main` e `trabalho` estavam no mesmo
 > commit (`ddb4082`); depois a `trabalho` andou à frente com o ajuste do menu, o botão "Quero saber mais" e a trava de contagem só no site oficial, publicados nos "podemos colocar no ar" seguintes (seção 7, "Ajustes depois de ir ao ar"); confira sempre com `git log --oneline origin/main..trabalho`; o `main` passa a ter também este resumo, o `CLAUDE.md`, `docs/`, `tests/` e `supabase/` (fora de `site/`, não ficam públicos). Detalhes e
 > o que ainda falta: veja "O que ficou pendente" e a seção 7 (entrada "13/10/2026, no ar"). Onde o texto abaixo disser "ainda NÃO no ar", leia "agora no ar".
+
+> **Em andamento (17/10/2026), NADA disto está no `main` (site oficial); está na `trabalho` no GitHub e na prévia da Vercel desde o "envie para o github" de 17/10/2026:** o usuário pediu **não publicar nada antes de ver**.
+> 1. **Página do Carmo no estilo da GMV** ("layout destaque"): capa grande, seções escuras e claras, faixa de características, galeria em cartões, diferenciais e casas, mapa (carrega no clique),
+>    andamento da obra e plantas (escondidos até chegarem os dados), formulário e outros empreendimentos. Desenho: `docs/superpowers/specs/2026-10-17-pagina-destaque-design.md`.
+> 2. **Capa em vídeo do Carmo** (`site/assets/carmo-capa.mp4`, só fotos animadas, sem a marca do Google) já na página; no celular, fotos em apresentação.
+> 3. **Capa com pessoas** (IA grátis do Hugging Face): 3 de 5 cenas prontas; rascunho em `midia/carmo-videos/carmo-capa-com-pessoas-rascunho.mp4`, **ainda não usado na capa**. Faltam varanda e sacadas (cota grátis renova em 24 h).
+> **Próximo:** o usuário vê a página e o rascunho, decide; gerar varanda e sacadas com pessoas; mandar plantas, percentuais da obra e o book. Detalhes na seção 7 (entrada "17/10/2026") e na seção 6.
 
 **Antes de tudo, em qualquer computador:** este projeto trabalha na branch **`trabalho`**, não no `main` (o `main` é o
 site no ar). Este arquivo e o `CLAUDE.md` **só existem na `trabalho`**. Se você não os vê, está no `main`: rode
@@ -99,6 +106,7 @@ pago, divulgação, impulsionar vendas), cada um com desenho e "pode construir" 
 | `robots.txt`, `vercel.json` | Robots, redirecionamentos, rewrites e cabeçalhos de cache |
 | (fim de `index.html` e `imovel.html`) | Duas linhas do script do Vercel Web Analytics (`/_vercel/insights/script.js`); só funciona em deploys feitos depois de ligar o Analytics na Vercel |
 | `privacidade.html`, `assets/privacidade.js`, `data/empresa.json` | Política de privacidade (dados da empresa escritos na página e no JSON) |
+| `assets/hero-slides.js`, `assets/carmo-capa.mp4`, `assets/carmo-capa-1..5.(jpg|webp)` | Capa em movimento da página do Carmo (vídeo no computador, fotos em apresentação no celular); só aparece em quem tem `capa_video`/`capa_slides` no JSON |
 | `assets/utm.js`, `assets/lead-form.js`, `data/consentimento.json` | Formulário de interesse, origem da visita e texto de consentimento (`v1`) |
 | `api/lead.js`, `api/_lib/*.js` | Recebe o lead (`POST /api/lead`): validação, anti-robô, Supabase e e-mail (Resend) |
 | `api/painel-config.js` | Entrega ao painel a URL e a chave **pública** do Supabase |
@@ -126,6 +134,15 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - `api/imovel.js` usa `replace` com **função** (não texto) porque um `$` na descrição corromperia o HTML.
 - Fotos do Carmo foram reduzidas a 1400 px (a página do Carmo foi de 4,3 MB para 1,8 MB). Os originais
   de 2000 px só existem no histórico do git. **Fotos novas enviadas pelo painel não são reduzidas.**
+- **Capa em movimento (17/10/2026):** se o empreendimento tem `capa_slides` (lista de fotos com `src`, `webp` e `foco`, a parte da foto que fica à vista), `render.js` monta a
+  capa com as fotos empilhadas e `hero-slides.js` troca uma a cada 5,5 s (fade de 1,4 s e zoom lento). Se tem também `capa_video` (MP4), só no computador (largura acima de 760 px, sem
+  "reduzir movimento" nem "economizar dados") o vídeo entra por cima quando começa a tocar e as fotos param. No celular ficam as fotos; com "reduzir movimento", só a primeira foto parada.
+  Empreendimento sem esses campos (hoje o Garrett) continua com a capa antiga, uma foto só. Os campos aparecem no `/admin` ("Vídeo da capa" e "Capa em apresentação").
+  O vídeo do Carmo (27 s, 1920×1080, 3,9 MB, sem som) foi gerado das 5 imagens por script (ffmpeg e sharp numa pasta temporária fora do repositório; nada disso está no projeto).
+  Para refazer: precisa do ffmpeg; os cortes 16:9 de cada foto usam um foco vertical (fachadas 62%, piscina base, varanda 66%, sacadas 42%) e a transição é fade de 1,2 s entre cenas de 6,5 s, com zoom lento de 7%. Ordem das cenas: fachada de frente, fachada de lado, piscina, varanda, sacadas. Codificação em duas passadas a 1150 kb/s (dá cerca de 4 MB).
+- **Página "destaque" (17/10/2026):** empreendimento com `"layout": "destaque"` usa `assets/detalhe-destaque.js` (seções escuras e claras, classes `dd-` no `style.css`); `render.js` monta as partes comuns
+  (capa, diferenciais, unidades, galeria) e entrega a ele. Cada seção nova só aparece se tiver dados (`sobre`, `caracteristicas`, `plantas`, `mapa`, `obra`). O mapa do Google só carrega no clique.
+  Sem o campo, vale a página antiga (hoje o Garrett). Detalhes no desenho `docs/superpowers/specs/2026-10-17-pagina-destaque-design.md`.
 - Sem build e sem `package.json`: HTML/CSS/JS puros e funções da Vercel que usam só `fetch`.
 - Testes automáticos: `node --test` na raiz (sem instalar nada; 82 testes, 76 passam e 6 são pulados porque precisam de
   chaves do Supabase: `tests/rls.test.mjs`). Além deles, as telas foram testadas num servidor local com Supabase
@@ -214,6 +231,13 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   decidir o que mostrar publicamente); blog como projeto à parte; textos prontos do WhatsApp Business (saudação, ausência, respostas rápidas do Garrett
   e do Carmo e uma mensagem pré-preenchida diferente por anúncio); `va-disable` para o Vercel Analytics ignorar as visitas da equipe (exigiria mudança no `main`).
 - **Perfil somente leitura para quem só acompanha o painel** (hoje todo usuário liberado pode apagar e exportar); pede desenho e "pode construir".
+- **Referência da GMV (17/10/2026): CONSTRUÍDA na página "destaque" do Carmo** (faixa, obra, mapa, plantas, visual escuro/claro, outros empreendimentos). Faltam: as **imagens das plantas**, os **percentuais da obra**,
+  confirmar se são **3 banheiros**, e decidir se o **Garrett** também passa ao estilo novo. Ficaram fora (pedem desenho próprio): "baixar o book" e "Cliente final ou Corretor". Texto original da ideia: faixa de características com ícones
+  (dormitórios, banheiros, m², vagas; faltam os números do Carmo); andamento da obra com barras por etapa e total (faltam os percentuais e quem atualiza); mapa "Explore a região"
+  (falta a localização exata); plantas por unidade com zoom (faltam as imagens); botão "baixar o book" que capta o contato (falta o PDF; ele não pode ficar em `site/` aberto);
+  campo "Cliente final ou Corretor" no formulário (mexe no banco e no painel); visual escuro alternando com seções claras e cards arredondados. Sugestão de começar por características, obra e mapa.
+- **Capa do Carmo:** ver na prévia (computador e celular) e decidir entre o vídeo só com fotos (no site) e o rascunho com pessoas (`midia/carmo-videos/`, faltam varanda e sacadas); a marca d'água "© 2025 Google" da varanda e das sacadas já foi apagada (17/10/2026); o ideal ainda é pedir os renders originais sem ela a quem fez o 3D.
+  Depois de ir ao ar, o campo de vídeo já aparece no `/admin`.
 - **Opções para antecipar valor sem esperar o painel:** publicar só no `main`, em pacote separado, o `utm.js` (origem no WhatsApp) e/ou um keep-alive mínimo.
 - Anotado: `OAUTH_CLIENT_SECRET` aparece na Vercel com "Needs Attention" (valor sem proteção Sensitive); ver com calma.
 - No ar, repetir `?nao_contar=1` em cada navegador da equipe no endereço oficial (`https://www.chiadoconstrutora.com.br/?nao_contar=1`).
@@ -402,6 +426,42 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   (o do usuário William, `cv.cvwill@gmail.com`, e este).
 - **Cuidado combinado:** o acesso é total (inclui apagar leads). Se o objetivo for só acompanhar, a opção é construir um perfil **somente leitura** (regra nova no banco e ajuste dos botões do
   painel; esforço médio; pede "pode construir"). Ainda não foi pedido.
+
+### 17/10/2026 (na `trabalho`, ainda NÃO no ar)
+- **"puxe do github":** a `trabalho` trouxe 20 commits do outro computador (tudo o que está nas entradas de 13/10/2026); o `main` não tinha nada que a `trabalho` não tivesse (nenhuma edição do `/admin`);
+  existe a branch `analytics-visitas` no GitHub (sem commits além da `trabalho`; parece sobra, não apagada).
+- **Conversa:** o usuário mandou o site da GMV Incorporadora (`gmvincorporadora.com.br`) e a página de um empreendimento (`empreendimento.php?id=62`, Costa Esmeralda) como referência. Analisado:
+  capa com vídeo de fundo em tela cheia (loop, sem som) sob título grande; seções escuras (`#0d0d0d`) e claras (`#ededed`) alternadas; cards verticais arredondados com a foto inteira; página do empreendimento com
+  capa, sobre, galeria, plantas por unidade, mapa, andamento da obra (barras e total), formulário "Cliente final / Corretor" e carrossel de outros empreendimentos. O usuário perguntou se dava para fazer no Carmo (resposta:
+  sim, tabela de esforço na seção 6) e, sem ter vídeo, mandou 5 imagens do Carmo.
+- **Mal-entendido:** o usuário queria **um arquivo de vídeo** como o da GMV. Primeiro foi feita uma apresentação de fotos feita pelo site (`capa_slides`); ele disse que pedira um vídeo. Com a autorização dele ("só gera o vídeo")
+  baixei o `ffmpeg-static` (npm, numa pasta temporária fora do projeto) e gerei o MP4. Lição: quando o usuário pede "vídeo", é arquivo de vídeo; confirmar antes de trocar por outra solução.
+- **Feito:** 5 imagens reduzidas a 1600 px (jpg+webp, 100 a 275 KB cada, `carmo-capa-1..5`); `site/assets/hero-slides.js`; `render.js` (capa com `capa_slides` e `capa_video`), `style.css`, `imovel.html` (script novo),
+  `admin/config.yml` (campos "Vídeo da capa" e "Capa em apresentação") e `data/empreendimentos.json` (só o Carmo recebeu os campos). Vídeo `carmo-capa.mp4`: 27 s, 1920×1080, 3,9 MB. Conferido no navegador de teste (computador e celular, sem rolagem lateral):
+  o vídeo toca (readyState 4, sem erro) e as fotos servem de alternativa. 82 testes (76 passam, 6 pulados). O Garrett não mudou. Foco da foto da piscina corrigido para mostrar a água.
+- **Onde parou (primeira parte do dia, já superado; ver o último item desta entrada):** o usuário ainda não viu a capa na prévia (pediu "como eu vejo"; o vídeo foi enviado na conversa e a prévia da Vercel depende do "envie para o github"). Próximo: ver, ajustar (ordem, velocidade, escuro/claro, texto sobre as fotos) e escolher
+  o que vem da referência da GMV (seção 6). Nada disto foi para o `main`.
+- **Marca d'água apagada (mesmo dia):** a marca "© 2025 Google" (o fundo dos renders veio do Street View) foi apagada da varanda e das sacadas, preenchendo o céu em volta. As fotos `carmo-capa-4` (varanda) e `carmo-capa-5` (sacadas)
+  foram trocadas (jpg e webp) e o vídeo `carmo-capa.mp4` foi refeito (27,7 s, 1920×1080, 4,0 MB); as versões limpas em tamanho original ficaram em `midia/carmo-videos/fotos/` (dentro do projeto, fora de `site/`, não é público). Conferido: vídeo toca na página no computador, fotos no celular, 82 testes (76 passam, 6 pulados).
+- **Pessoas no vídeo (primeiro plano, depois trocado pela opção grátis do item "Cenas com pessoas" abaixo):** o usuário quer cenas com gente (passando em frente, na piscina, na sacada). Não dá para fazer aqui com qualidade; combinado: ele gera trechos numa IA de imagem para vídeo (Kling, Runway ou Veo; textos sugeridos na conversa:
+  fachada de frente com pessoas na calçada, fachada de lado com casal no portão, piscina com gente, varanda com casal) e põe em `midia/carmo-videos/videos/` (a pasta tem `fotos` com as 5 imagens originais numeradas e um `LEIA-ME.txt` com os textos de cada cena); depois eu confiro, monto e troco a capa, com a frase "imagens ilustrativas". A imagem das sacadas fica só como foto.
+- **Página do Carmo no estilo da GMV (mesmo dia, "pode construir, mas não publique nada antes de vermos"):** feita a página "destaque" (ver seção 3 e o desenho `2026-10-17-pagina-destaque-design.md`).
+  Carmo com `layout: destaque`, `bairro`, 3 parágrafos de `sobre` (só com fatos que já estavam no site), 5 características (5 casas triplex, 2 suítes, lavabo, 92 a 103 m², 1 ou 2 vagas) e `mapa`;
+  `plantas` e `obra` vazios (as seções ficam escondidas até chegarem os dados). Campos novos no `/admin`. A foto da galeria `carmo-varanda` (que é a das sacadas) também foi trocada pela versão sem a marca do Google.
+  Conferido no navegador: computador e celular (sem rolagem lateral), vídeo da capa, formulário, mapa carregando no clique, obra e plantas com dados de exemplo (não salvos), Garrett sem mudança; 82 testes (76 passam, 6 pulados).
+  Criado `.claude/launch.json` (servidor de simulação do formulário na porta 4173) para abrir o site no navegador do app.
+- **Cenas com pessoas, de graça (mesmo dia):** geradas no Hugging Face (página pública "Wan 2.2 I2V 14B Fast", `zerogpu-aoti/wan2-2-fp8da-aoti-faster`, sem conta, sem marca d'água; modelo Wan 2.2 com licença Apache 2.0)
+  a partir das fotos 16:9 de `midia/carmo-videos/fotos-16x9/`: fachada de frente (duas pessoas e um cachorro, 5 s), fachada de lado (casal e ciclista, 5 s) e piscina (uma pessoa nadando, 3 s; a 5 s já não cabia na cota), em `midia/carmo-videos/videos/` (832×480, 16 qps). Prédio, portão e letreiro ficaram fiéis; a IA não pôs a mulher na espreguiçadeira.
+  Por que não Kling: o grátis tem marca d'água, baixa resolução e não permite uso comercial; o pago custa cerca de US$ 10 por mês (conferido em sites de terceiros, 17/10/2026). Rodar no computador (AMD RX 9070 XT) é possível mas instável no Windows.
+  Como gerar: abrir no Chrome a página do Hugging Face, enviar a foto de `fotos-16x9/`, colar o texto em inglês da cena, duração 5 s, "Generate Video", baixar o MP4 do resultado.
+  A **cota grátis sem conta acabou** depois de 3 cenas ("Try again in 24h"; com uma conta grátis do Hugging Face, feita pelo usuário, a cota aumenta). **Faltam varanda e sacadas** com pessoas
+  (o usuário pediu também as sacadas; ideias: casal na grade da varanda com café; alguém saindo na sacada de cima e outra pessoa na poltrona de baixo). A foto `fotos-16x9/5-sacadas.jpg` já está pronta.
+  Rascunho montado: `midia/carmo-videos/carmo-capa-com-pessoas-rascunho.mp4` (20 s, 1920×1080, 3,3 MB; as 3 cenas com pessoas + varanda e sacadas como fotos animadas). **Ainda não substitui a capa**; o usuário vai ver e decidir.
+- **Onde parou (fim do dia 17/10/2026):** nada no `main`; tudo enviado à `trabalho` no GitHub no fim do dia (prévia: `site-chaido-git-trabalho-chiado.vercel.app/imovel/carmo`). Em aberto, nesta ordem: (1) o usuário ver a página destaque e o rascunho com pessoas
+  (no computador: `http://localhost:4173/imovel.html?slug=carmo` com o servidor de simulação, ou a prévia da Vercel depois do envio); (2) gerar varanda e sacadas com pessoas quando a cota renovar e remontar o vídeo;
+  (3) decidir se o rascunho vira a capa (trocar `site/assets/carmo-capa.mp4`) e pôr "imagens ilustrativas"; (4) dados do Carmo: plantas, percentuais da obra, book, 3 banheiros?; (5) Garrett no estilo novo?
+  **No outro computador:** as ferramentas de vídeo (ffmpeg-static, sharp) ficavam numa pasta temporária, não no projeto; para remontar o vídeo é preciso instalá-las de novo numa pasta temporária (`npm install ffmpeg-static sharp`).
+  **Cuidado:** se alguém editar o Carmo pelo `/admin` antes de isto ir ao ar, o JSON do `main` muda e o "puxe do github" vai precisar juntar com cuidado (`site/data/empreendimentos.json`).
 
 ## 8. Regras de trabalho
 
