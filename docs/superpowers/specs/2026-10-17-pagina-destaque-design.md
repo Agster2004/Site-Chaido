@@ -9,8 +9,8 @@ Uma segunda forma da página `/imovel/<slug>`, ligada por empreendimento com `"l
 pode passar a usar só preenchendo os campos (decisão do usuário).
 
 ## Seções (cada uma só aparece se tiver os dados)
-1. **Capa** em tela cheia (vídeo no computador, fotos no celular), com selos de bairro e status, nome grande, endereço e botões
-   "Quero saber mais" e WhatsApp. Campos: `capa_video`, `capa_slides`, `bairro`, `tag_label`.
+1. **Capa** em tela cheia (vídeo no computador; versão leve no celular desde 18/10/2026; fotos como reserva), com selos de bairro e status, nome grande, endereço e botões
+   "Quero saber mais" e WhatsApp. Campos: `capa_video`, `capa_video_celular`, `capa_slides`, `capa_nota`, `bairro`, `tag_label`.
 2. **O empreendimento** (escura): parágrafos de `sobre` (ou `descricao`) e a **faixa de características** com ícones
    (`caracteristicas`: `icone` = casa, suite, banheiro, area ou vaga, e `texto`).
 3. **Galeria** (clara): a `galeria` de sempre, em **carrossel lateral** (desde 18/10/2026, como na GMV): 2 fotos e um pedaço da terceira no computador, com setas e arrastar;

@@ -109,7 +109,8 @@ pago, divulgação, impulsionar vendas), cada um com desenho e "pode construir" 
 | `robots.txt`, `vercel.json` | Robots, redirecionamentos, rewrites e cabeçalhos de cache |
 | (fim de `index.html` e `imovel.html`) | Duas linhas do script do Vercel Web Analytics (`/_vercel/insights/script.js`); só funciona em deploys feitos depois de ligar o Analytics na Vercel |
 | `privacidade.html`, `assets/privacidade.js`, `data/empresa.json` | Política de privacidade (dados da empresa escritos na página e no JSON) |
-| `assets/hero-slides.js`, `assets/carmo-capa.mp4`, `assets/carmo-capa-1..5.(jpg|webp)` | Capa em movimento da página do Carmo (vídeo no computador, fotos em apresentação no celular); só aparece em quem tem `capa_video`/`capa_slides` no JSON |
+| `assets/hero-slides.js`, `assets/carmo-capa-pessoas.mp4`, `assets/carmo-capa-pessoas-celular.mp4`, `assets/carmo-capa.mp4`, `assets/carmo-capa-1..5.(jpg|webp)` | Capa em movimento da página do Carmo (vídeo com pessoas no computador, versão leve no celular, fotos em apresentação como reserva); só aparece em quem tem `capa_video`/`capa_slides` no JSON |
+| `assets/detalhe-destaque.js`, `assets/plantas/` | Página "destaque" (`layout: destaque`) e as plantas das casas do Carmo |
 | `assets/utm.js`, `assets/lead-form.js`, `data/consentimento.json` | Formulário de interesse, origem da visita e texto de consentimento (`v1`) |
 | `api/lead.js`, `api/_lib/*.js` | Recebe o lead (`POST /api/lead`): validação, anti-robô, Supabase e e-mail (Resend) |
 | `api/painel-config.js` | Entrega ao painel a URL e a chave **pública** do Supabase |
@@ -138,10 +139,11 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - Fotos do Carmo foram reduzidas a 1400 px (a página do Carmo foi de 4,3 MB para 1,8 MB). Os originais
   de 2000 px só existem no histórico do git. **Fotos novas enviadas pelo painel não são reduzidas.**
 - **Capa em movimento (17/10/2026):** se o empreendimento tem `capa_slides` (lista de fotos com `src`, `webp` e `foco`, a parte da foto que fica à vista), `render.js` monta a
-  capa com as fotos empilhadas e `hero-slides.js` troca uma a cada 5,5 s (fade de 1,4 s e zoom lento). Se tem também `capa_video` (MP4), só no computador (largura acima de 760 px, sem
-  "reduzir movimento" nem "economizar dados") o vídeo entra por cima quando começa a tocar e as fotos param. No celular ficam as fotos; com "reduzir movimento", só a primeira foto parada.
-  Empreendimento sem esses campos (hoje o Garrett) continua com a capa antiga, uma foto só. Os campos aparecem no `/admin` ("Vídeo da capa" e "Capa em apresentação").
-  O vídeo do Carmo (27 s, 1920×1080, 3,9 MB, sem som) foi gerado das 5 imagens por script (ffmpeg e sharp numa pasta temporária fora do repositório; nada disso está no projeto).
+  capa com as fotos empilhadas e `hero-slides.js` troca uma a cada 5,5 s (fade de 1,4 s e zoom lento). Se tem também `capa_video` (MP4), no computador (largura acima de 760 px) o vídeo entra por cima quando começa a tocar e as fotos param;
+  no celular entra `capa_video_celular` (versão leve), se existir (desde 18/10/2026); sem ele, ficam as fotos. Com "economizar dados", só as fotos; com "reduzir movimento", só a primeira foto parada.
+  Empreendimento sem esses campos (hoje o Garrett) continua com a capa antiga, uma foto só. Os campos aparecem no `/admin` ("Vídeo da capa", "Vídeo da capa para celular", "Aviso pequeno sobre a capa" e "Capa em apresentação").
+  Hoje o Carmo usa o vídeo com pessoas (`carmo-capa-pessoas.mp4`, 20 s, 3,3 MB; celular: `carmo-capa-pessoas-celular.mp4`, 1280×720, 1,4 MB), feito das 5 cenas de `midia/carmo-videos/videos/`.
+  O primeiro vídeo do Carmo, só com fotos (27 s, 1920×1080, 3,9 MB, sem som, `carmo-capa.mp4`, guardado como reserva), foi gerado das 5 imagens por script (ffmpeg e sharp numa pasta temporária fora do repositório; nada disso está no projeto).
   Para refazer: precisa do ffmpeg; os cortes 16:9 de cada foto usam um foco vertical (fachadas 62%, piscina base, varanda 66%, sacadas 42%) e a transição é fade de 1,2 s entre cenas de 6,5 s, com zoom lento de 7%. Ordem das cenas: fachada de frente, fachada de lado, piscina, varanda, sacadas. Codificação em duas passadas a 1150 kb/s (dá cerca de 4 MB).
 - **Página "destaque" (17/10/2026):** empreendimento com `"layout": "destaque"` usa `assets/detalhe-destaque.js` (seções escuras e claras, classes `dd-` no `style.css`); `render.js` monta as partes comuns
   (capa, diferenciais, unidades, galeria) e entrega a ele. Cada seção nova só aparece se tiver dados (`sobre`, `caracteristicas`, `plantas`, `mapa`, `obra`). O mapa do Google só carrega no clique.
@@ -495,7 +497,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   (4) confirmar 3 banheiros na faixa de características; (5) Garrett no estilo novo?; (6) rótulos errados nas plantas das garagens 2 e 5 (arquiteto); (7) "podemos colocar no ar".
 - **Vídeo também no celular (mesmo dia, pergunta do usuário "no celular o vídeo da capa não roda?"):** criada a versão leve `site/assets/carmo-capa-pessoas-celular.mp4` (1280×720, 1,4 MB) e o campo
   `capa_video_celular` (também no `/admin`). `hero-slides.js`: no computador usa `capa_video`; no celular, `capa_video_celular` (se não houver, só fotos); com "economizar dados" ou "reduzir movimento", só fotos.
-  No celular o vídeo aparece recortado no meio (tela em pé); as pessoas aparecem. Versão dos arquivos `?v=20261018c`. Conferido no navegador local em tamanho de celular: toca a versão leve, sem erro. Enviado à prévia.
+  No celular o vídeo aparece recortado no meio (tela em pé); as pessoas aparecem. Versão dos arquivos `?v=20261018c`. Conferido no navegador local em tamanho de celular: toca a versão leve, sem erro. Enviado à prévia. Os .md foram revisados e enviados no fim do dia; todas as fotos, vídeos e plantas do projeto estão no GitHub.
   **No outro computador:** as plantas originais e as mídias do Carmo estão só em `Downloads/Mídia RES. CARMO` deste computador; as versões do site já estão no projeto (`site/assets/plantas/`).
 
 ## 8. Regras de trabalho
