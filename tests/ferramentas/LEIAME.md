@@ -47,6 +47,18 @@ Abra `http://localhost:4173/imovel.html?slug=carmo`, preencha e envie. `http://l
 função mandou ao banco (IP só como código embaralhado) e ao e-mail. Lembre: enviar em menos de 3 segundos depois de abrir
 a página devolve erro de propósito (proteção contra robô).
 
+## 4. `gerar-cena-video.mjs`: cena de vídeo com pessoas a partir de uma foto (não é teste)
+
+Usado para a capa do Carmo (18/10/2026). Manda a foto e o texto para a página pública e grátis do Wan 2.2 no Hugging Face
+(`zerogpu-aoti/wan2-2-fp8da-aoti-faster`) e baixa o vídeo (832×480, 16 quadros por segundo, sem marca d'água). Não usa conta nem chave.
+
+```bash
+node tests/ferramentas/gerar-cena-video.mjs midia/carmo-videos/fotos-16x9/4-varanda.jpg midia/carmo-videos/videos/4-varanda-v2.mp4 5 "Static camera. ..."
+```
+
+A cota grátis é curta (cerca de 3 cenas de 5 s por dia, por endereço de internet; renova 24 h depois do primeiro uso). Os textos de cada cena estão em
+`midia/carmo-videos/LEIA-ME.txt`. Juntar as cenas num vídeo só precisa do ffmpeg (`npm install ffmpeg-static` numa pasta temporária, fora do projeto).
+
 ## O que estas ferramentas NÃO provam
 O Supabase de verdade, o login real, o e-mail real e a Vercel só se provam na **prévia** (`site-chaido-git-trabalho-chiado.vercel.app`) e,
 no fim, no site oficial. As ferramentas pegam erros de lógica e de tela antes de chegar lá.

@@ -29,8 +29,8 @@ pode passar a usar só preenchendo os campos (decisão do usuário).
 - **Baixar o book**: precisa do PDF e de uma função que só libera o arquivo depois do cadastro (o PDF não pode ficar aberto em
   `site/`). Pede desenho próprio.
 - **"Cliente final ou Corretor"** no formulário: mexe no banco e no painel de leads. Pede desenho próprio.
-- **Pessoas no vídeo da capa**: trechos gerados de graça no Hugging Face (Wan 2.2); 3 de 5 cenas prontas e um rascunho em
-  `midia/carmo-videos/carmo-capa-com-pessoas-rascunho.mp4`. Ainda não é a capa; ao trocar, acrescentar "imagens ilustrativas" sobre a capa.
+- **Pessoas no vídeo da capa**: trechos gerados de graça no Hugging Face (Wan 2.2); as 5 cenas prontas (18/10/2026) e o vídeo em
+  `midia/carmo-videos/carmo-capa-com-pessoas.mp4`. Ainda não é a capa; ao trocar, acrescentar "imagens ilustrativas" sobre a capa.
 
 ## Dados que faltam do Carmo
 Plantas (imagens), percentuais da obra e o PDF do book. Confirmar com o usuário se o Carmo tem 3 banheiros (hoje a faixa diz "Lavabo").

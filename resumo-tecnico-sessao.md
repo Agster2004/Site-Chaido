@@ -20,8 +20,8 @@ virar venda no financeiro) é uma decisão à parte, tomada com o usuário e des
 > 1. **Página do Carmo no estilo da GMV** ("layout destaque"): capa grande, seções escuras e claras, faixa de características, galeria em cartões, diferenciais e casas, mapa (carrega no clique),
 >    andamento da obra e plantas (escondidos até chegarem os dados), formulário e outros empreendimentos. Desenho: `docs/superpowers/specs/2026-10-17-pagina-destaque-design.md`.
 > 2. **Capa em vídeo do Carmo** (`site/assets/carmo-capa.mp4`, só fotos animadas, sem a marca do Google) já na página; no celular, fotos em apresentação.
-> 3. **Capa com pessoas** (IA grátis do Hugging Face): 3 de 5 cenas prontas; rascunho em `midia/carmo-videos/carmo-capa-com-pessoas-rascunho.mp4`, **ainda não usado na capa**. Faltam varanda e sacadas (cota grátis renova em 24 h).
-> **Próximo:** o usuário vê a página e o rascunho, decide; gerar varanda e sacadas com pessoas; mandar plantas, percentuais da obra e o book. Detalhes na seção 7 (entrada "17/10/2026") e na seção 6.
+> 3. **Capa com pessoas** (IA grátis do Hugging Face): **as 5 cenas prontas (18/10/2026)**; vídeo em `midia/carmo-videos/carmo-capa-com-pessoas.mp4`, **ainda não usado na capa** (o usuário vai ver e decidir).
+> **Próximo:** o usuário viu o vídeo com pessoas e **quer ajustá-lo antes de usar na capa** (ainda não disse o quê); depois decidir se ele vira a capa; mandar plantas, percentuais da obra e o book. Detalhes na seção 7 (entrada "17/10/2026") e na seção 6.
 
 **Antes de tudo, em qualquer computador:** este projeto trabalha na branch **`trabalho`**, não no `main` (o `main` é o
 site no ar). Este arquivo e o `CLAUDE.md` **só existem na `trabalho`**. Se você não os vê, está no `main`: rode
@@ -236,7 +236,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   (dormitórios, banheiros, m², vagas; faltam os números do Carmo); andamento da obra com barras por etapa e total (faltam os percentuais e quem atualiza); mapa "Explore a região"
   (falta a localização exata); plantas por unidade com zoom (faltam as imagens); botão "baixar o book" que capta o contato (falta o PDF; ele não pode ficar em `site/` aberto);
   campo "Cliente final ou Corretor" no formulário (mexe no banco e no painel); visual escuro alternando com seções claras e cards arredondados. Sugestão de começar por características, obra e mapa.
-- **Capa do Carmo:** ver na prévia (computador e celular) e decidir entre o vídeo só com fotos (no site) e o rascunho com pessoas (`midia/carmo-videos/`, faltam varanda e sacadas); a marca d'água "© 2025 Google" da varanda e das sacadas já foi apagada (17/10/2026); o ideal ainda é pedir os renders originais sem ela a quem fez o 3D.
+- **Capa do Carmo:** ver na prévia (computador e celular) e decidir entre o vídeo só com fotos (no site) e o vídeo com pessoas nas 5 cenas (`midia/carmo-videos/carmo-capa-com-pessoas.mp4`, desde 18/10/2026); a marca d'água "© 2025 Google" da varanda e das sacadas já foi apagada (17/10/2026); o ideal ainda é pedir os renders originais sem ela a quem fez o 3D.
   Depois de ir ao ar, o campo de vídeo já aparece no `/admin`.
 - **Opções para antecipar valor sem esperar o painel:** publicar só no `main`, em pacote separado, o `utm.js` (origem no WhatsApp) e/ou um keep-alive mínimo.
 - Anotado: `OAUTH_CLIENT_SECRET` aparece na Vercel com "Needs Attention" (valor sem proteção Sensitive); ver com calma.
@@ -462,6 +462,16 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   (3) decidir se o rascunho vira a capa (trocar `site/assets/carmo-capa.mp4`) e pôr "imagens ilustrativas"; (4) dados do Carmo: plantas, percentuais da obra, book, 3 banheiros?; (5) Garrett no estilo novo?
   **No outro computador:** as ferramentas de vídeo (ffmpeg-static, sharp) ficavam numa pasta temporária, não no projeto; para remontar o vídeo é preciso instalá-las de novo numa pasta temporária (`npm install ffmpeg-static sharp`).
   **Cuidado:** se alguém editar o Carmo pelo `/admin` antes de isto ir ao ar, o JSON do `main` muda e o "puxe do github" vai precisar juntar com cuidado (`site/data/empreendimentos.json`).
+
+### 18/10/2026 (na `trabalho`, ainda NÃO no ar)
+- **Cenas que faltavam com pessoas:** com a cota grátis renovada, geradas a varanda (casal com café; a mulher senta na poltrona) e as sacadas (mulher sai na sacada de cima), 5 s cada, em `midia/carmo-videos/videos/`.
+  O Chrome não estava conectado, então a geração foi feita direto pela interface de programação da página do Hugging Face (`/gradio_api`), com o script `tests/ferramentas/gerar-cena-video.mjs`
+  (uso: `node gerar-cena-video.mjs <foto.jpg> <saida.mp4> <segundos> "<texto>"`; precisa só do Node; a cota é a mesma, por endereço de internet).
+- **Vídeo completo:** `midia/carmo-videos/carmo-capa-com-pessoas.mp4` (20 s, 1920×1080, 3,3 MB): fachada de frente, fachada de lado, piscina (3 s em câmera lenta), varanda e sacadas, todas com pessoas, transição de 1 s.
+  O rascunho de 17/10 foi apagado (substituído). **Ainda não é a capa do site**: se o usuário aprovar, copiar para `site/assets/carmo-capa.mp4` e pôr "imagens ilustrativas" sobre a capa.
+- **Onde parou (18/10/2026):** o usuário viu o vídeo e disse **"quero ajustar o vídeo antes de usar na capa"**, sem dizer ainda o quê. Opções oferecidas: ordem das cenas, tempo de cada cena,
+  refazer uma cena com outro texto (gasta a cota grátis, cerca de 3 cenas por dia), transição, brilho/contraste/tom e emenda suave do fim com o começo (o vídeo repete na capa).
+  Tudo de hoje (cenas, vídeo completo, script e textos) foi enviado à `trabalho` no GitHub em 18/10/2026; nada dentro de `site/` mudou, então a prévia ficou igual. Nada no `main`.
 
 ## 8. Regras de trabalho
 
