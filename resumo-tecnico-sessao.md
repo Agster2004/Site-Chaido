@@ -143,6 +143,8 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - **Página "destaque" (17/10/2026):** empreendimento com `"layout": "destaque"` usa `assets/detalhe-destaque.js` (seções escuras e claras, classes `dd-` no `style.css`); `render.js` monta as partes comuns
   (capa, diferenciais, unidades, galeria) e entrega a ele. Cada seção nova só aparece se tiver dados (`sobre`, `caracteristicas`, `plantas`, `mapa`, `obra`). O mapa do Google só carrega no clique.
   Sem o campo, vale a página antiga (hoje o Garrett). Detalhes no desenho `docs/superpowers/specs/2026-10-17-pagina-destaque-design.md`.
+- **Versão nos arquivos da página do imóvel (18/10/2026):** `imovel.html` carrega `style.css`, `hero-slides.js`, `detalhe-destaque.js` e `render.js` com `?v=AAAAMMDD`, porque a Vercel
+  manda o navegador guardar CSS/JS por 1 dia (o usuário via a versão antiga na prévia). **Ao mudar um desses arquivos, trocar o número em `imovel.html`.**
 - Sem build e sem `package.json`: HTML/CSS/JS puros e funções da Vercel que usam só `fetch`.
 - Testes automáticos: `node --test` na raiz (sem instalar nada; 82 testes, 76 passam e 6 são pulados porque precisam de
   chaves do Supabase: `tests/rls.test.mjs`). Além deles, as telas foram testadas num servidor local com Supabase
@@ -478,7 +480,8 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   O usuário viu na prévia (no computador) e disse **"ficou ótimo"**. Ainda NÃO no ar: falta o "podemos colocar no ar" (e, antes, decidir o que mais da página destaque entra).
 - **Galeria em carrossel lateral (mesmo dia, pedido do usuário, "igual naquele site"):** a galeria da página destaque deixou de ser grade e virou carrossel que desliza para o lado,
   como o da GMV (que usa Owl Carousel; aqui é rolagem nativa, sem biblioteca): no computador 2 fotos e um pedaço da terceira, setas e arrastar com o mouse; no celular 1 foto e um pedaço da próxima,
-  arrastando com o dedo. Tocar na foto continua abrindo a foto ampliada. Código em `detalhe-destaque.js` (`iniciarCarrossel`) e `style.css` (`.dd-carrossel`, `.dd-trilho`, `.dd-seta`). Enviado à prévia.
+  arrastando com o dedo. Tocar na foto continua abrindo a foto ampliada. Código em `detalhe-destaque.js` (`iniciarCarrossel`) e `style.css` (`.dd-carrossel`, `.dd-trilho`, `.dd-seta`). Enviado à prévia; o usuário não via a mudança
+  por causa do cache do navegador, resolvido com o número de versão nos arquivos (ver seção 3).
 
 ## 8. Regras de trabalho
 
