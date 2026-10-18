@@ -74,7 +74,38 @@
       if(moveu){ e.preventDefault(); e.stopPropagation(); moveu = false; }
     }, true);
     trilho.addEventListener('dragstart', function(e){ e.preventDefault(); });
+    caixa.ddAtualizar = atualizar;
     atualizar();
+  }
+
+  // Abas das plantas (uma por casa): clique ou setas do teclado trocam a casa.
+  function iniciarAbas(caixa){
+    if(!caixa) return;
+    var abas = Array.prototype.slice.call(caixa.querySelectorAll('[role="tab"]'));
+    if(!abas.length) return;
+    function escolher(i, focar){
+      abas.forEach(function(aba, j){
+        var ativo = j === i;
+        aba.setAttribute('aria-selected', ativo);
+        if(ativo){ aba.removeAttribute('tabindex'); } else { aba.setAttribute('tabindex', '-1'); }
+        var painel = document.getElementById(aba.getAttribute('aria-controls'));
+        if(painel){
+          painel.hidden = !ativo;
+          if(ativo){
+            var c = painel.querySelector('[data-dd-carrossel]');
+            if(c){ c.querySelector('.dd-trilho').scrollLeft = 0; if(c.ddAtualizar) c.ddAtualizar(); }
+          }
+        }
+      });
+      if(focar) abas[i].focus();
+    }
+    abas.forEach(function(aba, i){
+      aba.addEventListener('click', function(){ escolher(i, false); });
+      aba.addEventListener('keydown', function(e){
+        if(e.key === 'ArrowRight'){ e.preventDefault(); escolher((i + 1) % abas.length, true); }
+        if(e.key === 'ArrowLeft'){ e.preventDefault(); escolher((i - 1 + abas.length) % abas.length, true); }
+      });
+    });
   }
 
   window.renderDetalheDestaque = function(root, item, items, p){
@@ -143,13 +174,59 @@
       '</section>'
     ) : '';
 
-    // ---- diferenciais + casas (clara 2) ----
-    var plantas = (item.plantas || []).filter(function(pl){ return pl && pl.src; }).map(function(pl){
+    // ---- plantas (clara): um botão por casa ("grupo") e os andares dela em carrossel lateral ----
+    var listaPlantas = (item.plantas || []).filter(function(pl){ return pl && pl.src; });
+    var grupos = [];
+    listaPlantas.forEach(function(pl){
+      var g = pl.grupo || '';
+      var achado = grupos.filter(function(x){ return x.nome === g; })[0];
+      if(!achado){ achado = { nome: g, itens: [] }; grupos.push(achado); }
+      achado.itens.push(pl);
+    });
+    function cartaoPlanta(pl){
+      var titulo = (pl.grupo ? pl.grupo + ' · ' : '') + (pl.nome || 'Planta');
       return '<a href="' + esc(pl.src) + '"' + (pl.webp ? ' data-webp="' + esc(pl.webp) + '"' : '') + ' target="_blank" rel="noopener">' +
-        picture(pl.src, pl.webp, 'Planta ' + (pl.nome || ''), {lazy:true}) +
+        picture(pl.src, pl.webp, 'Planta ' + titulo, {lazy:true}) +
         '<span class="dd-planta-nome">' + esc(pl.nome || 'Planta') + '</span>' +
       '</a>';
-    }).join('');
+    }
+    function carrosselPlantas(itens, rotulo){
+      return '<div class="dd-carrossel" data-dd-carrossel>' +
+        '<div class="gallery-full dd-trilho dd-trilho-plantas" tabindex="0" aria-label="' + esc(rotulo) + ' (arraste para o lado)">' + itens.map(cartaoPlanta).join('') + '</div>' +
+        '<button type="button" class="dd-seta dd-seta-ant" aria-label="Planta anterior"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>' +
+        '<button type="button" class="dd-seta dd-seta-prox" aria-label="Próxima planta"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>' +
+      '</div>';
+    }
+    var plantasSec = '';
+    if(listaPlantas.length){
+      var corpoPlantas;
+      if(grupos.length > 1){
+        var abas = grupos.map(function(g, i){
+          return '<button type="button" role="tab" class="dd-aba" id="dd-aba-' + i + '" aria-controls="dd-painel-' + i + '" aria-selected="' + (i === 0) + '"' + (i === 0 ? '' : ' tabindex="-1"') + '>' + esc(g.nome || ('Opção ' + (i + 1))) + '</button>';
+        }).join('');
+        var paineis = grupos.map(function(g, i){
+          var unidade = (item.unidades || []).filter(function(u){ return u.nome === g.nome; })[0];
+          var info = unidade ? '<p class="dd-planta-info">' + esc([unidade.area, unidade.vaga].filter(Boolean).join(' · ')) + '</p>' : '';
+          return '<div role="tabpanel" class="dd-painel" id="dd-painel-' + i + '" aria-labelledby="dd-aba-' + i + '"' + (i === 0 ? '' : ' hidden') + '>' +
+            carrosselPlantas(g.itens, 'Plantas da ' + (g.nome || 'opção ' + (i + 1))) + info +
+          '</div>';
+        }).join('');
+        corpoPlantas = '<div class="dd-abas" role="tablist" aria-label="Escolha a casa">' + abas + '</div>' + paineis;
+      } else {
+        corpoPlantas = carrosselPlantas(listaPlantas, 'Plantas');
+      }
+      plantasSec = '' +
+        '<section class="dd-sec dd-claro" aria-labelledby="dd-plantas-titulo">' +
+          '<div class="wrap">' +
+            '<div class="dd-eyebrow">Plantas</div>' +
+            '<h2 id="dd-plantas-titulo" class="dd-h2">Conheça a planta de cada ' + esc(grupos.length > 1 ? 'casa' : 'unidade') + '</h2>' +
+            '<div class="reveal" data-dd-plantas>' + corpoPlantas + '</div>' +
+            '<p class="side-note">Toque na planta para ampliar. Imagens ilustrativas; medidas sujeitas a alterações no projeto executivo.</p>' +
+          '</div>' +
+        '</section>';
+    }
+
+    // ---- diferenciais + casas (clara 2) ----
 
     var projeto = '' +
       '<section class="dd-sec dd-claro2" aria-labelledby="dd-projeto-titulo">' +
@@ -171,11 +248,6 @@
               '</div>'
             ) : '') +
           '</div>' +
-          (plantas ? (
-            '<div class="section-label dd-plantas-label">Plantas</div>' +
-            '<div class="gallery-full dd-plantas reveal">' + plantas + '</div>' +
-            '<p class="side-note">Toque na planta para ampliar. Imagens ilustrativas.</p>'
-          ) : '') +
         '</div>' +
       '</section>';
 
@@ -268,9 +340,10 @@
       '</section>'
     ) : '';
 
-    root.innerHTML = '<div class="dd-pagina">' + capa + sobre + galeria + projeto + mapa + obra + contato + outrosSec + '</div>';
+    root.innerHTML = '<div class="dd-pagina">' + capa + sobre + galeria + projeto + plantasSec + mapa + obra + contato + outrosSec + '</div>';
 
-    iniciarCarrossel(root.querySelector('[data-dd-carrossel]'));
+    root.querySelectorAll('[data-dd-carrossel]').forEach(iniciarCarrossel);
+    iniciarAbas(root.querySelector('[data-dd-plantas]'));
 
     var caixa = root.querySelector('[data-dd-mapa]');
     if(caixa){

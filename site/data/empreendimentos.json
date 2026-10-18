@@ -193,7 +193,98 @@
           "texto": "1 ou 2 vagas"
         }
       ],
-      "plantas": [],
+      "plantas": [
+        {
+          "grupo": "Casa 1",
+          "nome": "Térreo · garagem",
+          "src": "assets/plantas/carmo-casa1-terreo.jpg",
+          "webp": "assets/plantas/carmo-casa1-terreo.webp"
+        },
+        {
+          "grupo": "Casa 1",
+          "nome": "1º pavimento",
+          "src": "assets/plantas/carmo-casa1-1pav.jpg",
+          "webp": "assets/plantas/carmo-casa1-1pav.webp"
+        },
+        {
+          "grupo": "Casa 1",
+          "nome": "2º pavimento",
+          "src": "assets/plantas/carmo-casa1-2pav.jpg",
+          "webp": "assets/plantas/carmo-casa1-2pav.webp"
+        },
+        {
+          "grupo": "Casa 2",
+          "nome": "Térreo · garagem",
+          "src": "assets/plantas/carmo-casa2-terreo.jpg",
+          "webp": "assets/plantas/carmo-casa2-terreo.webp"
+        },
+        {
+          "grupo": "Casa 2",
+          "nome": "1º pavimento",
+          "src": "assets/plantas/carmo-casa2-1pav.jpg",
+          "webp": "assets/plantas/carmo-casa2-1pav.webp"
+        },
+        {
+          "grupo": "Casa 2",
+          "nome": "2º pavimento",
+          "src": "assets/plantas/carmo-casa2-2pav.jpg",
+          "webp": "assets/plantas/carmo-casa2-2pav.webp"
+        },
+        {
+          "grupo": "Casa 3",
+          "nome": "Térreo · garagem",
+          "src": "assets/plantas/carmo-casa3-terreo.jpg",
+          "webp": "assets/plantas/carmo-casa3-terreo.webp"
+        },
+        {
+          "grupo": "Casa 3",
+          "nome": "1º pavimento",
+          "src": "assets/plantas/carmo-casa3-1pav.jpg",
+          "webp": "assets/plantas/carmo-casa3-1pav.webp"
+        },
+        {
+          "grupo": "Casa 3",
+          "nome": "2º pavimento",
+          "src": "assets/plantas/carmo-casa3-2pav.jpg",
+          "webp": "assets/plantas/carmo-casa3-2pav.webp"
+        },
+        {
+          "grupo": "Casa 4",
+          "nome": "Térreo · garagem",
+          "src": "assets/plantas/carmo-casa4-terreo.jpg",
+          "webp": "assets/plantas/carmo-casa4-terreo.webp"
+        },
+        {
+          "grupo": "Casa 4",
+          "nome": "1º pavimento",
+          "src": "assets/plantas/carmo-casa4-1pav.jpg",
+          "webp": "assets/plantas/carmo-casa4-1pav.webp"
+        },
+        {
+          "grupo": "Casa 4",
+          "nome": "2º pavimento",
+          "src": "assets/plantas/carmo-casa4-2pav.jpg",
+          "webp": "assets/plantas/carmo-casa4-2pav.webp"
+        },
+        {
+          "grupo": "Casa 5",
+          "nome": "Térreo · garagem",
+          "src": "assets/plantas/carmo-casa5-terreo.jpg",
+          "webp": "assets/plantas/carmo-casa5-terreo.webp"
+        },
+        {
+          "grupo": "Casa 5",
+          "nome": "1º pavimento",
+          "src": "assets/plantas/carmo-casa5-1pav.jpg",
+          "webp": "assets/plantas/carmo-casa5-1pav.webp"
+        },
+        {
+          "grupo": "Casa 5",
+          "nome": "2º pavimento",
+          "src": "assets/plantas/carmo-casa5-2pav.jpg",
+          "webp": "assets/plantas/carmo-casa5-2pav.webp"
+        }
+      ],
       "mapa": {
         "endereco": "Rua Dr. Freud, 161 - Vila Tupy, Praia Grande - SP",
         "texto": "A 300 metros da praia, no bairro Vila Tupy, em Praia Grande."

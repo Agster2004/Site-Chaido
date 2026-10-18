@@ -85,7 +85,8 @@ collections:
                 widget: "list"
                 required: false
                 fields:
-                  - { label: "Nome (ex: Casa 1 · térreo)", name: "nome", widget: "string" }
+                  - { label: "Casa / grupo (ex: Casa 1) — cria um botão por casa", name: "grupo", widget: "string", required: false }
+                  - { label: "Andar (ex: 1º pavimento)", name: "nome", widget: "string" }
                   - { label: "Imagem da planta (JPG ou PNG)", name: "src", widget: "image" }
                   - { label: "Imagem em WebP (opcional)", name: "webp", widget: "image", required: false }
               - label: "Mapa da região (página destaque)"

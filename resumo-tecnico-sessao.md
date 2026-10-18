@@ -233,7 +233,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   decidir o que mostrar publicamente); blog como projeto à parte; textos prontos do WhatsApp Business (saudação, ausência, respostas rápidas do Garrett
   e do Carmo e uma mensagem pré-preenchida diferente por anúncio); `va-disable` para o Vercel Analytics ignorar as visitas da equipe (exigiria mudança no `main`).
 - **Perfil somente leitura para quem só acompanha o painel** (hoje todo usuário liberado pode apagar e exportar); pede desenho e "pode construir".
-- **Referência da GMV (17/10/2026): CONSTRUÍDA na página "destaque" do Carmo** (faixa, obra, mapa, plantas, visual escuro/claro, outros empreendimentos). Faltam: as **imagens das plantas**, os **percentuais da obra**,
+- **Referência da GMV (17/10/2026): CONSTRUÍDA na página "destaque" do Carmo** (faixa, obra, mapa, plantas, visual escuro/claro, outros empreendimentos). Faltam: ~~as imagens das plantas~~ (feitas em 18/10/2026; pedir ao arquiteto a correção dos rótulos das garagens das casas 2 e 5), os **percentuais da obra**,
   confirmar se são **3 banheiros**, e decidir se o **Garrett** também passa ao estilo novo. Ficaram fora (pedem desenho próprio): "baixar o book" e "Cliente final ou Corretor". Texto original da ideia: faixa de características com ícones
   (dormitórios, banheiros, m², vagas; faltam os números do Carmo); andamento da obra com barras por etapa e total (faltam os percentuais e quem atualiza); mapa "Explore a região"
   (falta a localização exata); plantas por unidade com zoom (faltam as imagens); botão "baixar o book" que capta o contato (falta o PDF; ele não pode ficar em `site/` aberto);
@@ -482,6 +482,11 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   como o da GMV (que usa Owl Carousel; aqui é rolagem nativa, sem biblioteca): no computador 2 fotos e um pedaço da terceira, setas e arrastar com o mouse; no celular 1 foto e um pedaço da próxima,
   arrastando com o dedo. Tocar na foto continua abrindo a foto ampliada. Código em `detalhe-destaque.js` (`iniciarCarrossel`) e `style.css` (`.dd-carrossel`, `.dd-trilho`, `.dd-seta`). Enviado à prévia; o usuário não via a mudança
   por causa do cache do navegador, resolvido com o número de versão nos arquivos (ver seção 3).
+- **Plantas das 5 casas (mesmo dia):** o usuário mandou as plantas humanizadas (`Downloads/Mídia RES. CARMO/Plantas Humanizadas`, só neste computador): para cada casa, Térreo (garagem), 1º e 2º pavimento,
+  15 imagens. Reduzidas a até 1800 px em `site/assets/plantas/carmo-casaN-{terreo,1pav,2pav}.{jpg,webp}` (30 a 185 KB cada). No JSON, `plantas` ganhou o campo `grupo` ("Casa 1"...),
+  também no `/admin`. Na página destaque virou uma seção própria "Conheça a planta de cada casa": um botão por casa e os 3 andares em carrossel lateral (3 lado a lado no computador,
+  1 e um pedaço no celular), com área e vagas da casa embaixo (vêm de `unidades`) e zoom ao tocar. Versão dos arquivos trocada para `?v=20261018b`. Enviado à prévia.
+  **Erros de texto nas imagens do arquiteto (não corrigidos, avisar o usuário):** na planta da garagem da Casa 2 está escrito "Á. EXCL. COBERTA CASA 01" e na da Casa 5, "Á. EXC. COBERTA CASA 02".
 
 ## 8. Regras de trabalho
 
