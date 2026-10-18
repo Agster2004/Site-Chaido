@@ -25,12 +25,13 @@ window.initHeroSlides = function(){
     }, 5500);
   }
 
-  var src = raiz.getAttribute('data-hero-video');
-  if(!src) return;
   var larga = false, economiza = false;
   try { larga = window.matchMedia('(min-width: 761px)').matches; } catch(e){}
   try { economiza = !!(navigator.connection && navigator.connection.saveData); } catch(e){}
-  if(!larga || economiza) return; // celular e "economizar dados": só as fotos
+  if(economiza) return; // "economizar dados": só as fotos
+  // computador: vídeo principal; celular: a versão leve (data-hero-video-celular), se existir; senão, só as fotos
+  var src = larga ? raiz.getAttribute('data-hero-video') : raiz.getAttribute('data-hero-video-celular');
+  if(!src) return;
 
   var v = document.createElement('video');
   v.className = 'hero-video';

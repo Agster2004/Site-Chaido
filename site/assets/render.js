@@ -168,7 +168,7 @@
     // Capa em apresentação: se o empreendimento tiver "capa_slides", as fotos passam em sequência (fade + zoom lento).
     const slides = (item.capa_slides || []).filter(function(s){ return s && s.src; });
     const heroMidia = slides.length ? (
-      '<div class="hero-slides" data-hero-slides' + (item.capa_video ? ' data-hero-video="' + esc(item.capa_video) + '"' : '') + '>' +
+      '<div class="hero-slides" data-hero-slides' + (item.capa_video ? ' data-hero-video="' + esc(item.capa_video) + '"' : '') + (item.capa_video_celular ? ' data-hero-video-celular="' + esc(item.capa_video_celular) + '"' : '') + '>' +
         slides.map(function(s, i){
           const foco = s.foco ? ' style="object-position:' + esc(s.foco) + '"' : '';
           const alt = i === 0 ? ('Fachada do ' + item.nome) : '';

@@ -16,12 +16,15 @@ virar venda no financeiro) é uma decisão à parte, tomada com o usuário e des
 > commit (`ddb4082`); depois a `trabalho` andou à frente com o ajuste do menu, o botão "Quero saber mais" e a trava de contagem só no site oficial, publicados nos "podemos colocar no ar" seguintes (seção 7, "Ajustes depois de ir ao ar"); confira sempre com `git log --oneline origin/main..trabalho`; o `main` passa a ter também este resumo, o `CLAUDE.md`, `docs/`, `tests/` e `supabase/` (fora de `site/`, não ficam públicos). Detalhes e
 > o que ainda falta: veja "O que ficou pendente" e a seção 7 (entrada "13/10/2026, no ar"). Onde o texto abaixo disser "ainda NÃO no ar", leia "agora no ar".
 
-> **Em andamento (17/10/2026), NADA disto está no `main` (site oficial); está na `trabalho` no GitHub e na prévia da Vercel desde o "envie para o github" de 17/10/2026:** o usuário pediu **não publicar nada antes de ver**.
-> 1. **Página do Carmo no estilo da GMV** ("layout destaque"): capa grande, seções escuras e claras, faixa de características, galeria em cartões, diferenciais e casas, mapa (carrega no clique),
->    andamento da obra e plantas (escondidos até chegarem os dados), formulário e outros empreendimentos. Desenho: `docs/superpowers/specs/2026-10-17-pagina-destaque-design.md`.
-> 2. **Capa em vídeo do Carmo** (`site/assets/carmo-capa.mp4`, só fotos animadas, sem a marca do Google) já na página; no celular, fotos em apresentação.
-> 3. **Capa com pessoas** (IA grátis do Hugging Face): **as 5 cenas prontas (18/10/2026)**; vídeo em `midia/carmo-videos/carmo-capa-com-pessoas.mp4`; **desde 18/10/2026 é a capa do Carmo na prévia** (`site/assets/carmo-capa-pessoas.mp4`), não no site oficial.
-> **Próximo:** o usuário viu o vídeo com pessoas e **quer ajustá-lo antes de usar na capa** (ainda não disse o quê); depois decidir se ele vira a capa; mandar plantas, percentuais da obra e o book. Detalhes na seção 7 (entrada "17/10/2026") e na seção 6.
+> **Em andamento (17 e 18/10/2026), NADA disto está no `main` (site oficial); tudo está na `trabalho` e na prévia da Vercel** (`site-chaido-git-trabalho-chiado.vercel.app/imovel/carmo`).
+> O usuário pediu **não publicar nada antes de ver**.
+> 1. **Página do Carmo no estilo da GMV** ("layout destaque"): capa grande, seções escuras e claras, faixa de características, **galeria em carrossel lateral**, diferenciais e casas,
+>    **plantas das 5 casas** (um botão por casa, 3 andares em carrossel), mapa (carrega no clique), andamento da obra (escondido até chegarem os percentuais), formulário e outros empreendimentos.
+>    Desenho: `docs/superpowers/specs/2026-10-17-pagina-destaque-design.md`.
+> 2. **Capa com pessoas** (5 cenas geradas de graça no Hugging Face): é a capa do Carmo na prévia (`site/assets/carmo-capa-pessoas.mp4`), com "Imagens ilustrativas" no canto; o usuário achou "ótimo".
+>    No celular toca uma versão leve (`carmo-capa-pessoas-celular.mp4`, 1,4 MB); com "economizar dados", só fotos. O vídeo antigo, só com fotos, continua em `site/assets/carmo-capa.mp4`.
+> **Próximo:** o usuário revisa a página toda na prévia; faltam os percentuais da obra, o book, confirmar 3 banheiros, decidir o Garrett no estilo novo e pedir ao arquiteto a correção dos rótulos
+> das garagens das casas 2 e 5. Depois, o "podemos colocar no ar". Detalhes na seção 7 (entradas "17/10/2026" e "18/10/2026") e na seção 6.
 
 **Antes de tudo, em qualquer computador:** este projeto trabalha na branch **`trabalho`**, não no `main` (o `main` é o
 site no ar). Este arquivo e o `CLAUDE.md` **só existem na `trabalho`**. Se você não os vê, está no `main`: rode
@@ -238,7 +241,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   (dormitórios, banheiros, m², vagas; faltam os números do Carmo); andamento da obra com barras por etapa e total (faltam os percentuais e quem atualiza); mapa "Explore a região"
   (falta a localização exata); plantas por unidade com zoom (faltam as imagens); botão "baixar o book" que capta o contato (falta o PDF; ele não pode ficar em `site/` aberto);
   campo "Cliente final ou Corretor" no formulário (mexe no banco e no painel); visual escuro alternando com seções claras e cards arredondados. Sugestão de começar por características, obra e mapa.
-- **Capa do Carmo:** ver na prévia (computador e celular) e decidir entre o vídeo só com fotos (no site) e o vídeo com pessoas nas 5 cenas (`midia/carmo-videos/carmo-capa-com-pessoas.mp4`, desde 18/10/2026); a marca d'água "© 2025 Google" da varanda e das sacadas já foi apagada (17/10/2026); o ideal ainda é pedir os renders originais sem ela a quem fez o 3D.
+- **Capa do Carmo:** decidida em 18/10/2026: vídeo com pessoas nas 5 cenas (`site/assets/carmo-capa-pessoas.mp4`), aprovado pelo usuário na prévia ("ficou ótimo"); a marca d'água "© 2025 Google" da varanda e das sacadas já foi apagada (17/10/2026); o ideal ainda é pedir os renders originais sem ela a quem fez o 3D.
   Depois de ir ao ar, o campo de vídeo já aparece no `/admin`.
 - **Opções para antecipar valor sem esperar o painel:** publicar só no `main`, em pacote separado, o `utm.js` (origem no WhatsApp) e/ou um keep-alive mínimo.
 - Anotado: `OAUTH_CLIENT_SECRET` aparece na Vercel com "Needs Attention" (valor sem proteção Sensitive); ver com calma.
@@ -471,7 +474,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   (uso: `node gerar-cena-video.mjs <foto.jpg> <saida.mp4> <segundos> "<texto>"`; precisa só do Node; a cota é a mesma, por endereço de internet).
 - **Vídeo completo:** `midia/carmo-videos/carmo-capa-com-pessoas.mp4` (20 s, 1920×1080, 3,3 MB): fachada de frente, fachada de lado, piscina (3 s em câmera lenta), varanda e sacadas, todas com pessoas, transição de 1 s.
   O rascunho de 17/10 foi apagado (substituído). **Ainda não é a capa do site**: se o usuário aprovar, copiar para `site/assets/carmo-capa.mp4` e pôr "imagens ilustrativas" sobre a capa.
-- **Onde parou (18/10/2026):** o usuário viu o vídeo e disse **"quero ajustar o vídeo antes de usar na capa"**, sem dizer ainda o quê. Opções oferecidas: ordem das cenas, tempo de cada cena,
+- **Onde parou (meio do dia 18/10/2026, já superado; ver o último item):** o usuário viu o vídeo e disse **"quero ajustar o vídeo antes de usar na capa"**, sem dizer ainda o quê. Opções oferecidas: ordem das cenas, tempo de cada cena,
   refazer uma cena com outro texto (gasta a cota grátis, cerca de 3 cenas por dia), transição, brilho/contraste/tom e emenda suave do fim com o começo (o vídeo repete na capa).
   Tudo de hoje (cenas, vídeo completo, script e textos) foi enviado à `trabalho` no GitHub em 18/10/2026; nada dentro de `site/` mudou, então a prévia ficou igual. Nada no `main`.
 - **Vídeo com pessoas na capa da prévia (mesmo dia, pedido do usuário "colocar o vídeo na capa da prévia pra ver como fica"):** copiado para `site/assets/carmo-capa-pessoas.mp4` e o Carmo passou a usar
@@ -486,7 +489,14 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   15 imagens. Reduzidas a até 1800 px em `site/assets/plantas/carmo-casaN-{terreo,1pav,2pav}.{jpg,webp}` (30 a 185 KB cada). No JSON, `plantas` ganhou o campo `grupo` ("Casa 1"...),
   também no `/admin`. Na página destaque virou uma seção própria "Conheça a planta de cada casa": um botão por casa e os 3 andares em carrossel lateral (3 lado a lado no computador,
   1 e um pedaço no celular), com área e vagas da casa embaixo (vêm de `unidades`) e zoom ao tocar. Versão dos arquivos trocada para `?v=20261018b`. Enviado à prévia.
-  **Erros de texto nas imagens do arquiteto (não corrigidos, avisar o usuário):** na planta da garagem da Casa 2 está escrito "Á. EXCL. COBERTA CASA 01" e na da Casa 5, "Á. EXC. COBERTA CASA 02".
+  **Erros de texto nas imagens do arquiteto (não corrigidos, avisar o usuário):** na planta da garagem da Casa 2 está escrito "Á. EXCL. COBERTA CASA 01" e na da Casa 5, "Á. EXC. COBERTA CASA 02". (Avisado ao usuário.)
+- **Onde parou (fim do dia 18/10/2026):** tudo enviado à `trabalho` e na prévia (commit das plantas: `7fca7f4`); nada no `main`. O usuário aprovou a capa com pessoas.
+  Em aberto: (1) o usuário revisar a página destaque inteira na prévia (carrossel da galeria e plantas são novos); (2) percentuais da obra; (3) book em PDF (pede desenho próprio para liberar só depois do cadastro);
+  (4) confirmar 3 banheiros na faixa de características; (5) Garrett no estilo novo?; (6) rótulos errados nas plantas das garagens 2 e 5 (arquiteto); (7) "podemos colocar no ar".
+- **Vídeo também no celular (mesmo dia, pergunta do usuário "no celular o vídeo da capa não roda?"):** criada a versão leve `site/assets/carmo-capa-pessoas-celular.mp4` (1280×720, 1,4 MB) e o campo
+  `capa_video_celular` (também no `/admin`). `hero-slides.js`: no computador usa `capa_video`; no celular, `capa_video_celular` (se não houver, só fotos); com "economizar dados" ou "reduzir movimento", só fotos.
+  No celular o vídeo aparece recortado no meio (tela em pé); as pessoas aparecem. Versão dos arquivos `?v=20261018c`. Conferido no navegador local em tamanho de celular: toca a versão leve, sem erro. Enviado à prévia.
+  **No outro computador:** as plantas originais e as mídias do Carmo estão só em `Downloads/Mídia RES. CARMO` deste computador; as versões do site já estão no projeto (`site/assets/plantas/`).
 
 ## 8. Regras de trabalho
 
