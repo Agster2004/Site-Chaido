@@ -498,7 +498,8 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - **Vídeo também no celular (mesmo dia, pergunta do usuário "no celular o vídeo da capa não roda?"):** criada a versão leve `site/assets/carmo-capa-pessoas-celular.mp4` (1280×720, 1,4 MB) e o campo
   `capa_video_celular` (também no `/admin`). `hero-slides.js`: no computador usa `capa_video`; no celular, `capa_video_celular` (se não houver, só fotos); com "economizar dados" ou "reduzir movimento", só fotos.
   No celular o vídeo aparece recortado no meio (tela em pé); as pessoas aparecem. Versão dos arquivos `?v=20261018c`. Conferido no navegador local em tamanho de celular: toca a versão leve, sem erro. Enviado à prévia. Os .md foram revisados e enviados no fim do dia; todas as fotos, vídeos e plantas do projeto estão no GitHub.
-  **No outro computador:** as plantas originais e as mídias do Carmo estão só em `Downloads/Mídia RES. CARMO` deste computador; as versões do site já estão no projeto (`site/assets/plantas/`).
+  **Originais do Carmo no projeto (pedido do usuário):** a pasta `Downloads/Mídia RES. CARMO` (renders, plantas humanizadas em tamanho grande, `Link Tour Virtual.docx`) foi copiada para
+  `midia/carmo-originais/` (36 arquivos, 122 MB; tiradas 2 cópias idênticas de `52-Casa-02-A.S_R01`) e enviada ao GitHub, para estar nos dois computadores. Fica fora de `site/`, não é pública.
 
 ## 8. Regras de trabalho
 

@@ -1,4 +1,5 @@
 CAPA EM VIDEO DO CARMO - PASTA DE TRABALHO
+(Os originais do arquiteto/3D - renders e plantas em tamanho grande - estao em midia/carmo-originais.)
 
 fotos\   As 5 imagens do Carmo em tamanho original (varanda e sacadas ja sem a marca do Google).
 videos\  Salve aqui os trechos gerados na IA (Hugging Face, Kling, Runway ou Veo). Depois e so avisar o Claude.
