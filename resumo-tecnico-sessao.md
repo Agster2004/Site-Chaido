@@ -475,7 +475,10 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - **Vídeo com pessoas na capa da prévia (mesmo dia, pedido do usuário "colocar o vídeo na capa da prévia pra ver como fica"):** copiado para `site/assets/carmo-capa-pessoas.mp4` e o Carmo passou a usar
   `capa_video: assets/carmo-capa-pessoas.mp4` (o vídeo antigo, só com fotos, continua em `site/assets/carmo-capa.mp4` para voltar se quiser). Campo novo `capa_nota` ("Imagens ilustrativas"), mostrado pequeno no canto de cima
   da capa da página destaque e editável no `/admin` ("Aviso pequeno sobre a capa"). No celular a capa continua com as fotos (sem pessoas). Conferido no navegador local: o vídeo toca no computador e a frase aparece; 82 testes (76 passam, 6 pulados).
-  O usuário ainda quer ajustar o vídeo (não disse o quê); a prévia serve para ele ver e decidir.
+  O usuário viu na prévia (no computador) e disse **"ficou ótimo"**. Ainda NÃO no ar: falta o "podemos colocar no ar" (e, antes, decidir o que mais da página destaque entra).
+- **Galeria em carrossel lateral (mesmo dia, pedido do usuário, "igual naquele site"):** a galeria da página destaque deixou de ser grade e virou carrossel que desliza para o lado,
+  como o da GMV (que usa Owl Carousel; aqui é rolagem nativa, sem biblioteca): no computador 2 fotos e um pedaço da terceira, setas e arrastar com o mouse; no celular 1 foto e um pedaço da próxima,
+  arrastando com o dedo. Tocar na foto continua abrindo a foto ampliada. Código em `detalhe-destaque.js` (`iniciarCarrossel`) e `style.css` (`.dd-carrossel`, `.dd-trilho`, `.dd-seta`). Enviado à prévia.
 
 ## 8. Regras de trabalho
 

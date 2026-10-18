@@ -543,10 +543,28 @@ main:focus{ outline:none; }
 @media(max-width:860px){ .dd-carac:last-child:nth-child(odd){ grid-column:1 / -1; } }
 
 /* galeria: cartões arredondados, a primeira foto maior */
-.dd-galeria{ grid-template-columns:repeat(4, 1fr); gap:14px; }
-.dd-galeria a{ border-radius:16px; aspect-ratio:1 / 1; }
-.dd-galeria a:first-child{ grid-column:span 2; grid-row:span 2; }
-@media(max-width:860px){ .dd-galeria{ grid-template-columns:repeat(2, 1fr); gap:10px; } .dd-galeria a{ border-radius:12px; } }
+/* carrossel lateral: 2 fotos e um pedaço da terceira no computador; 1 foto e um pedaço da próxima no celular */
+.dd-carrossel{ position:relative; }
+.dd-trilho{ display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; overscroll-behavior-x:contain;
+  scrollbar-width:none; margin:0 -28px; padding:4px 28px 6px; scroll-padding:0 28px; cursor:grab; }
+.dd-trilho::-webkit-scrollbar{ display:none; }
+.dd-trilho.arrastando{ cursor:grabbing; scroll-snap-type:none; scroll-behavior:auto; }
+.dd-trilho.arrastando a{ pointer-events:none; }
+.dd-trilho a{ flex:0 0 calc((100% - 28px) / 2.3); aspect-ratio:4 / 3; border-radius:18px; scroll-snap-align:start; }
+.dd-trilho img{ -webkit-user-drag:none; user-select:none; }
+@media(max-width:860px){ .dd-trilho{ gap:10px; margin:0 -20px; padding:4px 20px 6px; scroll-padding:0 20px; } .dd-trilho a{ flex-basis:82%; border-radius:14px; } }
+.dd-seta{
+  position:absolute; top:50%; transform:translateY(-50%); z-index:2; width:50px; height:50px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  background:rgba(255,255,255,0.95); color:var(--green-900); border:1px solid var(--line); box-shadow:0 8px 22px rgba(22,48,31,0.16);
+  transition:opacity .2s ease, transform .2s ease;
+}
+.dd-seta svg{ width:22px; height:22px; }
+.dd-seta:hover{ transform:translateY(-50%) scale(1.06); }
+.dd-seta:disabled{ opacity:0; pointer-events:none; }
+.dd-seta-ant{ left:-14px; }
+.dd-seta-prox{ right:-14px; }
+@media(max-width:860px){ .dd-seta{ display:none; } }
 .dd-videos{ margin-top:36px; }
 
 /* diferenciais + unidades + plantas */

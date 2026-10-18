@@ -30,6 +30,53 @@
     return (Math.round(n * 10) / 10).toString().replace('.', ',') + '%';
   }
 
+  // Carrossel lateral: rolagem nativa com encaixe (celular arrasta com o dedo), setas e arrastar com o mouse no computador.
+  function iniciarCarrossel(caixa){
+    if(!caixa) return;
+    var trilho = caixa.querySelector('.dd-trilho');
+    var ant = caixa.querySelector('.dd-seta-ant'), prox = caixa.querySelector('.dd-seta-prox');
+    function passo(){ var a = trilho.querySelector('a'); return a ? a.getBoundingClientRect().width + 14 : trilho.clientWidth * 0.8; }
+    function atualizar(){
+      var max = trilho.scrollWidth - trilho.clientWidth - 2;
+      ant.disabled = trilho.scrollLeft <= 2;
+      prox.disabled = trilho.scrollLeft >= max;
+    }
+    ant.addEventListener('click', function(){ trilho.scrollBy({ left: -passo(), behavior: 'smooth' }); });
+    prox.addEventListener('click', function(){ trilho.scrollBy({ left: passo(), behavior: 'smooth' }); });
+    trilho.addEventListener('scroll', atualizar, { passive: true });
+    window.addEventListener('resize', atualizar);
+    trilho.addEventListener('keydown', function(e){
+      if(e.key === 'ArrowRight'){ e.preventDefault(); prox.click(); }
+      if(e.key === 'ArrowLeft'){ e.preventDefault(); ant.click(); }
+    });
+    // arrastar com o mouse; se arrastou, o clique não abre a foto
+    var inicioX = 0, inicioScroll = 0, arrastando = false, moveu = false;
+    trilho.addEventListener('pointerdown', function(e){
+      if(e.pointerType !== 'mouse' || e.button !== 0) return;
+      arrastando = true; moveu = false; inicioX = e.clientX; inicioScroll = trilho.scrollLeft;
+    });
+    window.addEventListener('pointermove', function(e){
+      if(!arrastando) return;
+      var dx = e.clientX - inicioX;
+      if(!moveu && Math.abs(dx) > 6){ moveu = true; trilho.classList.add('arrastando'); }
+      if(moveu){ trilho.scrollLeft = inicioScroll - dx; e.preventDefault(); }
+    });
+    window.addEventListener('pointerup', function(){
+      if(!arrastando) return;
+      arrastando = false;
+      if(moveu){
+        trilho.classList.remove('arrastando');
+        // volta ao encaixe mais próximo
+        var p = passo(); trilho.scrollTo({ left: Math.round(trilho.scrollLeft / p) * p, behavior: 'smooth' });
+      }
+    });
+    trilho.addEventListener('click', function(e){
+      if(moveu){ e.preventDefault(); e.stopPropagation(); moveu = false; }
+    }, true);
+    trilho.addEventListener('dragstart', function(e){ e.preventDefault(); });
+    atualizar();
+  }
+
   window.renderDetalheDestaque = function(root, item, items, p){
     var R = window.ChiadoRender;
     var esc = R.esc, picture = R.picture;
@@ -84,7 +131,12 @@
         '<div class="wrap">' +
           '<div class="dd-eyebrow">Galeria</div>' +
           '<h2 id="dd-galeria-titulo" class="dd-h2">Conheça as imagens do ' + esc(item.nome.replace(/^Residencial\s+/i, '')) + '</h2>' +
-          '<div class="gallery-full dd-galeria reveal">' + p.galleryItems + '</div>' +
+          // carrossel lateral (como na GMV): arrasta para o lado; setas no computador; tocar abre a foto ampliada
+          '<div class="dd-carrossel reveal" data-dd-carrossel>' +
+            '<div class="gallery-full dd-trilho" tabindex="0" aria-label="Fotos (arraste para o lado)">' + p.galleryItems + '</div>' +
+            '<button type="button" class="dd-seta dd-seta-ant" aria-label="Fotos anteriores"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>' +
+            '<button type="button" class="dd-seta dd-seta-prox" aria-label="Próximas fotos"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>' +
+          '</div>' +
           p.galleryNote +
           (p.videosHtml ? '<div class="dd-videos">' + p.videosHtml + '</div>' : '') +
         '</div>' +
@@ -217,6 +269,8 @@
     ) : '';
 
     root.innerHTML = '<div class="dd-pagina">' + capa + sobre + galeria + projeto + mapa + obra + contato + outrosSec + '</div>';
+
+    iniciarCarrossel(root.querySelector('[data-dd-carrossel]'));
 
     var caixa = root.querySelector('[data-dd-mapa]');
     if(caixa){

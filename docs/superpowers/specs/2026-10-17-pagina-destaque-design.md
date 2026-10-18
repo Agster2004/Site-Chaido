@@ -13,7 +13,8 @@ pode passar a usar só preenchendo os campos (decisão do usuário).
    "Quero saber mais" e WhatsApp. Campos: `capa_video`, `capa_slides`, `bairro`, `tag_label`.
 2. **O empreendimento** (escura): parágrafos de `sobre` (ou `descricao`) e a **faixa de características** com ícones
    (`caracteristicas`: `icone` = casa, suite, banheiro, area ou vaga, e `texto`).
-3. **Galeria** (clara): a `galeria` de sempre, em cartões arredondados, a primeira foto maior; abre no visualizador.
+3. **Galeria** (clara): a `galeria` de sempre, em **carrossel lateral** (desde 18/10/2026, como na GMV): 2 fotos e um pedaço da terceira no computador, com setas e arrastar;
+   1 foto e um pedaço da próxima no celular. Tocar abre o visualizador. Capa com `capa_nota` ("Imagens ilustrativas") no canto.
 4. **O projeto** (clara 2): diferenciais e tabela de unidades; **plantas** (`plantas`: `nome`, `src`, `webp`) com zoom.
 5. **Explore a região** (escura): `mapa.endereco` e `mapa.texto`. O mapa do Google **só carrega quando a pessoa toca em
    "Ver o mapa aqui"** (não envia dados ao Google antes disso e a página fica leve); há também o botão "Abrir no Google Maps".
