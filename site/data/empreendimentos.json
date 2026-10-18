@@ -135,7 +135,8 @@
       "endereco": "Rua Dr. Freud, 161, Vila Tupy, Praia Grande - SP · 300m da praia",
       "capa": "assets/carmo-fachada.jpg",
       "capa_webp": "assets/carmo-fachada.webp",
-      "capa_video": "assets/carmo-capa.mp4",
+      "capa_video": "assets/carmo-capa-pessoas.mp4",
+      "capa_nota": "Imagens ilustrativas",
       "capa_slides": [
         {
           "src": "assets/carmo-capa-1.jpg",

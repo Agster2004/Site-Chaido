@@ -53,6 +53,7 @@
             '</div>' +
           '</div>' +
         '</div>' +
+        (item.capa_nota ? '<span class="dd-hero-nota">' + esc(item.capa_nota) + '</span>' : '') +
       '</div>';
 
     // ---- sobre + características (escura) ----

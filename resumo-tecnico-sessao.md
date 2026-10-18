@@ -20,7 +20,7 @@ virar venda no financeiro) é uma decisão à parte, tomada com o usuário e des
 > 1. **Página do Carmo no estilo da GMV** ("layout destaque"): capa grande, seções escuras e claras, faixa de características, galeria em cartões, diferenciais e casas, mapa (carrega no clique),
 >    andamento da obra e plantas (escondidos até chegarem os dados), formulário e outros empreendimentos. Desenho: `docs/superpowers/specs/2026-10-17-pagina-destaque-design.md`.
 > 2. **Capa em vídeo do Carmo** (`site/assets/carmo-capa.mp4`, só fotos animadas, sem a marca do Google) já na página; no celular, fotos em apresentação.
-> 3. **Capa com pessoas** (IA grátis do Hugging Face): **as 5 cenas prontas (18/10/2026)**; vídeo em `midia/carmo-videos/carmo-capa-com-pessoas.mp4`, **ainda não usado na capa** (o usuário vai ver e decidir).
+> 3. **Capa com pessoas** (IA grátis do Hugging Face): **as 5 cenas prontas (18/10/2026)**; vídeo em `midia/carmo-videos/carmo-capa-com-pessoas.mp4`; **desde 18/10/2026 é a capa do Carmo na prévia** (`site/assets/carmo-capa-pessoas.mp4`), não no site oficial.
 > **Próximo:** o usuário viu o vídeo com pessoas e **quer ajustá-lo antes de usar na capa** (ainda não disse o quê); depois decidir se ele vira a capa; mandar plantas, percentuais da obra e o book. Detalhes na seção 7 (entrada "17/10/2026") e na seção 6.
 
 **Antes de tudo, em qualquer computador:** este projeto trabalha na branch **`trabalho`**, não no `main` (o `main` é o
@@ -472,6 +472,10 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - **Onde parou (18/10/2026):** o usuário viu o vídeo e disse **"quero ajustar o vídeo antes de usar na capa"**, sem dizer ainda o quê. Opções oferecidas: ordem das cenas, tempo de cada cena,
   refazer uma cena com outro texto (gasta a cota grátis, cerca de 3 cenas por dia), transição, brilho/contraste/tom e emenda suave do fim com o começo (o vídeo repete na capa).
   Tudo de hoje (cenas, vídeo completo, script e textos) foi enviado à `trabalho` no GitHub em 18/10/2026; nada dentro de `site/` mudou, então a prévia ficou igual. Nada no `main`.
+- **Vídeo com pessoas na capa da prévia (mesmo dia, pedido do usuário "colocar o vídeo na capa da prévia pra ver como fica"):** copiado para `site/assets/carmo-capa-pessoas.mp4` e o Carmo passou a usar
+  `capa_video: assets/carmo-capa-pessoas.mp4` (o vídeo antigo, só com fotos, continua em `site/assets/carmo-capa.mp4` para voltar se quiser). Campo novo `capa_nota` ("Imagens ilustrativas"), mostrado pequeno no canto de cima
+  da capa da página destaque e editável no `/admin` ("Aviso pequeno sobre a capa"). No celular a capa continua com as fotos (sem pessoas). Conferido no navegador local: o vídeo toca no computador e a frase aparece; 82 testes (76 passam, 6 pulados).
+  O usuário ainda quer ajustar o vídeo (não disse o quê); a prévia serve para ele ver e decidir.
 
 ## 8. Regras de trabalho
 

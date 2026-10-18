@@ -41,6 +41,7 @@ collections:
               - { label: "Foto de capa (JPG ou PNG)", name: "capa", widget: "image" }
               - { label: "Foto de capa em WebP (opcional, mais leve)", name: "capa_webp", widget: "image", required: false, hint: "Se não tiver uma versão .webp, deixe em branco — o site usa a foto normal." }
               - { label: "Vídeo da capa (opcional, MP4 leve)", name: "capa_video", widget: "file", required: false, hint: "Se preencher, no computador a capa toca este vídeo (sem som, em loop); no celular continuam as fotos da apresentação abaixo. Ideal: até 6 MB." }
+              - { label: "Aviso pequeno sobre a capa (opcional)", name: "capa_nota", widget: "string", required: false, hint: "Ex: Imagens ilustrativas. Aparece no canto da capa da página destaque." }
               - label: "Capa em apresentação (opcional)"
                 name: "capa_slides"
                 widget: "list"
