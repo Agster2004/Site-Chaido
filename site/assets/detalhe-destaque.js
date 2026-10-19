@@ -37,6 +37,7 @@
     var ant = caixa.querySelector('.dd-seta-ant'), prox = caixa.querySelector('.dd-seta-prox');
     function passo(){ var a = trilho.querySelector('a'); return a ? a.getBoundingClientRect().width + 14 : trilho.clientWidth * 0.8; }
     function atualizar(){
+      if(caixa.ddLoop){ ant.disabled = false; prox.disabled = false; return; }
       var max = trilho.scrollWidth - trilho.clientWidth - 2;
       ant.disabled = trilho.scrollLeft <= 2;
       prox.disabled = trilho.scrollLeft >= max;
@@ -77,6 +78,84 @@
     caixa.ddAtualizar = atualizar;
     atualizar();
   }
+
+  // Galeria contínua (marcada com data-dd-loop): clones das 3 últimas fotos antes e das 3 primeiras depois, avanço automático e salto
+  // invisível quando chega ao fim, então gira sem parar nos dois sentidos e sempre abre nas primeiras fotos. Os clones são criados
+  // DEPOIS do visualizador de fotos (lightbox.js), para não entrarem na contagem dele; tocar num clone abre a foto original.
+  window.ddIniciarLoops = function(){
+    document.querySelectorAll('[data-dd-loop]').forEach(function(caixa){
+      var trilho = caixa.querySelector('.dd-trilho');
+      var orig = Array.prototype.slice.call(trilho.querySelectorAll('a'));
+      var n = orig.length;
+      if(n < 4 || caixa.ddLoop) return;
+      function clonar(a){
+        var c = a.cloneNode(true);
+        c.setAttribute('aria-hidden', 'true'); c.tabIndex = -1; c.setAttribute('data-clone', '1');
+        c.querySelectorAll('img').forEach(function(i){ i.setAttribute('alt', ''); i.setAttribute('loading', 'eager'); });
+        c.addEventListener('click', function(e){ e.preventDefault(); a.click(); });
+        return c;
+      }
+      // largura do texto da página (o carrossel passa dela até as bordas da tela; ver .dd-carrossel[data-dd-loop] no style.css)
+      function medirTexto(){
+        var pai = caixa.parentElement, cs = getComputedStyle(pai);
+        caixa.style.setProperty('--w', (pai.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)) + 'px');
+      }
+      medirTexto();
+      var antes = orig.slice(n - 3).map(clonar), depois = orig.slice(0, 3).map(clonar);
+      antes.forEach(function(c){ trilho.insertBefore(c, orig[0]); });
+      depois.forEach(function(c){ trilho.appendChild(c); });
+      caixa.ddLoop = true;
+      function inicio(){ return orig[0].offsetLeft - antes[0].offsetLeft; }
+      function periodo(){ return depois[0].offsetLeft - orig[0].offsetLeft; }
+      function saltar(delta){
+        trilho.style.scrollSnapType = 'none'; trilho.style.scrollBehavior = 'auto';
+        trilho.scrollLeft += delta;
+        requestAnimationFrame(function(){ requestAnimationFrame(function(){ trilho.style.scrollSnapType = ''; trilho.style.scrollBehavior = ''; }); });
+      }
+      var tocando = false, parou = null;
+      function conferir(){
+        if(tocando || trilho.classList.contains('arrastando')) return;
+        var p = periodo(), s = inicio();
+        if(trilho.scrollLeft >= s + p - 2) saltar(-p);
+        else if(trilho.scrollLeft <= 2) saltar(p);
+      }
+      trilho.addEventListener('scroll', function(){ clearTimeout(parou); parou = setTimeout(conferir, 120); }, { passive: true });
+      trilho.addEventListener('touchstart', function(){ tocando = true; }, { passive: true });
+      trilho.addEventListener('touchend', function(){ tocando = false; clearTimeout(parou); parou = setTimeout(conferir, 200); }, { passive: true });
+      var largura = trilho.clientWidth;
+      window.addEventListener('resize', function(){
+        if(trilho.clientWidth === largura) return; // no celular a barra do navegador também dispara resize
+        largura = trilho.clientWidth; medirTexto(); saltar(inicio() - trilho.scrollLeft);
+      });
+      // começa sempre na primeira foto verdadeira
+      trilho.style.scrollSnapType = 'none'; trilho.style.scrollBehavior = 'auto';
+      trilho.scrollLeft = inicio();
+      requestAnimationFrame(function(){ trilho.style.scrollSnapType = ''; trilho.style.scrollBehavior = ''; });
+      if(caixa.ddAtualizar) caixa.ddAtualizar();
+      // avanço automático: pausa com mouse/foco/toque (volta 6 s depois), com o visualizador aberto, aba escondida ou fora da tela;
+      // não anda sozinho para quem pediu menos movimento
+      var reduzido = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var sobre = false, ultimo = 0, visivel = false;
+      function marcar(){ ultimo = Date.now(); }
+      caixa.addEventListener('mouseenter', function(){ sobre = true; });
+      caixa.addEventListener('mouseleave', function(){ sobre = false; marcar(); });
+      caixa.addEventListener('focusin', function(){ sobre = true; });
+      caixa.addEventListener('focusout', function(){ sobre = false; marcar(); });
+      caixa.addEventListener('touchstart', marcar, { passive: true });
+      caixa.addEventListener('pointerdown', marcar);
+      if(window.IntersectionObserver){
+        new IntersectionObserver(function(es){ visivel = es[0].isIntersecting; }, { threshold: 0.3 }).observe(caixa);
+      } else { visivel = true; }
+      if(!reduzido){
+        setInterval(function(){
+          if(sobre || !visivel || document.hidden || tocando || trilho.classList.contains('arrastando')) return;
+          if(document.querySelector('.lightbox.open') || Date.now() - ultimo < 6000) return;
+          var a = trilho.querySelector('a');
+          trilho.scrollBy({ left: a ? a.getBoundingClientRect().width + 14 : trilho.clientWidth * 0.8, behavior: 'smooth' });
+        }, 3800);
+      }
+    });
+  };
 
   // Abas das plantas (uma por casa): clique ou setas do teclado trocam a casa.
   function iniciarAbas(caixa){
@@ -163,7 +242,7 @@
           '<div class="dd-eyebrow">Galeria</div>' +
           '<h2 id="dd-galeria-titulo" class="dd-h2">Conheça as imagens do ' + esc(item.nome.replace(/^Residencial\s+/i, '')) + '</h2>' +
           // carrossel lateral (como na GMV): arrasta para o lado; setas no computador; tocar abre a foto ampliada
-          '<div class="dd-carrossel reveal" data-dd-carrossel>' +
+          '<div class="dd-carrossel reveal" data-dd-carrossel data-dd-loop>' +
             '<div class="gallery-full dd-trilho" tabindex="0" aria-label="Fotos (arraste para o lado)">' + p.galleryItems + '</div>' +
             '<button type="button" class="dd-seta dd-seta-ant" aria-label="Fotos anteriores"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>' +
             '<button type="button" class="dd-seta dd-seta-prox" aria-label="Próximas fotos"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>' +
@@ -197,6 +276,16 @@
         '<button type="button" class="dd-seta dd-seta-prox" aria-label="Próxima planta"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>' +
       '</div>';
     }
+    // tabela das casas (área e vagas): fica junto das plantas; sem plantas, vira uma seção própria
+    var tabelaUnidades = p.unitRows ? (
+      '<div class="dd-cartao dd-cartao-unid reveal">' +
+        '<div class="section-label">' + esc(item.unidades_titulo || 'Unidades') + '</div>' +
+        '<table class="unit-table">' +
+          '<thead><tr><th>' + esc(item.unidades_col1 || 'Unidade') + '</th><th>Área</th><th>Vaga(s)</th></tr></thead>' +
+          '<tbody>' + p.unitRows + '</tbody>' +
+        '</table>' +
+      '</div>'
+    ) : '';
     var plantasSec = '';
     if(listaPlantas.length){
       var corpoPlantas;
@@ -220,36 +309,27 @@
           '<div class="wrap">' +
             '<div class="dd-eyebrow">Plantas</div>' +
             '<h2 id="dd-plantas-titulo" class="dd-h2">Conheça a planta de cada ' + esc(grupos.length > 1 ? 'casa' : 'unidade') + '</h2>' +
+            tabelaUnidades +
             '<div class="reveal" data-dd-plantas>' + corpoPlantas + '</div>' +
             '<p class="side-note">Toque na planta para ampliar. Imagens ilustrativas; medidas sujeitas a alterações no projeto executivo.</p>' +
           '</div>' +
         '</section>';
     }
 
-    // ---- diferenciais + casas (clara 2) ----
-
-    var projeto = '' +
-      '<section class="dd-sec dd-claro2" aria-labelledby="dd-projeto-titulo">' +
+    // ---- diferenciais (escura, em destaque) ----
+    var projeto = p.features ? (
+      '<section class="dd-sec dd-escuro" aria-labelledby="dd-projeto-titulo">' +
         '<div class="wrap">' +
           '<div class="dd-eyebrow">O projeto</div>' +
-          '<h2 id="dd-projeto-titulo" class="dd-h2">Diferenciais e ' + esc((item.unidades_titulo || 'unidades').toLowerCase()) + '</h2>' +
-          '<div class="dd-projeto reveal">' +
-            '<div class="dd-cartao">' +
-              '<div class="section-label">Diferenciais</div>' +
-              '<div class="feature-grid">' + p.features + '</div>' +
-            '</div>' +
-            (p.unitRows ? (
-              '<div class="dd-cartao">' +
-                '<div class="section-label">' + esc(item.unidades_titulo || 'Unidades') + '</div>' +
-                '<table class="unit-table">' +
-                  '<thead><tr><th>' + esc(item.unidades_col1 || 'Unidade') + '</th><th>Área</th><th>Vaga(s)</th></tr></thead>' +
-                  '<tbody>' + p.unitRows + '</tbody>' +
-                '</table>' +
-              '</div>'
-            ) : '') +
-          '</div>' +
+          '<h2 id="dd-projeto-titulo" class="dd-h2">Diferenciais do ' + esc(item.nome.replace(/^Residencial\s+/i, '')) + '</h2>' +
+          '<div class="dd-difs reveal' + (((item.diferenciais || []).length % 3 !== 0 && (item.diferenciais || []).length % 2 === 0) ? ' dd-difs-2' : '') + '">' + p.features + '</div>' +
         '</div>' +
-      '</section>';
+      '</section>'
+    ) : '';
+    // sem plantas, a tabela das casas não some: ganha uma seção clara própria
+    var unidadesSec = (!listaPlantas.length && tabelaUnidades) ? (
+      '<section class="dd-sec dd-claro"><div class="wrap">' + tabelaUnidades + '</div></section>'
+    ) : '';
 
     // ---- região / mapa (escura) ----
     var mapa = '';
@@ -340,7 +420,7 @@
       '</section>'
     ) : '';
 
-    root.innerHTML = '<div class="dd-pagina">' + capa + sobre + galeria + projeto + plantasSec + mapa + obra + contato + outrosSec + '</div>';
+    root.innerHTML = '<div class="dd-pagina">' + capa + sobre + galeria + projeto + plantasSec + unidadesSec + mapa + obra + contato + outrosSec + '</div>';
 
     root.querySelectorAll('[data-dd-carrossel]').forEach(iniciarCarrossel);
     iniciarAbas(root.querySelector('[data-dd-plantas]'));

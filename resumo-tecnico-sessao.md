@@ -16,14 +16,18 @@ virar venda no financeiro) é uma decisão à parte, tomada com o usuário e des
 > commit (`ddb4082`); depois a `trabalho` andou à frente com o ajuste do menu, o botão "Quero saber mais" e a trava de contagem só no site oficial, publicados nos "podemos colocar no ar" seguintes (seção 7, "Ajustes depois de ir ao ar"); confira sempre com `git log --oneline origin/main..trabalho`; o `main` passa a ter também este resumo, o `CLAUDE.md`, `docs/`, `tests/` e `supabase/` (fora de `site/`, não ficam públicos). Detalhes e
 > o que ainda falta: veja "O que ficou pendente" e a seção 7 (entrada "13/10/2026, no ar"). Onde o texto abaixo disser "ainda NÃO no ar", leia "agora no ar".
 
-> **Em andamento (17 e 18/10/2026), NADA disto está no `main` (site oficial); tudo está na `trabalho` e na prévia da Vercel** (`site-chaido-git-trabalho-chiado.vercel.app/imovel/carmo`).
+> **Em andamento (17, 18 e 19/10/2026), NADA disto está no `main` (site oficial); tudo está na `trabalho` e na prévia da Vercel** (`site-chaido-git-trabalho-chiado.vercel.app/imovel/carmo`).
 > O usuário pediu **não publicar nada antes de ver**.
 > 1. **Página do Carmo no estilo da GMV** ("layout destaque"): capa grande, seções escuras e claras, faixa de características, **galeria em carrossel lateral**, diferenciais e casas,
 >    **plantas das 5 casas** (um botão por casa, 3 andares em carrossel), mapa (carrega no clique), andamento da obra (escondido até chegarem os percentuais), formulário e outros empreendimentos.
 >    Desenho: `docs/superpowers/specs/2026-10-17-pagina-destaque-design.md`.
 > 2. **Capa com pessoas** (5 cenas geradas de graça no Hugging Face): é a capa do Carmo na prévia (`site/assets/carmo-capa-pessoas.mp4`), com "Imagens ilustrativas" no canto; o usuário achou "ótimo".
 >    No celular toca uma versão leve (`carmo-capa-pessoas-celular.mp4`, 1,4 MB); com "economizar dados", só fotos. O vídeo antigo, só com fotos, continua em `site/assets/carmo-capa.mp4`.
-> **Próximo:** o usuário revisa a página toda na prévia; faltam os percentuais da obra, o book, confirmar 3 banheiros, decidir o Garrett no estilo novo e pedir ao arquiteto a correção dos rótulos
+> 3. **Ajustes de 19/10/2026 na página destaque:** galeria em **carrossel contínuo** (gira sem parar, anda sozinha, sempre abre na primeira foto, vai até as bordas da tela com as fotos vizinhas esmaecidas);
+>    "O projeto" ficou **só com os diferenciais**, em blocos grandes no fundo escuro; a **tabela das casas** foi para a seção das plantas, logo abaixo do título. Detalhes na seção 7 (entrada "19/10/2026").
+> 4. **Painel `/admin` guardado e desligado em 19/10/2026** (só o usuário edita; nada apagado): arquivos em `docs/admin-guardado/`, com `LEIAME.md` de como reativar. Só some do site oficial depois do "podemos colocar no ar";
+>    até lá o `main` ainda o tem. Para editar o conteúdo (`site/data/empreendimentos.json`), pedir ao Claude.
+> **Próximo:** o usuário revisa a página toda na prévia (galeria nova, diferenciais, tabela, plantas); faltam os percentuais da obra, o book, confirmar 3 banheiros, decidir o Garrett no estilo novo e pedir ao arquiteto a correção dos rótulos
 > das garagens das casas 2 e 5. Depois, o "podemos colocar no ar". Detalhes na seção 7 (entradas "17/10/2026" e "18/10/2026") e na seção 6.
 
 **Antes de tudo, em qualquer computador:** este projeto trabalha na branch **`trabalho`**, não no `main` (o `main` é o
@@ -99,11 +103,11 @@ pago, divulgação, impulsionar vendas), cada um com desenho e "pode construir" 
 | Caminho | Função |
 |---|---|
 | `index.html`, `imovel.html` | Páginas. Cards, detalhe do imóvel, nav e galeria são montados no navegador por `assets/render.js` |
-| `data/empreendimentos.json` | **Fonte do conteúdo** dos empreendimentos (editada pelo painel `/admin`) |
+| `data/empreendimentos.json` | **Fonte do conteúdo** dos empreendimentos (antes editada pelo painel `/admin`, hoje guardado; agora editada no código, pelo Claude, a pedido do usuário) |
 | `data/empreendimentos.js` | Cópia do JSON só para abrir o site direto do disco (`file://`). O painel não a atualiza |
 | `assets/` | `style.css`, `main.js` (menu), `render.js`, `lightbox.js`, `reveal.js`, fotos (jpg+webp), vídeos do Garrett, logos |
-| `admin/` | Painel Decap CMS, login por GitHub (`admin/config.yml`) |
-| `api/auth.js`, `api/callback.js` | Login OAuth do painel (variáveis `OAUTH_CLIENT_ID`, `OAUTH_CLIENT_SECRET`) |
+| ~~`admin/`~~ | **Guardado desde 19/10/2026** em `docs/admin-guardado/` (Decap CMS, login por GitHub; `index.html` e `config.yml`). Reativar: ver o `LEIAME.md` de lá |
+| ~~`api/auth.js`, `api/callback.js`~~ | **Guardados desde 19/10/2026** em `docs/admin-guardado/api/` (login OAuth do `/admin`; as variáveis `OAUTH_CLIENT_ID` e `OAUTH_CLIENT_SECRET` seguem na Vercel) |
 | `api/imovel.js` | Serve `/imovel/<slug>` com title, canonical, og:*, JSON-LD e `<base href="/">` |
 | `api/sitemap.js` | Gera `/sitemap.xml` a partir do JSON |
 | `robots.txt`, `vercel.json` | Robots, redirecionamentos, rewrites e cabeçalhos de cache |
@@ -230,7 +234,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   apagamento automático de leads antigos.
 - Cadastrar `sitemap.xml` no Google Search Console (ação do usuário, na conta Google dele).
 - Testar a prévia do link no WhatsApp com o site já publicado.
-- Opcionais do site: reduzir o escopo do login do painel `/admin` (hoje `repo,user`) e adicionar `state` — risco de
+- Opcionais do site: (só se o `/admin` for reativado) reduzir o escopo do login do painel `/admin` (hoje `repo,user`) e adicionar `state` — risco de
   travar o acesso; legenda no vídeo do Garrett; tirar o `?slug=` duplicado do redirect; medição oficial do PageSpeed
   (a cota gratuita estava esgotada); limite de tamanho de imagem no `admin/config.yml`.
 - **Ideias combinadas, ainda não construídas** (cada uma pede desenho e "pode construir"): dados práticos nos cards dos empreendimentos (entrada,
@@ -500,6 +504,34 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   No celular o vídeo aparece recortado no meio (tela em pé); as pessoas aparecem. Versão dos arquivos `?v=20261018c`. Conferido no navegador local em tamanho de celular: toca a versão leve, sem erro. Enviado à prévia. Os .md foram revisados e enviados no fim do dia; todas as fotos, vídeos e plantas do projeto estão no GitHub.
   **Originais do Carmo no projeto (pedido do usuário):** a pasta `Downloads/Mídia RES. CARMO` (renders, plantas humanizadas em tamanho grande, `Link Tour Virtual.docx`) foi copiada para
   `midia/carmo-originais/` (36 arquivos, 122 MB; tiradas 2 cópias idênticas de `52-Casa-02-A.S_R01`) e enviada ao GitHub, para estar nos dois computadores. Fica fora de `site/`, não é pública.
+
+### 19/10/2026 (na `trabalho`, ainda NÃO no ar)
+- **"puxe do github":** a `trabalho` trouxe 9 commits (capa com pessoas, plantas, originais do Carmo); o `main` sem novidades. Os `.md` foram lidos.
+- **Painel `/admin` guardado e desligado (pedido do usuário: só ele edita; "deixar no cantinho, sem uso, e reativar no futuro se quiser").** Nada apagado:
+  `site/admin/index.html` e `config.yml` e `site/api/auth.js` e `callback.js` foram movidos com `git mv` para `docs/admin-guardado/` (fora de `site/`, não público), com um
+  `LEIAME.md` que explica como reativar. `Disallow: /admin/` saiu do `robots.txt`. As variáveis `OAUTH_CLIENT_ID` e `OAUTH_CLIENT_SECRET` seguem na Vercel. Efeito: `/admin/`, `/api/auth` e
+  `/api/callback` darão 404. **Só vale no oficial depois do "podemos colocar no ar"** (o `main` ainda tem o `/admin` funcionando). Consequência boa: sem o `/admin`, o `main` deixa de receber
+  edições de fora e o conteúdo (`site/data/empreendimentos.json`) passa a ser editado só pela `trabalho` (pelo Claude, a pedido do usuário). **Para editar o conteúdo agora: pedir ao Claude.**
+  Antes do "podemos colocar no ar", enquanto o `/admin` do `main` existir, o "puxe do github" ainda confere o `main`.
+- **Garrett (conversa, nada alterado):** o usuário perguntou se dá para fazer com o Garrett o vídeo com pessoas. As 5 fotos do site (`site/assets/garrett-*.jpg`) são pequenas (464 px de largura, só a de capa tem 894×1138) e quase todas verticais; só a
+  `garrett-capa` (fachada de frente) aguentaria uma cena gerada. Os dois vídeos reais (`garrett-tour.mp4`, 57 s, e `garrett-tour-interna.mp4`, 64 s, 464×832, ~10 MB cada) são verticais: servem para o **celular** (`capa_video_celular`, trecho cortado e comprimido a 1 a 2 MB),
+  não para o computador. Decisão do usuário: **procurar as fotos originais em tamanho grande** e **não mexer em nada do Garrett por enquanto** (capa e vídeos ficam como estão). Quando chegarem, copiar para `midia/garrett-originais/` (fora de `site/`),
+  gerar as cenas (cota grátis de ~3 por dia) e montar o vídeo como o do Carmo; precisa do `ffmpeg` (`npm install ffmpeg-static` numa pasta temporária).
+- **Onde parou (fim do dia 19/10/2026):** tudo isto enviado à `trabalho` (prévia) no fim do dia; nada no `main`. Em aberto: (1) o usuário ver na prévia a galeria contínua com bordas esmaecidas, os diferenciais e a tabela das casas; (2) as fotos originais do Garrett;
+  (3) percentuais da obra, book em PDF, 3 banheiros?, rótulos errados das plantas das garagens 2 e 5, Garrett no estilo novo; (4) o "podemos colocar no ar" (que também desliga o `/admin` no site oficial).
+- **Galeria do Carmo em carrossel contínuo (pedido do usuário: "carrossel contínuo, mas sempre iniciar nessas fotos").** Só a galeria (`data-dd-loop`); o carrossel das plantas segue com começo e fim.
+  `detalhe-destaque.js` (`window.ddIniciarLoops`, chamada em `render.js` DEPOIS de `initLightbox`): clones das 3 últimas fotos antes e das 3 primeiras depois, salto invisível ao chegar na ponta (nos dois sentidos, também pela seta "anterior"),
+  e a página **sempre abre na primeira foto**. Anda sozinho a cada 3,8 s; pausa com o mouse em cima, foco, toque ou arrastar (volta 6 s depois), com o visualizador aberto, aba escondida ou carrossel fora da tela; quem pediu "reduzir movimento" não tem avanço automático.
+  Os clones só existem depois do visualizador, então ele continua com "1 / 16" (conferido) e tocar num clone abre a foto original. Com menos de 4 fotos não liga o loop. `?v=20261019a` em `imovel.html`.
+  Testado no navegador (computador e celular, sem rolagem lateral): começa na foto 1, o automático avança, os saltos nos dois sentidos, visualizador e clone; 82 testes (76 passam, 6 pulados). **Só na `trabalho`, ainda não enviado ao GitHub nem ao ar.**
+- **Galeria até as bordas da tela, com as fotos vizinhas esmaecidas (pedido do usuário).** O carrossel contínuo da galeria passou a ocupar a largura inteira da janela (`.dd-carrossel[data-dd-loop]` no `style.css`),
+  mas a primeira foto continua alinhada ao texto da página (conferido: mesma posição, 36 px numa janela de 1210 px e 431 px numa de 2000 px; no celular 20 px). Nas laterais aparecem a foto anterior e a próxima, com máscara de
+  transparência (22% na ponta até 100% na margem do texto; quanto maior a tela, maior a faixa esmaecida). `detalhe-destaque.js` (`medirTexto`) mede a largura do texto e a grava em `--w`, para o alinhamento não depender da barra de rolagem
+  (no Windows ela ocupa uns 17 px). As setas ficam perto do texto, não na ponta da tela. Sem rolagem lateral na página nos 3 tamanhos testados. `?v=20261019d`; 82 testes (76 passam, 6 pulados). Só na `trabalho`.
+- **"O projeto" só com os diferenciais, e a tabela das casas junto das plantas (pedido do usuário).** Na página destaque: a seção "O projeto" virou **escura** e só tem os diferenciais ("Diferenciais do Carmo"), em blocos grandes com
+  marca dourada (`.dd-difs`; 3 por linha, 2 por linha quando a quantidade não fecha em 3, como os 10 do Carmo, e 1 no celular). A tabela **Casas** (área e vagas) saiu de lá e ficou **dentro da seção das plantas, logo abaixo do título "Conheça a planta de cada casa" e acima dos botões das casas** (`tabelaUnidades`,
+  `.dd-cartao-unid`); se um empreendimento não tiver plantas, a tabela ganha uma seção clara própria (`unidadesSec`), então nunca some. Ordem das cores: escura, clara, escura, clara, escura. O texto de área/vaga abaixo do carrossel das plantas
+  continua, e repete a linha da tabela da casa escolhida (se incomodar, dá para tirar). Arquivos: `detalhe-destaque.js`, `style.css`, `imovel.html` (`?v=20261019c`). Conferido no computador e no celular; 82 testes (76 passam, 6 pulados). Só na `trabalho`.
 
 ## 8. Regras de trabalho
 

@@ -3,6 +3,8 @@
 Este site é só HTML/CSS/JS estático + duas funções pequenas (em `/api`) que
 existem só para o login do painel administrativo funcionar. Siga na ordem.
 
+> **Atualização (19/10/2026): o `/admin` (Decap CMS) está guardado e desligado**; os arquivos do passo a passo abaixo (`admin/`, `api/auth.js`, `api/callback.js`) ficam em `docs/admin-guardado/`, com `LEIAME.md` de como reativar.
+>
 > **Estado atual (13/10/2026).** Este guia é o passo a passo original de publicação e continua valendo para o
 > painel `/admin` (empreendimentos). O projeto real é o repositório `Agster2004/Site-Chaido`, publicado na Vercel
 > como `site-chaido` em `www.chiadoconstrutora.com.br`. Hoje existem **dois painéis**: `/admin` (Decap CMS: edita os

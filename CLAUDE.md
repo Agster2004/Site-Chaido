@@ -14,7 +14,7 @@ sempre na branch **`trabalho`**: "puxe" e "envie" movem a `trabalho`, como o usu
 `main`. A prévia dela fica em `site-chaido-git-trabalho-chiado.vercel.app`. O `main` só recebe a `trabalho`
 quando o usuário diz "podemos colocar no ar" (ver Regras).
 
-**Atenção:** o painel `/admin` grava **direto no `main`** (edições de empreendimentos vão ao ar sem prévia).
+**Atenção (atualizado em 19/10/2026):** o painel `/admin` foi **guardado e desligado** (arquivos em `docs/admin-guardado/`, com `LEIAME.md` para reativar); isso só vale no site oficial depois do "podemos colocar no ar". Enquanto o `main` ainda o tiver, ou se for reativado: o `/admin` grava **direto no `main`** (edições de empreendimentos vão ao ar sem prévia).
 Essas edições **não aparecem sozinhas** na `trabalho`: o git as guarda em outra branch. Por isso o "puxe do
 github" confere o `main` (passo 4) e traz as novidades para a `trabalho`.
 

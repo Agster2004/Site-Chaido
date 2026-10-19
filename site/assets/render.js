@@ -257,6 +257,7 @@
       if(window.initHeroSlides) window.initHeroSlides();
       if(window.initReveal) window.initReveal();
       if(window.initLightbox) window.initLightbox();
+      if(window.ddIniciarLoops) window.ddIniciarLoops();
       if(window.initLeadForm) window.initLeadForm(items);
     }).catch(function(err){
       console.error('Erro ao carregar empreendimentos:', err);
