@@ -356,6 +356,9 @@
     // ---- andamento da obra (clara) ----
     var obra = '';
     var etapas = (item.obra && item.obra.etapas || []).filter(function(e){ return e && e.nome; });
+    // só o percentual geral (sem etapas): uma barra única, sem repetir o "Total geral"
+    var soTotal = !etapas.length && item.obra && item.obra.total !== undefined && item.obra.total !== '';
+    if(soTotal) etapas = [{ nome: 'Andamento geral', percentual: item.obra.total }];
     if(etapas.length){
       var soma = 0;
       var barras = etapas.map(function(e){
@@ -374,7 +377,7 @@
             '</div>' +
             '<div>' +
               '<ul class="dd-etapas">' + barras + '</ul>' +
-              '<div class="dd-total"><span>Total geral</span><b>' + fmtPct(total) + '</b></div>' +
+              (soTotal ? '' : '<div class="dd-total"><span>Total geral</span><b>' + fmtPct(total) + '</b></div>') +
             '</div>' +
           '</div>' +
         '</section>';
