@@ -60,3 +60,16 @@
 
   sync();
 })();
+
+// Links para um ponto da própria página ("#interesse"). Nas páginas /imovel/<slug> o <base href="/"> faria o
+// navegador ir para a página inicial; aqui o clique rola até o ponto na página em que a pessoa está.
+document.addEventListener('click', function(e){
+  const a = e.target.closest && e.target.closest('a[href^="#"]');
+  if(!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+  const id = decodeURIComponent((a.getAttribute('href') || '').slice(1));
+  const alvo = id && document.getElementById(id);
+  if(!alvo) return;
+  e.preventDefault();
+  alvo.scrollIntoView();
+  try { history.replaceState(null, '', location.pathname + location.search + '#' + id); } catch(err) {}
+});
