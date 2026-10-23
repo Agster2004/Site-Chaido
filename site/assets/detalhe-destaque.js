@@ -203,7 +203,8 @@
     var obraCapa = '';
     if(obraPct !== null && item.status !== 'pronto') obraCapa = '<div class="dd-hero-obra" role="progressbar" aria-label="Andamento da obra" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + obraPct + '">' +
       '<div class="dd-hero-obra-topo"><span>Andamento da obra</span><b>' + fmtPct(obraPct) + '</b></div>' +
-      '<div class="dd-hero-obra-barra"><i style="--pct:' + obraPct + '%"></i></div></div>';
+      '<div class="dd-hero-obra-barra"><i style="--pct:' + obraPct + '%"></i></div>' +
+      (item.obra && item.obra.atualizado_em ? '<p class="dd-hero-obra-data">Atualizado em ' + esc(item.obra.atualizado_em) + '</p>' : '') + '</div>';
 
     var capa = '' +
       '<div class="detail-hero dd-hero' + (p.temSlides ? ' detail-hero-slides' : '') + '">' +
@@ -370,7 +371,8 @@
     // só o percentual geral (sem etapas): uma barra única, sem repetir o "Total geral"
     var soTotal = !etapas.length && item.obra && item.obra.total !== undefined && item.obra.total !== '';
     if(soTotal) etapas = [{ nome: 'Andamento geral', percentual: item.obra.total }];
-    if(etapas.length){
+    // só o percentual geral já aparece na capa; a seção abaixo só entra quando houver etapas
+    if(etapas.length && !soTotal){
       var soma = 0;
       var barras = etapas.map(function(e){
         var v = pct(e.percentual); soma += v;
