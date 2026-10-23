@@ -84,6 +84,18 @@
     items.forEach(function(item){
       const tagClass = item.status === 'pronto' ? 'tag-ready' : 'tag-building';
       const specs = (item.specs_card || []).map(s => '<span>' + esc(s) + '</span>').join('');
+      // andamento da obra (só para empreendimento em construção, com percentual cadastrado)
+      let obraHtml = '';
+      const ob = item.obra || {};
+      const etapasOb = (ob.etapas || []).filter(function(e){ return e && e.nome; });
+      let obraPct = null;
+      if(ob.total !== undefined && ob.total !== '') obraPct = parseFloat(String(ob.total).replace(',', '.'));
+      else if(etapasOb.length) obraPct = etapasOb.reduce(function(t, e){ return t + (parseFloat(String(e.percentual).replace(',', '.')) || 0); }, 0) / etapasOb.length;
+      if(obraPct !== null && isFinite(obraPct) && item.status !== 'pronto'){
+        obraPct = Math.max(0, Math.min(100, obraPct));
+        const txt = (Math.round(obraPct * 10) / 10).toString().replace('.', ',') + '%';
+        obraHtml = '<div class="card-obra" aria-label="Obra ' + txt + ' concluída"><span>Obra <b>' + txt + '</b></span><div class="card-obra-barra"><i style="width:' + obraPct + '%"></i></div></div>';
+      }
       html += '' +
         '<div class="card reveal">' +
           '<div class="card-cover">' +
@@ -94,6 +106,7 @@
             '<h3>' + esc(item.nome) + '</h3>' +
             '<p class="card-address">' + esc(item.endereco) + '</p>' +
             '<div class="card-specs">' + specs + '</div>' +
+            obraHtml +
             '<p class="card-desc">' + esc(item.resumo_curto) + '</p>' +
             '<div class="card-actions">' +
               '<a class="btn btn-dark" href="imovel.html?slug=' + encodeURIComponent(item.slug) + '">Saiba mais</a>' +
