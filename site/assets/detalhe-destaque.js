@@ -200,7 +200,10 @@
     var obraPct = null;
     if(item.obra && item.obra.total !== undefined && item.obra.total !== '') obraPct = pct(item.obra.total);
     else if(obraEtapas.length) obraPct = obraEtapas.reduce(function(t, e){ return t + pct(e.percentual); }, 0) / obraEtapas.length;
-    if(obraPct !== null && item.status !== 'pronto') chips += '<span class="dd-chip dd-chip-obra" aria-label="Obra ' + fmtPct(obraPct) + ' concluída">Obra <b>' + fmtPct(obraPct) + '</b><i style="--pct:' + obraPct + '%"></i></span>';
+    var obraCapa = '';
+    if(obraPct !== null && item.status !== 'pronto') obraCapa = '<div class="dd-hero-obra" role="progressbar" aria-label="Andamento da obra" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + obraPct + '">' +
+      '<div class="dd-hero-obra-topo"><span>Andamento da obra</span><b>' + fmtPct(obraPct) + '</b></div>' +
+      '<div class="dd-hero-obra-barra"><i style="--pct:' + obraPct + '%"></i></div></div>';
 
     var capa = '' +
       '<div class="detail-hero dd-hero' + (p.temSlides ? ' detail-hero-slides' : '') + '">' +
@@ -215,6 +218,7 @@
               (item.book ? '<a class="btn dd-btn-vazado" href="#interesse" data-pedir-book>Baixar o book</a>' : '') +
               '<a class="btn dd-btn-vazado" href="' + esc(p.waHref) + '" target="_blank" rel="noopener">' + R.waIconSvg() + 'WhatsApp</a>' +
             '</div>' +
+            obraCapa +
           '</div>' +
         '</div>' +
         (item.capa_nota ? '<span class="dd-hero-nota">' + esc(item.capa_nota) + '</span>' : '') +

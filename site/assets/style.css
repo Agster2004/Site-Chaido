@@ -521,9 +521,6 @@ main:focus{ outline:none; }
   backdrop-filter:blur(4px);
 }
 .dd-chip-ouro{ background:var(--gold); border-color:var(--gold); color:var(--green-900); }
-.dd-chip-obra{ position:relative; overflow:hidden; padding-bottom:12px; }
-.dd-chip-obra b{ color:var(--gold); margin-left:4px; }
-.dd-chip-obra i{ position:absolute; left:0; bottom:0; height:4px; width:var(--pct); background:var(--gold); }
 .dd-hero h1{ font-size:clamp(40px, 7.4vw, 88px); color:#fff; line-height:1; }
 .dd-hero-end{ margin-top:14px; font-size:15px; color:rgba(255,255,255,0.85); max-width:620px; }
 .dd-hero-acoes{ display:flex; flex-wrap:wrap; gap:12px; margin-top:26px; }
@@ -708,3 +705,11 @@ main:focus{ outline:none; }
 .card-obra b{ color:var(--gold-dark); margin-left:4px; }
 .card-obra-barra{ height:6px; border-radius:999px; background:var(--cream-2); overflow:hidden; }
 .card-obra-barra i{ display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg, var(--gold-dark), var(--gold)); }
+
+/* andamento da obra na capa: barra larga logo abaixo dos botões */
+.dd-hero-obra{ margin-top:26px; max-width:520px; }
+.dd-hero-obra-topo{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; color:#fff; }
+.dd-hero-obra-topo span{ font-size:12px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; opacity:.9; }
+.dd-hero-obra-topo b{ font-size:20px; color:var(--gold); }
+.dd-hero-obra-barra{ height:10px; border-radius:999px; background:rgba(255,255,255,0.22); overflow:hidden; }
+.dd-hero-obra-barra i{ display:block; height:100%; width:var(--pct); border-radius:inherit; background:linear-gradient(90deg, var(--gold-dark), var(--gold)); }
