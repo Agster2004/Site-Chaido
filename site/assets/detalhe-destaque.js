@@ -195,6 +195,12 @@
     var chips = '';
     if(item.bairro) chips += '<span class="dd-chip">' + esc(item.bairro) + '</span>';
     if(item.tag_label) chips += '<span class="dd-chip dd-chip-ouro">' + esc(item.tag_label) + '</span>';
+    // selo do andamento da obra na capa (mesmo número da seção "Acompanhe o andamento da obra")
+    var obraEtapas = (item.obra && item.obra.etapas || []).filter(function(e){ return e && e.nome; });
+    var obraPct = null;
+    if(item.obra && item.obra.total !== undefined && item.obra.total !== '') obraPct = pct(item.obra.total);
+    else if(obraEtapas.length) obraPct = obraEtapas.reduce(function(t, e){ return t + pct(e.percentual); }, 0) / obraEtapas.length;
+    if(obraPct !== null && item.status !== 'pronto') chips += '<span class="dd-chip dd-chip-obra" aria-label="Obra ' + fmtPct(obraPct) + ' concluída">Obra <b>' + fmtPct(obraPct) + '</b><i style="--pct:' + obraPct + '%"></i></span>';
 
     var capa = '' +
       '<div class="detail-hero dd-hero' + (p.temSlides ? ' detail-hero-slides' : '') + '">' +

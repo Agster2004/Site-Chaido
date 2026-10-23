@@ -521,6 +521,9 @@ main:focus{ outline:none; }
   backdrop-filter:blur(4px);
 }
 .dd-chip-ouro{ background:var(--gold); border-color:var(--gold); color:var(--green-900); }
+.dd-chip-obra{ position:relative; overflow:hidden; padding-bottom:12px; }
+.dd-chip-obra b{ color:var(--gold); margin-left:4px; }
+.dd-chip-obra i{ position:absolute; left:0; bottom:0; height:4px; width:var(--pct); background:var(--gold); }
 .dd-hero h1{ font-size:clamp(40px, 7.4vw, 88px); color:#fff; line-height:1; }
 .dd-hero-end{ margin-top:14px; font-size:15px; color:rgba(255,255,255,0.85); max-width:620px; }
 .dd-hero-acoes{ display:flex; flex-wrap:wrap; gap:12px; margin-top:26px; }
