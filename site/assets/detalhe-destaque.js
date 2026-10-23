@@ -323,7 +323,7 @@
             '<h2 id="dd-plantas-titulo" class="dd-h2">Conheça a planta de cada ' + esc(grupos.length > 1 ? 'casa' : 'unidade') + '</h2>' +
             tabelaUnidades +
             '<div class="reveal" data-dd-plantas>' + corpoPlantas + '</div>' +
-            '<p class="side-note">Toque na planta para ampliar. Imagens ilustrativas; medidas sujeitas a alterações no projeto executivo.</p>' +
+            '<p class="side-note">Toque na planta para ampliar.' + (item.status === 'pronto' ? '' : ' Imagens ilustrativas; medidas sujeitas a alterações no projeto executivo.') + '</p>' +
           '</div>' +
         '</section>';
     }
