@@ -70,34 +70,14 @@
           "alt": "Churrasqueira na varanda do Residencial Garrett"
         },
         {
-          "src": "assets/garrett-int-varanda.jpg",
-          "webp": "assets/garrett-int-varanda.webp",
-          "alt": "Varanda do Residencial Garrett"
-        },
-        {
           "src": "assets/garrett-int-sala.jpg",
           "webp": "assets/garrett-int-sala.webp",
           "alt": "Sala do Residencial Garrett, com saída para a varanda"
         },
         {
-          "src": "assets/garrett-int-sala-escada.jpg",
-          "webp": "assets/garrett-int-sala-escada.webp",
-          "alt": "Sala e escada do Residencial Garrett"
-        },
-        {
           "src": "assets/garrett-int-cozinha.jpg",
           "webp": "assets/garrett-int-cozinha.webp",
           "alt": "Cozinha do Residencial Garrett"
-        },
-        {
-          "src": "assets/garrett-int-cozinha-janela.jpg",
-          "webp": "assets/garrett-int-cozinha-janela.webp",
-          "alt": "Bancada de granito e janela da cozinha do Residencial Garrett"
-        },
-        {
-          "src": "assets/garrett-int-corredor.jpg",
-          "webp": "assets/garrett-int-corredor.webp",
-          "alt": "Corredor do Residencial Garrett"
         },
         {
           "src": "assets/garrett-int-suite.jpg",
@@ -110,11 +90,6 @@
           "alt": "Dormitório do Residencial Garrett"
         },
         {
-          "src": "assets/garrett-int-quarto-2.jpg",
-          "webp": "assets/garrett-int-quarto-2.webp",
-          "alt": "Segundo dormitório do Residencial Garrett"
-        },
-        {
           "src": "assets/garrett-int-suite-banheiro.jpg",
           "webp": "assets/garrett-int-suite-banheiro.webp",
           "alt": "Banheiro da suíte do Residencial Garrett"
@@ -123,11 +98,6 @@
           "src": "assets/garrett-int-lavabo.jpg",
           "webp": "assets/garrett-int-lavabo.webp",
           "alt": "Lavabo do Residencial Garrett"
-        },
-        {
-          "src": "assets/garrett-int-escada.jpg",
-          "webp": "assets/garrett-int-escada.webp",
-          "alt": "Escada de acesso aos pavimentos do Residencial Garrett"
         },
         {
           "src": "assets/garrett-int-portao.jpg",
@@ -172,11 +142,6 @@
           "src": "assets/garrett-int-varanda-vista.jpg",
           "webp": "assets/garrett-int-varanda-vista.webp",
           "foco": "center 55%"
-        },
-        {
-          "src": "assets/garrett-int-sala.jpg",
-          "webp": "assets/garrett-int-sala.webp",
-          "foco": "center 60%"
         }
       ],
       "caracteristicas": [
