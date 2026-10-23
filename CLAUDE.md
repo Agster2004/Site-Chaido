@@ -69,7 +69,7 @@ apagar branch, merge nem push no `main`.
 e dizer em poucas linhas o que foi feito e onde paramos:
 - `resumo-tecnico-sessao.md`: estado atual, como o site funciona, pendências e o registro por sessão.
 - Os documentos de desenho e plano em andamento, em `docs/superpowers/specs/` e `docs/superpowers/plans/`
-  (hoje: `2026-10-03-painel-leads-design.md`, `2026-10-03-painel-leads-plano.md`, `2026-10-13-contador-visitas-design.md` e `2026-10-17-pagina-destaque-design.md`), e outros `.md` que o
+  (hoje: `2026-10-03-painel-leads-design.md`, `2026-10-03-painel-leads-plano.md`, `2026-10-13-contador-visitas-design.md` e `2026-10-17-pagina-destaque-design.md` e `2026-10-23-book-carmo-design.md`), e outros `.md` que o
   resumo indicar como ativos.
 
 **Ao terminar o dia** (quando o usuário disser que terminou, que vai parar, ou enviar "envie para o github"):
