@@ -242,6 +242,8 @@ footer{ background:var(--green-900); color:rgba(255,255,255,0.6); padding:56px 0
 .emp-intro{ padding:88px 0 20px; text-align:center; }
 .emp-intro h2{ font-size:clamp(30px, 4.4vw, 44px); color:var(--green-900); margin-top:14px; }
 .emp-intro .rule{ margin-top:20px; }
+.emp-intro-txt{ max-width:680px; margin:22px auto 0; color:var(--ink); opacity:.82; line-height:1.65; }
+.emp-intro-txt a{ color:inherit; text-decoration:underline; text-underline-offset:3px; }
 
 .cards{ padding:52px 0 100px; display:grid; grid-template-columns:1fr 1fr; gap:28px; }
 @media(max-width:860px){ .cards{ grid-template-columns:1fr; } }
