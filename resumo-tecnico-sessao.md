@@ -545,6 +545,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - **Plantas:** as duas plantas (Casa 1 e 2, imagem alta com os 3 pavimentos) em `site/assets/plantas/garrett-casa1|2`. Para caberem, a página destaque ganhou o cartão "planta única" (`dd-trilho-unica` em `style.css` e `detalhe-destaque.js`); não muda o Carmo. `imovel.html` com `?v=20261023a`.
 - **Capa:** 3 fotos em sequência (fachada, vista da varanda, sala). **Limite:** a fachada, a aérea e a foto do pôr do sol são pequenas (464 a 894 px de largura), então ficam pouco nítidas em tela cheia; vale pedir uma foto externa maior. O vídeo da capa não foi usado (os dois vídeos são verticais e pequenos, 464x832).
 - **Ajuste após a revisão (23/10):** galeria enxugada para 13 fotos (saíram varanda repetida, cozinha-janela, corredor, quarto-2, escada e sala-escada; os arquivos continuam em `assets/`) e capa só com fachada e vista da varanda (a sala vazia saiu).
+- **Respostas do usuário (23/10):** as 2 casas do Garrett são praticamente **espelhadas** (as fotos de uma valem para a outra, então a galeria pode misturá-las); o usuário **não tem foto externa maior** da fachada (hoje só há a de 894 px e outras de 464 px). Ficou em aberto o que "deixar igual ao Carmo" quis dizer (capa em vídeo, galeria de 16 fotos ou o visual todo).
 - **Falta:** o usuário revisar na prévia; foto externa melhor; decidir vídeo na capa; confirmar se as fotos misturam as duas casas.
 
 ## 8. Regras de trabalho
