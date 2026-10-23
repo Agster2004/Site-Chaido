@@ -563,6 +563,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 ### 23/10/2026 (no ar)
 - **Publicado no `main` (`ee80abf..32dddda`, 39 commits, `--ff-only`):** o `main` não tinha nada que a `trabalho` não tivesse (sem edições do `/admin` para perder). Antes: 88 testes passando (6 pulados), `IP_HASH_SALT` confirmada na Produção da Vercel (só a lista, sem abrir valores).
 - **Conferido depois no oficial:** ver o bloco "NO AR desde 23/10/2026" no começo do arquivo. A Vercel publicou em menos de 1 minuto.
+- **Vercel limpa (23/10/2026):** o usuário apagou `OAUTH_CLIENT_ID` e `OAUTH_CLIENT_SECRET` (eram do `/admin`); conferido pela lista de variáveis (sem abrir valores). Ficaram `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `LEAD_FROM_EMAIL`, `LEAD_NOTIFY_EMAILS` e `IP_HASH_SALT`. Para reativar o `/admin` seria preciso recriá-las (a chave secreta se gera de novo no GitHub).
 - **Continua só nos dois computadores pela `trabalho`:** a próxima mudança vai de novo pela `trabalho` e prévia; o `/admin` não existe mais no `main`.
 
 ## 8. Regras de trabalho
