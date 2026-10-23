@@ -16,6 +16,13 @@ virar venda no financeiro) é uma decisão à parte, tomada com o usuário e des
 > commit (`ddb4082`); depois a `trabalho` andou à frente com o ajuste do menu, o botão "Quero saber mais" e a trava de contagem só no site oficial, publicados nos "podemos colocar no ar" seguintes (seção 7, "Ajustes depois de ir ao ar"); confira sempre com `git log --oneline origin/main..trabalho`; o `main` passa a ter também este resumo, o `CLAUDE.md`, `docs/`, `tests/` e `supabase/` (fora de `site/`, não ficam públicos). Detalhes e
 > o que ainda falta: veja "O que ficou pendente" e a seção 7 (entrada "13/10/2026, no ar"). Onde o texto abaixo disser "ainda NÃO no ar", leia "agora no ar".
 
+> **NO AR desde 23/10/2026 (commit `32dddda`, avanço simples da `trabalho` no `main`, com o "podemos colocar no ar" do usuário):** tudo o que estava "em andamento"
+> abaixo foi publicado: página destaque do Carmo e do Garrett, capa em vídeo do Carmo, book do Carmo (download depois do cadastro), andamento da obra (90%), SEO da home e `/admin` desligado.
+> Conferido no site oficial: título e descrição novos, canonical, `/api/book` e o PDF direto dão 404 sem link, `/admin` e `/api/auth` dão 404, `/painel`, `/privacidade`, `sitemap.xml` e `robots.txt` abrem,
+> botão "Baixar o book" leva ao formulário na própria página, barra de 90% na capa, sem erro no console. **Não verificado no oficial:** o envio real do formulário com o book (para não criar outro lead de teste).
+> Depois de publicar, ficam com o usuário: apagar o lead de teste, aplicar a migração `0003` (opcional), testar o book no celular, apagar `OAUTH_CLIENT_ID` e `OAUTH_CLIENT_SECRET` da Vercel (eram do `/admin`),
+> Search Console e Google Meu Negócio. O texto que diz "NADA disto está no `main`" logo abaixo é de antes de 23/10/2026.
+
 > **Em andamento (17, 18 e 19/10/2026), NADA disto está no `main` (site oficial); tudo está na `trabalho` e na prévia da Vercel** (`site-chaido-git-trabalho-chiado.vercel.app/imovel/carmo`).
 > O usuário pediu **não publicar nada antes de ver**.
 > 1. **Página do Carmo no estilo da GMV** ("layout destaque"): capa grande, seções escuras e claras, faixa de características, **galeria em carrossel lateral**, diferenciais e casas,
@@ -552,6 +559,11 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - **Obra do Carmo, onde aparece (23/10):** barra larga de "Andamento da obra" na **capa** (abaixo dos botões, com "Atualizado em"), "OBRA 90%" no cartão da home; a seção "Acompanhe o andamento da obra" **só aparece quando houver etapas** (com só o percentual geral ela foi tirada, por pedido do usuário). Mesmo número nos três: `obra.total` e `obra.atualizado_em` em `empreendimentos.json`.
 - **Banheiros do Carmo (23/10):** o usuário esclareceu que são **2 suítes e 1 lavabo** (não há "3 banheiros"); a faixa de características da capa agora diz "2 suítes" e "1 lavabo". Pendência dos "3 banheiros" encerrada.
 - **Falta:** o usuário revisar na prévia; foto externa melhor; decidir vídeo na capa; confirmar se as fotos misturam as duas casas.
+
+### 23/10/2026 (no ar)
+- **Publicado no `main` (`ee80abf..32dddda`, 39 commits, `--ff-only`):** o `main` não tinha nada que a `trabalho` não tivesse (sem edições do `/admin` para perder). Antes: 88 testes passando (6 pulados), `IP_HASH_SALT` confirmada na Produção da Vercel (só a lista, sem abrir valores).
+- **Conferido depois no oficial:** ver o bloco "NO AR desde 23/10/2026" no começo do arquivo. A Vercel publicou em menos de 1 minuto.
+- **Continua só nos dois computadores pela `trabalho`:** a próxima mudança vai de novo pela `trabalho` e prévia; o `/admin` não existe mais no `main`.
 
 ## 8. Regras de trabalho
 
