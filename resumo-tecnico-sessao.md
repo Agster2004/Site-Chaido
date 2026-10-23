@@ -533,6 +533,11 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
   `.dd-cartao-unid`); se um empreendimento não tiver plantas, a tabela ganha uma seção clara própria (`unidadesSec`), então nunca some. Ordem das cores: escura, clara, escura, clara, escura. O texto de área/vaga abaixo do carrossel das plantas
   continua, e repete a linha da tabela da casa escolhida (se incomodar, dá para tirar). Arquivos: `detalhe-destaque.js`, `style.css`, `imovel.html` (`?v=20261019c`). Conferido no computador e no celular; 82 testes (76 passam, 6 pulados). Só na `trabalho`.
 
+### 22/10/2026 (análise de SEO da home)
+- Rodada a análise SEO da home na prévia (nota 74/100): técnico, canonical, sitemap, robots, Open Graph e imagens estão bons; os pontos fracos eram título longo, descrição curta, alt genérico da fachada e pouco texto estático (cards entram por JavaScript).
+- **Aplicado na `trabalho` (`site/index.html`):** título `Chiado Construtora | Imóveis em Praia Grande/SP` (47 caracteres); descrição de 153 caracteres (também no Open Graph e Twitter); alt da fachada do Garrett mais descritivo; `width`/`height` (832x464) nessa foto. O `defer` nos scripts foi descartado: já ficam no fim do `<body>`, e o ganho seria quase nulo. Só conferido pelo diff, ainda não visto na prévia.
+- **Falta, nesta ordem:** (1) conferir/ajustar título e descrição de `/imovel/carmo` e `/imovel/garrett` (no HTML são genéricos; ver se o JavaScript os troca); (2) texto estático dos empreendimentos na home; (3) endereço e horário no schema (o usuário precisa passar os dados, se o escritório atende o público); (4) cadastrar o `sitemap.xml` no Search Console depois do "podemos colocar no ar". Nada disto está no `main`.
+
 ## 8. Regras de trabalho
 
 - Só mexer neste projeto; nunca no Site Financeiro (repositório, pasta, banco ou chaves).
