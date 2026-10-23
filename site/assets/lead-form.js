@@ -75,6 +75,7 @@
         '<label for="lf-tel">WhatsApp *</label><input id="lf-tel" name="telefone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="(13) 99999-9999" aria-describedby="lf-telefone-erro"><p class="lead-erro" id="lf-telefone-erro"></p>' +
         '<label for="lf-email">E-mail</label><input id="lf-email" name="email" type="email" autocomplete="email" maxlength="254" aria-describedby="lf-email-erro"><p class="lead-erro" id="lf-email-erro"></p>' +
         '<label for="lf-msg">Mensagem</label><textarea id="lf-msg" name="mensagem" rows="3" maxlength="1000" aria-describedby="lf-mensagem-erro"></textarea><p class="lead-erro" id="lf-mensagem-erro"></p>' +
+        '<div class="lead-consent lead-book" id="lf-book-box" hidden><input id="lf-book" name="quer_book" type="checkbox"><label for="lf-book" id="lf-book-rotulo">Quero receber o book (PDF)</label></div>' +
         '<div class="lead-isca" aria-hidden="true"><label for="lf-site">Não preencha este campo</label><input id="lf-site" name="website" type="text" tabindex="-1" autocomplete="off"></div>' +
         '<div class="lead-consent"><input id="lf-consent" name="consentimento" type="checkbox" aria-describedby="lf-consentimento-erro"><label for="lf-consent">' + textoConsentimento(cons.texto) + '</label></div><p class="lead-erro" id="lf-consentimento-erro"></p>' +
         '<button class="btn btn-dark" type="submit" id="lf-enviar">Enviar</button>' +
@@ -85,6 +86,33 @@
       var tel = document.getElementById('lf-tel');
       var status = document.getElementById('lf-status');
       var botao = document.getElementById('lf-enviar');
+
+      var caixaBook = document.getElementById('lf-book-box');
+      var marcaBook = document.getElementById('lf-book');
+      var seletor = form.elements.empreendimento_slug;
+      function itemEscolhido() {
+        var achado = null;
+        items.forEach(function (i) { if (i.slug === seletor.value) achado = i; });
+        return achado;
+      }
+      function atualizarBook() {
+        var it = itemEscolhido();
+        var tem = !!(it && it.book);
+        caixaBook.hidden = !tem;
+        if (!tem) marcaBook.checked = false;
+        if (tem) document.getElementById('lf-book-rotulo').textContent = 'Quero receber o book (PDF) do ' + it.nome;
+      }
+      seletor.addEventListener('change', atualizarBook);
+      atualizarBook();
+      // Botão "Baixar o book" da página: marca a caixa e leva ao primeiro campo.
+      function pedirBook() {
+        if (!caixaBook.hidden) {
+          marcaBook.checked = true;
+          form.elements.nome.focus({ preventScroll: true });
+        }
+      }
+      document.addEventListener('chiado:book', pedirBook);
+      if (window.__chiadoQuerBook) pedirBook();
 
       tel.addEventListener('input', function () {
         tel.value = mascara(tel.value);
@@ -129,6 +157,7 @@
           consentimento: form.elements.consentimento.checked,
           consentimento_versao: cons.versao,
           website: form.elements.website.value,
+          quer_book: !caixaBook.hidden && marcaBook.checked,
           tempo_ms: Date.now() - inicio,
           origem_fonte: o.fonte || '',
           origem_meio: o.meio || '',
@@ -149,9 +178,14 @@
               var nomeImovel = '';
               items.forEach(function (i) { if (i.slug === corpo.empreendimento_slug) nomeImovel = i.nome; });
               var msg = 'Olá, acabei de deixar meu contato no site' + (nomeImovel ? ' sobre o ' + nomeImovel : '') + '.';
+              var temBook = res.corpo.book && /^\/api\/book\?t=[A-Za-z0-9._-]+$/.test(res.corpo.book.url || '');
               raiz.innerHTML =
-                '<div class="lead-card"><h2>Recebemos seu contato</h2><p>A equipe da Chiado vai falar com você pelo WhatsApp. Se preferir, já pode chamar agora.</p>' +
-                '<a class="btn btn-dark" target="_blank" rel="noopener" href="' + esc(linkWhatsapp(msg)) + '">Chamar no WhatsApp</a></div>';
+                '<div class="lead-card"><h2>' + (temBook ? 'Seu book está pronto' : 'Recebemos seu contato') + '</h2>' +
+                (temBook
+                  ? '<p>Toque no botão para baixar o PDF. O link vale por 10 minutos. A equipe da Chiado também vai falar com você pelo WhatsApp.</p>' +
+                    '<a class="btn btn-dark" href="' + esc(res.corpo.book.url) + '" download>Baixar o book (PDF)</a> '
+                  : '<p>A equipe da Chiado vai falar com você pelo WhatsApp. Se preferir, já pode chamar agora.</p>') +
+                '<a class="btn ' + (temBook ? 'btn-outline-dark' : 'btn-dark') + '" target="_blank" rel="noopener" href="' + esc(linkWhatsapp(msg)) + '">Chamar no WhatsApp</a></div>';
               return;
             }
             if (res.status === 400 && res.corpo.erros && Object.keys(res.corpo.erros).length) {

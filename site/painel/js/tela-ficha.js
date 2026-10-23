@@ -19,6 +19,7 @@ export async function telaFicha(id) {
 
 function textoEvento(ev) {
   if (ev.tipo === 'nota') return '<strong>Anotação:</strong> ' + h(ev.texto);
+  if (ev.tipo === 'book') return '<strong>Baixou o book</strong>' + (ev.texto ? ' do ' + h(nomeEmp(ev.texto)) : '');
   if (ev.tipo === 'retorno') return '<strong>Voltou a preencher o formulário.</strong>' + (ev.texto ? ' Mensagem: ' + h(ev.texto) : '');
   if (!ev.de_fase) return '<strong>Lead criado</strong>';
   const motivo = ev.texto ? ' (' + h(estado.motivos.find((m) => m.id === ev.texto)?.nome ?? ev.texto) + ')' : '';

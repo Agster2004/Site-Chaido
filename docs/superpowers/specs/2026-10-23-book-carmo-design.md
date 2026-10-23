@@ -1,6 +1,6 @@
 # Book do Carmo: "Baixar o book" depois do cadastro (desenho)
 
-Data: 23/10/2026. **Aguardando aprovação do desenho e o "pode construir" do usuário.** Nada disto foi construído.
+Data: 23/10/2026. **Construído na `trabalho` em 23/10/2026 ("pode construir" dado), só na prévia.** Mudanças em relação ao desenho original estão na seção "Como ficou".
 
 ## O que é
 Um botão "Baixar o book" na página do Carmo. A pessoa deixa nome e WhatsApp, o contato entra no painel de leads
@@ -59,3 +59,17 @@ localização. Os valores continuam só no WhatsApp.
 ## Riscos
 - O link de 10 minutos pode ser repassado para outra pessoa: aceitável, o PDF não tem preços.
 - O Supabase gratuito tem limite de armazenamento (1 GB) e de banda: um PDF de 3 a 5 MB cabe folgado.
+
+## Como ficou (construído em 23/10/2026)
+- **O PDF não vai para o Supabase Storage** (o desenho previa isso). Ele fica em `site/api/_book/carmo.pdf`, dentro da função da Vercel
+  (`includeFiles` em `vercel.json`), fora da parte pública: o endereço do arquivo não existe na internet. Isso dispensou criar bucket e subir arquivo.
+  O PDF tem 3 páginas (capa, diferenciais, localização), 2 MB, sem a página de valores.
+- **Link assinado próprio** (`api/_lib/book.js`): `carmo.<validade>.<assinatura HMAC>`, vale 10 minutos, usa `IP_HASH_SALT` (ou `BOOK_SECRET`, se existir).
+  `api/book.js` só entrega o PDF com token válido; sem ele, 404.
+- `api/lead.js`: se `quer_book` for verdadeiro **e** o empreendimento tiver `"book": true` no cadastro, depois de gravar o lead devolve `book.url`.
+  Robô (isca), limite por hora e dados inválidos nunca recebem o link.
+- **Migração `0003_book.sql`** (a aplicar pelo usuário no Supabase): permite o evento `book` e cria `registrar_book`. **Sem a migração tudo funciona**
+  (o lead e o link saem), só falta a linha "Baixou o book" na ficha do lead. A ficha do painel e o e-mail de aviso ("Pediu o book") já estão prontos.
+- Página: botão "Baixar o book" na capa do Carmo, que marca a caixa "Quero receber o book (PDF)" do formulário (a caixa só aparece para empreendimentos com book).
+  Depois do envio, a tela mostra "Baixar o book (PDF)".
+- Testes: `tests/book.test.mjs` (12 testes); total 94, 88 passam, 6 pulados.

@@ -507,7 +507,8 @@
       ],
       "sidebar_botao": "Ver plantas 3D e tour virtual",
       "sidebar_nota": "Condições de pagamento sob consulta — chame no WhatsApp para receber a tabela completa.",
-      "whatsapp_msg": "Olá, tenho interesse no Residencial Carmo e quero ver as plantas 3D e o tour virtual."
+      "whatsapp_msg": "Olá, tenho interesse no Residencial Carmo e quero ver as plantas 3D e o tour virtual.",
+      "book": true
     }
   ]
 }

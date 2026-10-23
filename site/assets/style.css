@@ -480,6 +480,9 @@ main:focus{ outline:none; }
 .lead-consent input{ margin-top:3px; flex-shrink:0; width:18px; height:18px; }
 .lead-consent label{ margin:0; font-weight:400; font-size:13px; color:rgba(27,33,24,0.78); }
 .lead-consent a{ text-decoration:underline; }
+.lead-book{ margin-top:12px; padding:10px 12px; border:1px solid var(--line); border-radius:8px; background:rgba(201,162,92,.10); }
+.lead-book label{ color:var(--ink); font-weight:500; }
+.lead-book[hidden]{ display:none; }
 .lead-card .btn{ margin-top:18px; }
 .lead-card .btn[disabled]{ opacity:0.6; cursor:default; }
 .lead-status{ margin-top:12px; }

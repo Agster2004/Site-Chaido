@@ -7,7 +7,7 @@ const esc = (s) =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 
-export function montarEmail(lead, { retorno = false, nomesEmpreendimentos = {} }) {
+export function montarEmail(lead, { retorno = false, nomesEmpreendimentos = {}, book = false }) {
   const imovel = nomesEmpreendimentos[lead.empreendimento_slug] || 'Não informado';
   const origem =
     [lead.origem_fonte, lead.origem_meio, lead.origem_campanha].filter(Boolean).join(' / ') ||
@@ -26,6 +26,7 @@ export function montarEmail(lead, { retorno = false, nomesEmpreendimentos = {} }
     ['E-mail', lead.email || '—'],
     ['Interesse', imovel],
     ['Origem', origem],
+    ...(book ? [['Pediu o book', 'Sim, baixou o PDF do ' + imovel]] : []),
     ['Mensagem', lead.mensagem || '—'],
   ];
 

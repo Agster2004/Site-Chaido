@@ -206,6 +206,7 @@
             '<p class="dd-hero-end">' + esc(item.endereco) + '</p>' +
             '<div class="dd-hero-acoes">' +
               '<a class="btn dd-btn-ouro" href="#interesse">Quero saber mais</a>' +
+              (item.book ? '<a class="btn dd-btn-vazado" href="#interesse" data-pedir-book>Baixar o book</a>' : '') +
               '<a class="btn dd-btn-vazado" href="' + esc(p.waHref) + '" target="_blank" rel="noopener">' + R.waIconSvg() + 'WhatsApp</a>' +
             '</div>' +
           '</div>' +
@@ -427,6 +428,13 @@
 
     root.querySelectorAll('[data-dd-carrossel]').forEach(iniciarCarrossel);
     iniciarAbas(root.querySelector('[data-dd-plantas]'));
+    // "Baixar o book": leva ao formulário e marca o pedido do book (o formulário escuta este evento).
+    root.querySelectorAll('[data-pedir-book]').forEach(function(b){
+      b.addEventListener('click', function(){
+        window.__chiadoQuerBook = true;
+        document.dispatchEvent(new CustomEvent('chiado:book'));
+      });
+    });
 
     var caixa = root.querySelector('[data-dd-mapa]');
     if(caixa){

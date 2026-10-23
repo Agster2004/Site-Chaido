@@ -4,6 +4,7 @@ import { hashIp, ipDaRequisicao } from './_lib/ip.js';
 import { rpc, marcarAviso } from './_lib/supabase.js';
 import { montarEmail, enviarEmail } from './_lib/email.js';
 import { lerJsonProprio } from './_lib/proprio.js';
+import { criarToken } from './_lib/book.js';
 
 const LIMITE_POR_HORA = 5;
 
@@ -62,12 +63,20 @@ export default async function handler(req, res) {
   if (!validacao.ok) return res.status(400).json({ ok: false, erros: validacao.erros });
 
   let resultado;
+  let pediuBook = false;
+  let slugBook = '';
   try {
     const ipHash = hashIp(ipDaRequisicao(req), process.env.IP_HASH_SALT || '');
     const permitido = await rpc('permitir_envio', { p_ip_hash: ipHash, p_limite: LIMITE_POR_HORA });
     if (permitido !== true) return res.status(200).json({ ok: true });
 
     resultado = await rpc('registrar_lead', { p: validacao.dados });
+    // Pediu o book? Só vale para o empreendimento escolhido e se ele tiver book no cadastro.
+    const alvo = empreendimentos.find((e) => e.slug === validacao.dados.empreendimento_slug);
+    if (corpo && corpo.quer_book === true && alvo && alvo.book) {
+      pediuBook = true;
+      slugBook = alvo.slug;
+    }
   } catch (e) {
     // e.message tem só o status e a rota, nunca dados do lead
     console.error('lead: falha ao gravar no banco:', e.message);
@@ -77,10 +86,19 @@ export default async function handler(req, res) {
   // O lead já está salvo. Se o e-mail falhar, só marca o aviso como não enviado.
   try {
     const nomes = Object.fromEntries(empreendimentos.map((e) => [e.slug, e.nome]));
-    await enviarEmail(montarEmail(validacao.dados, { retorno: resultado.novo === false, nomesEmpreendimentos: nomes }));
+    await enviarEmail(montarEmail(validacao.dados, { retorno: resultado.novo === false, nomesEmpreendimentos: nomes, book: pediuBook }));
   } catch (e) {
     console.error('lead: aviso por e-mail não enviado:', e.message);
     await marcarAviso(resultado.id, false).catch(() => {});
+  }
+
+  if (pediuBook) {
+    // O histórico da ficha ("Baixou o book") depende da migração 0003; sem ela, o link sai do mesmo jeito.
+    await rpc('registrar_book', { p_lead: resultado.id, p_slug: slugBook }).catch((e) => {
+      console.error('lead: histórico do book não gravado:', e.message);
+    });
+    const token = criarToken(slugBook);
+    if (token) return res.status(200).json({ ok: true, book: { url: '/api/book?t=' + token } });
   }
 
   return res.status(200).json({ ok: true });
