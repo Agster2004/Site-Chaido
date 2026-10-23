@@ -12,7 +12,7 @@ existem só para o login do painel administrativo funcionar. Siga na ordem.
 > de trabalho e as pendências, leia `resumo-tecnico-sessao.md` e `CLAUDE.md` na raiz do repositório.
 >
 > **Variáveis de ambiente do projeto na Vercel** (só os nomes; os valores ficam na Vercel, nunca no repositório):
-> `OAUTH_CLIENT_ID`, `OAUTH_CLIENT_SECRET` (login do `/admin`); `SUPABASE_URL`, `SUPABASE_ANON_KEY`,
+> ~~`OAUTH_CLIENT_ID`, `OAUTH_CLIENT_SECRET`~~ (login do `/admin`; **apagadas em 23/10/2026**, o `/admin` saiu do ar); `SUPABASE_URL`, `SUPABASE_ANON_KEY`,
 > `SUPABASE_SERVICE_ROLE_KEY`, `IP_HASH_SALT` (painel de leads); `RESEND_API_KEY`, `LEAD_FROM_EMAIL`,
 > `LEAD_NOTIFY_EMAILS` (e-mail de aviso de lead, criadas em 09/10/2026); `SITE_URL` (opcional, domínio oficial);
 > `CRON_SECRET` (opcional: se existir, `/api/keep-alive` só aceita a chamada do cron da Vercel, que já envia essa senha).

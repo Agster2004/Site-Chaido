@@ -14,7 +14,7 @@ e o endereço `/admin/` dá 404.
    `git mv docs/admin-guardado/config.yml site/admin/config.yml`,
    `git mv docs/admin-guardado/api/auth.js site/api/auth.js` e `git mv docs/admin-guardado/api/callback.js site/api/callback.js`.
 2. Opcional: voltar `Disallow: /admin/` no `site/robots.txt`.
-3. As variáveis `OAUTH_CLIENT_ID` e `OAUTH_CLIENT_SECRET` seguem na Vercel (não foram mexidas). Conferir o OAuth App no GitHub
+3. As variáveis `OAUTH_CLIENT_ID` e `OAUTH_CLIENT_SECRET` **foram apagadas da Vercel em 23/10/2026**: é preciso recriá-las (o Client Secret se gera de novo no OAuth App do GitHub e vai direto na Vercel, nunca no chat). Conferir o OAuth App no GitHub
    (callback `https://www.chiadoconstrutora.com.br/api/callback`). Passo a passo original: `docs/README-VERCEL.md`.
 4. Testar na prévia e só então o "podemos colocar no ar". Depois de reativado, o "puxe do github" volta a ser essencial
    (o `/admin` grava direto no `main`).

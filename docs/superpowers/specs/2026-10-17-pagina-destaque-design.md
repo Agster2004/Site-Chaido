@@ -5,8 +5,7 @@ Costa Esmeralda da GMV Incorporadora (`gmvincorporadora.com.br/empreendimento.ph
 
 ## O que é
 Uma segunda forma da página `/imovel/<slug>`, ligada por empreendimento com `"layout": "destaque"` no `empreendimentos.json`
-(ou "Estilo da página" no `/admin`). Quem não tem o campo continua com a página antiga. Hoje só o **Carmo** usa; o **Garrett**
-pode passar a usar só preenchendo os campos (decisão do usuário).
+(o `/admin` saiu em 23/10/2026). Quem não tem o campo continua com a página antiga. Hoje o **Carmo e o Garrett** usam (o Garrett desde 23/10/2026, só com os campos preenchidos).
 
 ## Seções (cada uma só aparece se tiver os dados)
 1. **Capa** em tela cheia (vídeo no computador; versão leve no celular desde 18/10/2026; fotos como reserva), com selos de bairro e status, nome grande, endereço e botões
@@ -22,6 +21,9 @@ pode passar a usar só preenchendo os campos (decisão do usuário).
 5. **Explore a região** (escura): `mapa.endereco` e `mapa.texto`. O mapa do Google **só carrega quando a pessoa toca em
    "Ver o mapa aqui"** (não envia dados ao Google antes disso e a página fica leve); há também o botão "Abrir no Google Maps".
 6. **Andamento da obra** (clara): `obra.etapas` (`nome`, `percentual`), `obra.total` (vazio = média) e `obra.atualizado_em`.
+   **Desde 23/10/2026:** com só `obra.total` (sem etapas), o percentual aparece como **barra larga na capa**, abaixo dos botões (com "Atualizado em"), e como "OBRA 90%" no cartão da home; esta seção só entra quando houver `obra.etapas`. Nada disso aparece com `"status": "pronto"`.
+   Também da capa: o botão "Baixar o book" (quando o empreendimento tem `"book": true`; ver `2026-10-23-book-carmo-design.md`).
+   **Plantas com uma imagem só por casa** (caso do Garrett, 3 pavimentos na mesma imagem) usam o cartão em pé `dd-trilho-unica`; e a frase "projeto executivo" sob as plantas some quando o status é "pronto".
 7. **Formulário** (verde): o mesmo formulário de leads, ao lado das linhas do painel lateral e do botão do WhatsApp. Âncora `#interesse`.
 8. **Outros empreendimentos** (clara 2): cartões dos demais empreendimentos da lista, automático.
 
@@ -37,4 +39,4 @@ pode passar a usar só preenchendo os campos (decisão do usuário).
   `midia/carmo-videos/carmo-capa-com-pessoas.mp4`. Ainda não é a capa; ao trocar, acrescentar "imagens ilustrativas" sobre a capa.
 
 ## Dados que faltam do Carmo
-Plantas (imagens), percentuais da obra e o PDF do book. Confirmar com o usuário se o Carmo tem 3 banheiros (hoje a faixa diz "Lavabo").
+Plantas, percentual da obra, book e banheiros (2 suítes e 1 lavabo) estão feitos. Falta pedir ao arquiteto a correção dos rótulos das garagens das casas 2 e 5 e, se vierem, as etapas da obra.

@@ -9,7 +9,7 @@ lançamentos, contas, vendas por unidade). Ficam em repositórios, bancos e chav
 misturam**. Qualquer ligação entre os dois no futuro (por exemplo, uma venda fechada no painel de leads
 virar venda no financeiro) é uma decisão à parte, tomada com o usuário e desenhada antes.
 
-## COMECE POR AQUI (estado em 17/10/2026; último "no ar" em 13/10/2026)
+## COMECE POR AQUI (estado em 23/10/2026; último "no ar" em 23/10/2026)
 
 > **NO AR desde 13/10/2026:** a `trabalho` foi publicada no `main` (commit `ddb4082`, avanço simples) com o "podemos colocar no ar" do usuário. O site
 > oficial agora tem formulário, `/painel`, `/privacidade`, contador de visitas, origem no WhatsApp e keep-alive. No momento da publicação `main` e `trabalho` estavam no mesmo
@@ -23,7 +23,7 @@ virar venda no financeiro) é uma decisão à parte, tomada com o usuário e des
 > Depois de publicar, ficam com o usuário: apagar o lead de teste, aplicar a migração `0003` (opcional), testar o book no celular, apagar `OAUTH_CLIENT_ID` e `OAUTH_CLIENT_SECRET` da Vercel (eram do `/admin`),
 > Search Console e Google Meu Negócio. O texto que diz "NADA disto está no `main`" logo abaixo é de antes de 23/10/2026.
 
-> **Em andamento (17, 18 e 19/10/2026), NADA disto está no `main` (site oficial); tudo está na `trabalho` e na prévia da Vercel** (`site-chaido-git-trabalho-chiado.vercel.app/imovel/carmo`).
+> **Histórico (17 a 19/10/2026; já NO AR desde 23/10/2026):** a página destaque do Carmo foi construída na `trabalho` e na prévia da Vercel** (`site-chaido-git-trabalho-chiado.vercel.app/imovel/carmo`).
 > O usuário pediu **não publicar nada antes de ver**.
 > 1. **Página do Carmo no estilo da GMV** ("layout destaque"): capa grande, seções escuras e claras, faixa de características, **galeria em carrossel lateral**, diferenciais e casas,
 >    **plantas das 5 casas** (um botão por casa, 3 andares em carrossel), mapa (carrega no clique), andamento da obra (escondido até chegarem os percentuais), formulário e outros empreendimentos.
@@ -32,27 +32,32 @@ virar venda no financeiro) é uma decisão à parte, tomada com o usuário e des
 >    No celular toca uma versão leve (`carmo-capa-pessoas-celular.mp4`, 1,4 MB); com "economizar dados", só fotos. O vídeo antigo, só com fotos, continua em `site/assets/carmo-capa.mp4`.
 > 3. **Ajustes de 19/10/2026 na página destaque:** galeria em **carrossel contínuo** (gira sem parar, anda sozinha, sempre abre na primeira foto, vai até as bordas da tela com as fotos vizinhas esmaecidas);
 >    "O projeto" ficou **só com os diferenciais**, em blocos grandes no fundo escuro; a **tabela das casas** foi para a seção das plantas, logo abaixo do título. Detalhes na seção 7 (entrada "19/10/2026").
-> 4. **Painel `/admin` guardado e desligado em 19/10/2026** (só o usuário edita; nada apagado): arquivos em `docs/admin-guardado/`, com `LEIAME.md` de como reativar. Só some do site oficial depois do "podemos colocar no ar";
->    até lá o `main` ainda o tem. Para editar o conteúdo (`site/data/empreendimentos.json`), pedir ao Claude.
-> **Próximo:** o usuário revisa a página toda na prévia (galeria nova, diferenciais, tabela, plantas); faltam os percentuais da obra, o book, confirmar 3 banheiros, decidir o Garrett no estilo novo e pedir ao arquiteto a correção dos rótulos
-> das garagens das casas 2 e 5. Depois, o "podemos colocar no ar". Detalhes na seção 7 (entradas "17/10/2026" e "18/10/2026") e na seção 6.
+> 4. **Painel `/admin` guardado e desligado em 19/10/2026** (só o usuário edita; nada apagado): arquivos em `docs/admin-guardado/`, com `LEIAME.md` de como reativar. **Saiu do site oficial em 23/10/2026** (`/admin` e `/api/auth` dão 404);
+>    as variáveis `OAUTH_*` da Vercel foram apagadas (reativar exigiria recriá-las). Para editar o conteúdo (`site/data/empreendimentos.json`), pedir ao Claude.
+> **Estado em 23/10/2026 (fim do dia) e o que falta**, nesta ordem (tudo com o usuário, salvo onde dito):
+> 1. **Testar o book no celular** (no oficial, do clique até o PDF abrir) e **apagar os leads de teste** do painel ("TESTE Claude (pode apagar)" e o que o teste gerar).
+> 2. **Search Console** (propriedade de Domínio por DNS TXT, depois enviar `https://www.chiadoconstrutora.com.br/sitemap.xml`) e **Google Meu Negócio** com o **endereço escondido** (atendimento com hora marcada). Passo a passo já dado ao usuário em 23/10; ele deixou para depois.
+> 3. **Migração `supabase/migrations/0003_book.sql`** (opcional): só faz a ficha do lead mostrar "Baixou o book"; sem ela o book funciona igual.
+> 4. **Foto da frente do Garrett** em alta resolução (a de 894 px e as de 464 px ficam macias em tela cheia); quando vier, entra como primeira da capa.
+> 5. Pedir ao **arquiteto** a correção dos rótulos das garagens das casas 2 e 5 do Carmo.
+> 6. Antes/depois: **advogado** na `/privacidade` (incluir uma frase sobre o pedido do book), **plano do Supabase**, **Vercel Pro**. Detalhes na seção 6.
 
 **Antes de tudo, em qualquer computador:** este projeto trabalha na branch **`trabalho`**, não no `main` (o `main` é o
 site no ar). Este arquivo e o `CLAUDE.md` **só existem na `trabalho`**. Se você não os vê, está no `main`: rode
 `git fetch` e `git checkout trabalho` (uma vez só) e depois use "puxe do github" normalmente.
 
-**Os dois branches: o que cada um tem (conferido em 13/10/2026)**
+**Os dois branches: o que cada um tem (conferido em 23/10/2026)**
 
 | | `main` | `trabalho` |
 |---|---|---|
-| Para que serve | O **site oficial no ar** (`www.chiadoconstrutora.com.br`). O `/admin` grava aqui | Onde **trabalhamos**; gera a **prévia** (`site-chaido-git-trabalho-chiado.vercel.app`) |
-| Último commit | `ee80abf` (13/10/2026): painel completo, contador de visitas (só conta no site oficial), menu com a aba Visitas ao lado de Leads e botão "Quero saber mais" | o mais recente da `trabalho` (`git log -1`); igual ao `main` até o próximo ajuste |
+| Para que serve | O **site oficial no ar** (`www.chiadoconstrutora.com.br`). Não há mais `/admin` gravando nele (saiu em 23/10/2026) | Onde **trabalhamos**; gera a **prévia** (`site-chaido-git-trabalho-chiado.vercel.app`) |
+| Último commit | `32dddda` (23/10/2026): Garrett e Carmo no estilo destaque, book do Carmo, obra em 90%, SEO da home, `/admin` removido | o mais recente da `trabalho` (`git log -1`); igual ao `main` até o próximo ajuste |
 | O que tem | A pasta `site/` (vitrine, imóveis, formulário, `/painel`, `/privacidade`, funções `api/`, `sitemap.xml`, `robots.txt`) e, fora dela, `supabase/`, `tests/`, `docs/`, este resumo e o `CLAUDE.md` | O mesmo que o `main`, mais o que estiver sendo feito e ainda não foi publicado |
 | Este resumo e o `CLAUDE.md` | Existem (desde que a `trabalho` entrou no `main`) | Existem |
 | Como muda | Só com o seu **"podemos colocar no ar"** | Commits normais ("envie para o github") |
 
-A `trabalho` está à frente do `main` (confira: `git log --oneline origin/main..trabalho`). O `main` pode ter
-commits que a `trabalho` não tem (edições do `/admin`): o "puxe do github" confere isso. **Este arquivo fica na raiz da `trabalho`;
+Em 23/10/2026 o `main` estava em `32dddda`; a `trabalho` só andou à frente com commits de `.md` (confira: `git log --oneline origin/main..trabalho`). Como o `/admin` saiu, o `main` não deve
+mais receber commits que a `trabalho` não tenha, mas o "puxe do github" continua conferindo isso. **Este arquivo fica na raiz da `trabalho`;
 no outro computador, deixe a pasta sempre na `trabalho`.**
 
 **O que está pronto**
@@ -114,7 +119,7 @@ pago, divulgação, impulsionar vendas), cada um com desenho e "pode construir" 
 | `data/empreendimentos.js` | Cópia do JSON só para abrir o site direto do disco (`file://`). O painel não a atualiza |
 | `assets/` | `style.css`, `main.js` (menu), `render.js`, `lightbox.js`, `reveal.js`, fotos (jpg+webp), vídeos do Garrett, logos |
 | ~~`admin/`~~ | **Guardado desde 19/10/2026** em `docs/admin-guardado/` (Decap CMS, login por GitHub; `index.html` e `config.yml`). Reativar: ver o `LEIAME.md` de lá |
-| ~~`api/auth.js`, `api/callback.js`~~ | **Guardados desde 19/10/2026** em `docs/admin-guardado/api/` (login OAuth do `/admin`; as variáveis `OAUTH_CLIENT_ID` e `OAUTH_CLIENT_SECRET` seguem na Vercel) |
+| ~~`api/auth.js`, `api/callback.js`~~ | **Guardados desde 19/10/2026** em `docs/admin-guardado/api/` (login OAuth do `/admin`; as variáveis `OAUTH_CLIENT_ID` e `OAUTH_CLIENT_SECRET` foram apagadas da Vercel em 23/10/2026) |
 | `api/imovel.js` | Serve `/imovel/<slug>` com title, canonical, og:*, JSON-LD e `<base href="/">` |
 | `api/sitemap.js` | Gera `/sitemap.xml` a partir do JSON |
 | `robots.txt`, `vercel.json` | Robots, redirecionamentos, rewrites e cabeçalhos de cache |
@@ -124,6 +129,8 @@ pago, divulgação, impulsionar vendas), cada um com desenho e "pode construir" 
 | `assets/detalhe-destaque.js`, `assets/plantas/` | Página "destaque" (`layout: destaque`) e as plantas das casas do Carmo |
 | `assets/utm.js`, `assets/lead-form.js`, `data/consentimento.json` | Formulário de interesse, origem da visita e texto de consentimento (`v1`) |
 | `api/lead.js`, `api/_lib/*.js` | Recebe o lead (`POST /api/lead`): validação, anti-robô, Supabase e e-mail (Resend) |
+| `api/book.js`, `api/_lib/book.js`, `api/_book/carmo.pdf` | **Book do Carmo:** o PDF (3 páginas, sem a de valores, 2 MB) fica dentro da função (`includeFiles` no `vercel.json`), fora da parte pública. `/api/book?t=<link>` só entrega com link assinado (HMAC, 10 minutos, usa `IP_HASH_SALT` ou `BOOK_SECRET`); sem ele, 404. `api/lead.js` devolve o link quando `quer_book` é verdadeiro e o empreendimento tem `"book": true`. **A Vercel compila para CommonJS: não usar `import.meta` nas funções** |
+| `assets/garrett-int-*.(jpg\|webp)`, `assets/plantas/garrett-casa1\|2.*` | Fotos novas do Garrett (1200x1600, retrato, sem metadados) e plantas das Casas 1 e 2 (imagem alta; ganhou o cartão "planta única", classe `dd-trilho-unica`) |
 | `api/painel-config.js` | Entrega ao painel a URL e a chave **pública** do Supabase |
 | `api/visita.js`, `api/_lib/visita.js` | Contador de visitas (`POST /api/visita`): uma por sessão, na página de entrada; só somas por dia, página e origem (sem IP, nome ou cookie). Ignora robôs e prévias de link, só aceita caminhos conhecidos (`/`, `/privacidade`, `/imovel/<slug>`) e responde 204 mesmo se o banco falhar. Grava com `registrar_visita` (migração `0002_visitas.sql`, tabela `visitas_diarias`) |
 | `painel/js/tela-visitas.js` | Tela `#/visitas` do painel: visitas hoje, 7 e 30 dias, por dia, por origem, por página de entrada e conversão (leads ÷ visitas em 30 dias) |
@@ -131,7 +138,7 @@ pago, divulgação, impulsionar vendas), cada um com desenho e "pode construir" 
 | `api/keep-alive.js` | Leitura diária em `fases` para o Supabase gratuito não pausar; chamada pelo cron do `vercel.json` (`0 12 * * *`). Cron só roda em **Produção** (o `main`), não nas prévias. Aceita `CRON_SECRET` se existir |
 | `painel/` (`index.html`, `painel.css`, `js/*.js`) | Painel de leads em `/painel` (login, lista, ficha, dados da pessoa); `noindex` |
 
-Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (banco), `tests/*.test.mjs` (`node --test`), `tests/ferramentas/` (banco de teste e servidores simulados; veja o `LEIAME.md` de lá), `docs/` (desenho, plano e `docs/README-VERCEL.md`, o passo a passo original de publicação), `CLAUDE.md` e este resumo. **Tudo que está dentro de `site/` é público na internet**: por isso o `README-VERCEL.md` saiu de lá em 03/10/2026.
+Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql`, `0002_visitas.sql` e `0003_book.sql` (banco; a 0003 ainda não foi aplicada), `tests/*.test.mjs` (`node --test`), `tests/ferramentas/` (banco de teste e servidores simulados; veja o `LEIAME.md` de lá), `docs/` (desenho, plano e `docs/README-VERCEL.md`, o passo a passo original de publicação), `CLAUDE.md` e este resumo. **Tudo que está dentro de `site/` é público na internet**: por isso o `README-VERCEL.md` saiu de lá em 03/10/2026.
 
 ## 3. Como funciona (o que não é óbvio)
 
@@ -162,9 +169,16 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - **Versão nos arquivos da página do imóvel (18/10/2026):** `imovel.html` carrega `style.css`, `hero-slides.js`, `detalhe-destaque.js` e `render.js` com `?v=AAAAMMDD`, porque a Vercel
   manda o navegador guardar CSS/JS por 1 dia (o usuário via a versão antiga na prévia). **Ao mudar um desses arquivos, trocar o número em `imovel.html`.**
 - Sem build e sem `package.json`: HTML/CSS/JS puros e funções da Vercel que usam só `fetch`.
-- Testes automáticos: `node --test` na raiz (sem instalar nada; 82 testes, 76 passam e 6 são pulados porque precisam de
+- Testes automáticos: `node --test tests/*.test.mjs` na raiz (sem instalar nada; 94 testes, 88 passam e 6 são pulados porque precisam de
   chaves do Supabase: `tests/rls.test.mjs`). Além deles, as telas foram testadas num servidor local com Supabase
   simulado e as funções, com `curl` na prévia da Vercel.
+- **Cache dos arquivos do site (aprendido em 23/10/2026):** CSS e JS ficam em cache no navegador por 1 dia. Ao mudar `style.css`, `main.js`, `lead-form.js`, `render.js`, `detalhe-destaque.js` ou `hero-slides.js`,
+  **subir o `?v=` nos `<script>`/`<link>` de `index.html` e `imovel.html`** (a versão de hoje é `20261023j`), senão o visitante vê a página nova com o estilo antigo.
+- **`<base href="/">` nas páginas `/imovel/<slug>`:** o `api/imovel.js` o injeta, então `href="#interesse"` iria para a home. Um clique em `a[href^="#"]` é tratado em `assets/main.js` e rola dentro da própria página.
+  Links de âncora novos funcionam sem mexer no `<base>`.
+- **Andamento da obra (Carmo):** `obra.total` e `obra.atualizado_em` em `empreendimentos.json` alimentam a barra larga na capa e o "OBRA 90%" do cartão da home; a seção "Acompanhe o andamento da obra" só aparece quando houver
+  `obra.etapas`. Empreendimento com `"status": "pronto"` (Garrett) não mostra nada disso nem a frase "projeto executivo" sob as plantas.
+- **Endereço do escritório (decisão do usuário, 23/10/2026): nunca público** (nem no rodapé, nem no schema). Só o bairro (Boqueirão, Praia Grande) aparece, em "Sobre a Chiado" e no schema; o endereço completo só consta na `/privacidade` (exigência legal).
 
 ## 4. Feito até agora (03/10/2026)
 
@@ -233,7 +247,8 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 
 ## 6. Pendências e próximos passos
 
-- **Para ir ao ar:** os itens 2 a 6 da seção 5 ("Antes de colocar no ar"); o item 1 (Resend) já está feito.
+- **Feito e no ar em 23/10/2026:** ver o bloco "NO AR desde 23/10/2026" no começo. **O que falta agora** está em "Estado em 23/10/2026 (fim do dia) e o que falta", também no começo.
+- ~~Para ir ao ar: itens 2 a 6 da seção 5~~ (publicado em 23/10/2026; os que ainda valem: advogado na `/privacidade`, plano do Supabase e Vercel Pro).
 - ~~Frase sobre a medição de visitas em `/privacidade`~~ **feita** (seção "Contagem de visitas", 13/10/2026); o advogado ainda deve revisar a redação.
 - **Painel de leads, opcionais:** segundo usuário sem permissão no Supabase real para ver a mensagem de bloqueio;
   `tests/rls.test.mjs` com chaves de teste no terminal do usuário; paginar a lista quando passar de 1000 leads (limite
@@ -546,7 +561,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - **Páginas dos imóveis conferidas:** título, descrição, canonical, imagem e schema (`Residence`, breadcrumb) já saem certos, trocados no servidor por `api/imovel.js`; só as descrições são curtas (<120 caracteres), a refazer depois que o texto do Carmo estiver aprovado. **Texto estático na home (23/10):** parágrafo `.emp-intro-txt` sob "Um pronto para morar. Um em construção.", com links diretos para `/imovel/garrett` e `/imovel/carmo` (os cards continuam vindo do JavaScript).
 - **Falta, nesta ordem:** (1) ~~descrições dos imóveis mais longas~~ feitas em 23/10 (`meta_descricao` em `data/empreendimentos.json` e `.js`, 152 e 157 caracteres; refazer se o texto do Carmo mudar); (2) ~~texto estático dos empreendimentos na home~~ feito; (3) **decidido em 23/10: o endereço do escritório NÃO aparece no schema nem no rodapé da home** (precaução do usuário; ele só consta na `/privacidade`, exigência legal). O schema fica só com a cidade e o bairro (Boqueirão, Praia Grande, em `areaServed` e na descrição; e, por autorização do usuário em 23/10, em uma frase visível em "Sobre a Chiado": "Nosso escritório fica no Boqueirão, em Praia Grande… hora marcada… WhatsApp"; só o bairro, nunca a rua) e a frase "atendimento mediante agendamento pelo WhatsApp" na descrição; sem `openingHours`; (4) cadastrar o `sitemap.xml` no Search Console depois do "podemos colocar no ar". Nada disto está no `main`.
 
-### 23/10/2026 (Garrett no estilo "destaque", só na prévia)
+### 23/10/2026 (Garrett no estilo "destaque"; entrou no ar no fim do dia)
 - **Garrett passou para o layout "destaque"** (igual ao Carmo): `layout`, `bairro` (Ocian), `capa_slides`, `caracteristicas`, `sobre`, `mapa` e `plantas` preenchidos em `site/data/empreendimentos.json`. O Garrett tem **2 casas** (não apartamentos): Casa 1 = antiga "Unidade 1" (94,5 m², 2 vagas) e Casa 2 = antiga "Unidade 2" (89,1 m², 1 vaga rotativa); a tabela agora diz "Casas". Corrigido também o texto da home ("2 casas", antes saiu "apartamentos" por engano).
 - **Fotos novas** (pasta `Documents/Chiado/Fotos Garret`, 23 HEIC do celular, giradas e **sem os metadados/GPS**): 15 escolhidas, em `site/assets/garrett-int-*.jpg/.webp` (1200x1600, retrato). A galeria ficou com 19 fotos (fachada, aérea, pôr do sol e as 15 novas); as fotos internas antigas (frames de vídeo, 464x832) saíram da galeria, mas os arquivos continuam em `assets/`. Ficaram de fora: 0511 (escura), 0512 (fechadura), 0501, 0505, 0506 e 0509 (repetidas ou fracas). Os originais HEIC ficam só na pasta do usuário.
 - **Plantas:** as duas plantas (Casa 1 e 2, imagem alta com os 3 pavimentos) em `site/assets/plantas/garrett-casa1|2`. Para caberem, a página destaque ganhou o cartão "planta única" (`dd-trilho-unica` em `style.css` e `detalhe-destaque.js`); não muda o Carmo. `imovel.html` com `?v=20261023a`.
@@ -565,6 +580,16 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql` (b
 - **Conferido depois no oficial:** ver o bloco "NO AR desde 23/10/2026" no começo do arquivo. A Vercel publicou em menos de 1 minuto.
 - **Vercel limpa (23/10/2026):** o usuário apagou `OAUTH_CLIENT_ID` e `OAUTH_CLIENT_SECRET` (eram do `/admin`); conferido pela lista de variáveis (sem abrir valores). Ficaram `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `LEAD_FROM_EMAIL`, `LEAD_NOTIFY_EMAILS` e `IP_HASH_SALT`. Para reativar o `/admin` seria preciso recriá-las (a chave secreta se gera de novo no GitHub).
 - **Continua só nos dois computadores pela `trabalho`:** a próxima mudança vai de novo pela `trabalho` e prévia; o `/admin` não existe mais no `main`.
+
+### 23/10/2026 (resumo do dia e onde paramos)
+- **Feito (tudo no ar desde o fim do dia, `main` = `32dddda`):** SEO da home (título de 47 caracteres, descrição de 153, alt e dimensões da fachada, texto estático dos empreendimentos com links diretos, descrições dos imóveis);
+  Garrett no estilo destaque (casas, 13 fotos novas na galeria, plantas, capa com fachada e vista da varanda); Carmo com obra em 90% (barra na capa, selo no cartão da home), "2 suítes e 1 lavabo" e book;
+  correção do erro de âncora (`#interesse` levava à home); revisão da home e do Garrett no celular.
+- **Decisões do usuário:** o endereço do escritório não aparece em lugar nenhum (só o bairro Boqueirão); as 2 casas do Garrett são espelhadas; o Garrett **não tem book** (o botão só aparece no Carmo; o mecanismo serve a qualquer empreendimento com `"book": true` e um PDF em `api/_book/<slug>.pdf`);
+  o PDF do book sai **sem a página de valores**; a seção de andamento de baixo foi tirada (só volta se houver etapas); deixar para depois: testar o book no celular, apagar os leads de teste, Search Console e Google Meu Negócio.
+- **Erros meus corrigidos no dia (para não repetir):** "apartamentos" em vez de "casas" no Garrett; largura/altura da foto invertidas; `import.meta` numa função da Vercel (quebrava `/api/book`); `#interesse` com `<base href="/">`; frase de "projeto executivo" sob as plantas de um imóvel pronto;
+  "2 banheiros e lavabo" no Carmo (o certo é "2 suítes" e "1 lavabo"). Conferir sempre o dado com o usuário e o resultado na prévia antes de dar como feito.
+- **Onde paramos:** nada em andamento. Pendências na ordem do bloco "Estado em 23/10/2026 (fim do dia) e o que falta", no começo deste arquivo. Há um lead de teste real no painel ("TESTE Claude (pode apagar)").
 
 ## 8. Regras de trabalho
 
