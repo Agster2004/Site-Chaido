@@ -713,3 +713,4 @@ main:focus{ outline:none; }
 .dd-hero-obra-topo b{ font-size:20px; color:var(--gold); }
 .dd-hero-obra-barra{ height:10px; border-radius:999px; background:rgba(255,255,255,0.22); overflow:hidden; }
 .dd-hero-obra-barra i{ display:block; height:100%; width:var(--pct); border-radius:inherit; background:linear-gradient(90deg, var(--gold-dark), var(--gold)); }
+@media(max-width:640px){ .dd-hero-obra{ max-width:calc(100% - 76px); } }
