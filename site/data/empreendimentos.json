@@ -24,16 +24,16 @@
         "Acabamento de altíssima qualidade",
         "Entrada exclusiva coberta"
       ],
-      "unidades_titulo": "Unidades",
-      "unidades_col1": "Unidade",
+      "unidades_titulo": "Casas",
+      "unidades_col1": "Casa",
       "unidades": [
         {
-          "nome": "Unidade 1",
+          "nome": "Casa 1",
           "area": "94,5 m²",
           "vaga": "2 vagas de garagem"
         },
         {
-          "nome": "Unidade 2",
+          "nome": "Casa 2",
           "area": "89,1 m²",
           "vaga": "1 vaga rotativa"
         }
@@ -55,49 +55,84 @@
           "alt": "Vista aérea do Residencial Garrett"
         },
         {
+          "src": "assets/garrett-int-varanda-vista.jpg",
+          "webp": "assets/garrett-int-varanda-vista.webp",
+          "alt": "Varanda com vista da cidade, no Residencial Garrett"
+        },
+        {
           "src": "assets/varanda-poentesol.jpg",
           "webp": "assets/varanda-poentesol.webp",
           "alt": "Vista da varanda ao pôr do sol do Residencial Garrett"
         },
         {
-          "src": "assets/garrett-varanda.jpg",
-          "webp": "assets/garrett-varanda.webp",
-          "alt": "Varanda com vista do Residencial Garrett"
-        },
-        {
-          "src": "assets/churrasqueira.jpg",
-          "webp": "assets/churrasqueira.webp",
+          "src": "assets/garrett-int-churrasqueira-varanda.jpg",
+          "webp": "assets/garrett-int-churrasqueira-varanda.webp",
           "alt": "Churrasqueira na varanda do Residencial Garrett"
         },
         {
-          "src": "assets/sala.jpg",
-          "webp": "assets/sala.webp",
-          "alt": "Sala com acesso à varanda do Residencial Garrett"
+          "src": "assets/garrett-int-varanda.jpg",
+          "webp": "assets/garrett-int-varanda.webp",
+          "alt": "Varanda do Residencial Garrett"
         },
         {
-          "src": "assets/cozinha.jpg",
-          "webp": "assets/cozinha.webp",
+          "src": "assets/garrett-int-sala.jpg",
+          "webp": "assets/garrett-int-sala.webp",
+          "alt": "Sala do Residencial Garrett, com saída para a varanda"
+        },
+        {
+          "src": "assets/garrett-int-sala-escada.jpg",
+          "webp": "assets/garrett-int-sala-escada.webp",
+          "alt": "Sala e escada do Residencial Garrett"
+        },
+        {
+          "src": "assets/garrett-int-cozinha.jpg",
+          "webp": "assets/garrett-int-cozinha.webp",
           "alt": "Cozinha do Residencial Garrett"
         },
         {
-          "src": "assets/corredor.jpg",
-          "webp": "assets/corredor.webp",
-          "alt": "Corredor de acesso aos quartos do Residencial Garrett"
+          "src": "assets/garrett-int-cozinha-janela.jpg",
+          "webp": "assets/garrett-int-cozinha-janela.webp",
+          "alt": "Bancada de granito e janela da cozinha do Residencial Garrett"
         },
         {
-          "src": "assets/quarto2.jpg",
-          "webp": "assets/quarto2.webp",
+          "src": "assets/garrett-int-corredor.jpg",
+          "webp": "assets/garrett-int-corredor.webp",
+          "alt": "Corredor do Residencial Garrett"
+        },
+        {
+          "src": "assets/garrett-int-suite.jpg",
+          "webp": "assets/garrett-int-suite.webp",
+          "alt": "Suíte do Residencial Garrett, com porta para a varanda"
+        },
+        {
+          "src": "assets/garrett-int-quarto.jpg",
+          "webp": "assets/garrett-int-quarto.webp",
           "alt": "Dormitório do Residencial Garrett"
         },
         {
-          "src": "assets/lavabo.jpg",
-          "webp": "assets/lavabo.webp",
+          "src": "assets/garrett-int-quarto-2.jpg",
+          "webp": "assets/garrett-int-quarto-2.webp",
+          "alt": "Segundo dormitório do Residencial Garrett"
+        },
+        {
+          "src": "assets/garrett-int-suite-banheiro.jpg",
+          "webp": "assets/garrett-int-suite-banheiro.webp",
+          "alt": "Banheiro da suíte do Residencial Garrett"
+        },
+        {
+          "src": "assets/garrett-int-lavabo.jpg",
+          "webp": "assets/garrett-int-lavabo.webp",
           "alt": "Lavabo do Residencial Garrett"
         },
         {
-          "src": "assets/garrett-banheiro.jpg",
-          "webp": "assets/garrett-banheiro.webp",
-          "alt": "Banheiro com acabamento do Residencial Garrett"
+          "src": "assets/garrett-int-escada.jpg",
+          "webp": "assets/garrett-int-escada.webp",
+          "alt": "Escada de acesso aos pavimentos do Residencial Garrett"
+        },
+        {
+          "src": "assets/garrett-int-portao.jpg",
+          "webp": "assets/garrett-int-portao.webp",
+          "alt": "Entrada exclusiva coberta do Residencial Garrett"
         }
       ],
       "galeria_nota": "",
@@ -124,7 +159,71 @@
       ],
       "sidebar_botao": "Mais informações",
       "sidebar_nota": "Valores e condições sob consulta — chame no WhatsApp para receber todas as opções.",
-      "whatsapp_msg": "Olá, tenho interesse no Residencial Garrett e quero mais opções e valores."
+      "whatsapp_msg": "Olá, tenho interesse no Residencial Garrett e quero mais opções e valores.",
+      "layout": "destaque",
+      "bairro": "Ocian",
+      "capa_slides": [
+        {
+          "src": "assets/garrett-capa.jpg",
+          "webp": "assets/garrett-capa.webp",
+          "foco": "center 40%"
+        },
+        {
+          "src": "assets/garrett-int-varanda-vista.jpg",
+          "webp": "assets/garrett-int-varanda-vista.webp",
+          "foco": "center 55%"
+        },
+        {
+          "src": "assets/garrett-int-sala.jpg",
+          "webp": "assets/garrett-int-sala.webp",
+          "foco": "center 60%"
+        }
+      ],
+      "caracteristicas": [
+        {
+          "icone": "casa",
+          "texto": "2 casas"
+        },
+        {
+          "icone": "suite",
+          "texto": "3 dormitórios, 1 suíte"
+        },
+        {
+          "icone": "banheiro",
+          "texto": "Lavabo"
+        },
+        {
+          "icone": "area",
+          "texto": "89,1 a 94,5 m²"
+        },
+        {
+          "icone": "vaga",
+          "texto": "1 ou 2 vagas"
+        }
+      ],
+      "sobre": [
+        "No Ocian, em Praia Grande, o Residencial Garrett reúne apenas 2 casas já prontas, com acabamento de altíssima qualidade, para quem quer se livrar do aluguel.",
+        "Cada casa tem 3 dormitórios, sendo 1 suíte, lavabo, varanda com churrasqueira e entrada exclusiva coberta.",
+        "Pronto para morar: é só agendar uma visita pelo WhatsApp."
+      ],
+      "mapa": {
+        "endereco": "Rua Alfonso Bovero, 506, Ocian, Praia Grande - SP",
+        "texto": "No bairro Ocian, em Praia Grande."
+      },
+      "plantas": [
+        {
+          "grupo": "Casa 1",
+          "nome": "Térreo, 1º e 2º pavimentos",
+          "src": "assets/plantas/garrett-casa1.jpg",
+          "webp": "assets/plantas/garrett-casa1.webp"
+        },
+        {
+          "grupo": "Casa 2",
+          "nome": "Térreo, 1º e 2º pavimentos",
+          "src": "assets/plantas/garrett-casa2.jpg",
+          "webp": "assets/plantas/garrett-casa2.webp"
+        }
+      ]
     },
     {
       "slug": "carmo",

@@ -271,7 +271,7 @@
     }
     function carrosselPlantas(itens, rotulo){
       return '<div class="dd-carrossel" data-dd-carrossel>' +
-        '<div class="gallery-full dd-trilho dd-trilho-plantas" tabindex="0" aria-label="' + esc(rotulo) + ' (arraste para o lado)">' + itens.map(cartaoPlanta).join('') + '</div>' +
+        '<div class="gallery-full dd-trilho dd-trilho-plantas' + (itens.length === 1 ? ' dd-trilho-unica' : '') + '" tabindex="0" aria-label="' + esc(rotulo) + ' (arraste para o lado)">' + itens.map(cartaoPlanta).join('') + '</div>' +
         '<button type="button" class="dd-seta dd-seta-ant" aria-label="Planta anterior"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>' +
         '<button type="button" class="dd-seta dd-seta-prox" aria-label="Próxima planta"><svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>' +
       '</div>';

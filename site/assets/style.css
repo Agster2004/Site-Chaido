@@ -623,6 +623,10 @@ main:focus{ outline:none; }
 .dd-trilho-plantas a{ flex-basis:calc((100% - 28px) / 3); aspect-ratio:4 / 3.4; background:#fff; border:1px solid var(--line); }
 .dd-trilho-plantas img{ object-fit:contain; padding:14px 14px 48px; background:#fff; }
 .gallery-full.dd-trilho-plantas a:hover img{ transform:none; }
+/* casa com uma planta só (imagem alta, com os três pavimentos): um cartão em pé, centralizado */
+.dd-trilho-unica{ justify-content:center; }
+.dd-trilho-unica a{ flex:0 0 min(100%, 380px); aspect-ratio:9 / 16; }
+.dd-trilho-unica img{ padding:0 0 40px; }
 @media(max-width:860px){ .dd-trilho-plantas a{ flex-basis:86%; } }
 .dd-planta-info{ margin-top:14px; font-size:14px; font-weight:600; color:var(--green-800); }
 .dd-planta-nome{
