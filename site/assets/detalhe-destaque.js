@@ -320,7 +320,7 @@
     var outros = items.filter(function(i){ return i.slug !== item.slug; }).map(function(i){
       var specs = (i.specs_card || []).map(function(s){ return '<span>' + esc(s) + '</span>'; }).join('');
       return '' +
-        '<a class="dd-outro reveal" href="imovel.html?slug=' + encodeURIComponent(i.slug) + '">' +
+        '<a class="dd-outro reveal" href="/imovel/' + encodeURIComponent(i.slug) + '">' +
           '<div class="dd-outro-foto">' + picture(i.capa, i.capa_webp, 'Fachada do ' + i.nome, {lazy:true}) + '</div>' +
           '<div class="dd-outro-corpo">' +
             '<span class="dd-outro-tag">' + esc(i.tag_label) + '</span>' +

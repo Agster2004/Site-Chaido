@@ -70,7 +70,7 @@
     if(!menu) return;
     let html = '';
     items.forEach(function(item){
-      html += '<a href="imovel.html?slug=' + encodeURIComponent(item.slug) + '">' + esc(item.nome) + '</a>';
+      html += '<a href="/imovel/' + encodeURIComponent(item.slug) + '">' + esc(item.nome) + '</a>';
     });
     html += '<div class="nav-dropdown-soon">Alcantara Mar <span>Em breve</span></div>';
     menu.innerHTML = html;
@@ -96,7 +96,7 @@
             '<div class="card-specs">' + specs + '</div>' +
             '<p class="card-desc">' + esc(item.resumo_curto) + '</p>' +
             '<div class="card-actions">' +
-              '<a class="btn btn-dark" href="imovel.html?slug=' + encodeURIComponent(item.slug) + '">Saiba mais</a>' +
+              '<a class="btn btn-dark" href="/imovel/' + encodeURIComponent(item.slug) + '">Saiba mais</a>' +
               '<a class="btn btn-outline-dark" href="' + waLink('Olá, tenho interesse no ' + item.nome + '.') + '" target="_blank" rel="noopener">WhatsApp</a>' +
             '</div>' +
           '</div>' +

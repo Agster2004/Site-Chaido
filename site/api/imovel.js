@@ -116,6 +116,29 @@ export default async function handler(req, res) {
 
       // função em vez de texto: um "$" na descrição (ex: "R$ 500 mil") não pode virar padrão do replace
       html = html.replace('</head>', () => head + jsonLd + '</head>');
+
+      // Texto real no lugar do "Carregando…": robôs que não executam JavaScript (buscadores de IA,
+      // por exemplo) passam a ver H1, descrição, endereço e características. O render.js troca
+      // todo o conteúdo de #detail-root quando a página abre no navegador.
+      if (item) {
+        const paragrafos = [it.descricao].concat(Array.isArray(it.sobre) ? it.sobre : []).filter(Boolean);
+        const difs = (it.diferenciais || []).map((d) => '<li>' + esc(d) + '</li>').join('');
+        const unids = (it.unidades || [])
+          .map((u) => '<li>' + esc([u.nome, u.area, u.vaga].filter(Boolean).join(' · ')) + '</li>')
+          .join('');
+        const conteudo =
+          '<div class="wrap" style="padding:60px 0;">' +
+          '<h1>' + esc(it.nome) + '</h1>' +
+          (it.endereco ? '<p>' + esc(it.endereco) + '</p>' : '') +
+          paragrafos.map((p) => '<p>' + esc(p) + '</p>').join('') +
+          (difs ? '<h2>Diferenciais</h2><ul>' + difs + '</ul>' : '') +
+          (unids ? '<h2>' + esc(it.unidades_titulo || 'Unidades') + '</h2><ul>' + unids + '</ul>' : '') +
+          '</div>';
+        html = html.replace(
+          /(<div id="detail-root">)\s*<div class="wrap"[^>]*>Carregando…<\/div>\s*(<\/div>)/,
+          (m, abre, fecha) => abre + conteudo + fecha
+        );
+      }
     }
   } catch (err) {
     // Se algo falhar ao ler os dados, a página ainda abre com as tags genéricas.
