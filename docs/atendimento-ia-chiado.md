@@ -51,11 +51,15 @@ A assistente consulta os dados institucionais permitidos e o catálogo local, ma
 
 Os 28 testes automatizados do piloto passaram. Três conversas com vários turnos foram verificadas pelo servidor local, com o Qwen ativo. Cobriram abreviações, troca de residencial, perguntas sobre a empresa e bairros e encaminhamento para atendimento humano. Após corrigir a seleção por bairro, o reteste confirmou que “Ocian” seguido de “quais casas?” lista as unidades do Garrett. O atendente conseguiu assumir e responder na mesma conversa simulada.
 
+O painel ganhou uma tela de login com a identidade da Chiado e uma tela inicial com o cartão Central de atendimento. A lista de conversas continua à esquerda, com destaque para a fila de atendimentos pendentes.
+
+O servidor já aceita configuração para rodar atrás de HTTPS, contas individuais por variáveis de ambiente e um serviço Ollama remoto. Quando configurado com SQLite, o histórico de conversas é salvo em disco. As sessões ficam em memória, então a equipe precisa entrar de novo após reiniciar o serviço.
+
 ## Pendências e ordem de execução
 
-1. Preparar um ambiente privado de teste online para o painel e o serviço de atendimento, com HTTPS, contas individuais, banco para sessões e conversas e um modelo que funcione com o Mac desligado. Validar login, persistência após reinício e retomada pela equipe.
-2. Conectar o número reservado à automação ao serviço online. Implementar recepção e envio pelo WhatsApp e validar em teste privado que a resposta humana sai pelo mesmo número e mantém o histórico.
-3. Configurar o aviso de conversa pendente via Telegram. O destino do aviso ainda precisa ser definido. Validar a abertura da conversa no painel e a autoria da resposta.
-4. Adicionar a ficha oficial do Alcântara ao catálogo quando estiver pronta e validar as respostas antes de incluí-lo na apresentação ao cliente.
+1. Publicar um piloto privado com HTTPS, uma instância Node.js 24, volume persistente, credenciais individuais e modelo acessível com o Mac desligado. Testar o login nos dois computadores, a recuperação das conversas após reinício e a passagem da IA para o atendente pelo simulador.
+2. Conectar o número reservado à automação. Validar recepção e envio pelo WhatsApp em teste privado, incluindo a resposta humana pelo mesmo número.
+3. Configurar os avisos de conversas pendentes via Telegram e definir o chat de destino. Validar o atalho para a conversa e a autoria da resposta.
+4. Adicionar a ficha oficial do Alcântara ao catálogo quando estiver pronta e validar as respostas sobre o empreendimento.
 
-O piloto atual guarda sessões e mensagens em memória e usa um login provisório. A publicação deste código no GitHub sincroniza o desenvolvimento entre computadores. A hospedagem do atendimento e as integrações de WhatsApp e Telegram ainda estão pendentes.
+A branch `trabalho` sincroniza código, documentação e catálogo entre os computadores. O painel online, WhatsApp e Telegram ainda precisam ser configurados.

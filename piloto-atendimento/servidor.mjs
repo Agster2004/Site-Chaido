@@ -1,15 +1,40 @@
 import { responderComModelo } from './modelo.mjs';
 import { createServer } from 'node:http';
 import { randomUUID, timingSafeEqual } from 'node:crypto';
+import { DatabaseSync } from 'node:sqlite';
 import { readFileSync } from 'node:fs';
 
-const origem = 'http://127.0.0.1:8791';
+const ambiente = process.env;
+const origem = new URL(ambiente.CHIADO_ORIGEM || 'http://127.0.0.1:8791').origin;
+const online = origem.startsWith('https://');
+const host = ambiente.CHIADO_HOST || '127.0.0.1';
+const modelo = ambiente.CHIADO_MODELO_LOCAL;
+const caminhoBanco = ambiente.CHIADO_BANCO;
+const contas = ambiente.CHIADO_CONTAS
+  ? JSON.parse(ambiente.CHIADO_CONTAS)
+  : { will: ambiente.CHIADO_SENHA_PILOTO || 'chiado-piloto-local' };
+
+if ((online || host !== '127.0.0.1') &&
+    (!online || !caminhoBanco || !ambiente.CHIADO_CONTAS || !modelo || !ambiente.CHIADO_OLLAMA_URL ||
+      !Object.keys(contas).length || Object.values(contas).some(senha => typeof senha !== 'string' || senha.length < 16))) {
+  throw new Error('O modo online exige HTTPS, banco, modelo remoto e contas com senhas de pelo menos 16 caracteres.');
+}
+
+const banco = caminhoBanco ? new DatabaseSync(caminhoBanco) : null;
+banco?.exec('CREATE TABLE IF NOT EXISTS conversas (id TEXT PRIMARY KEY, dados TEXT NOT NULL)');
+const gravar = banco?.prepare('INSERT INTO conversas VALUES (?, ?) ON CONFLICT(id) DO UPDATE SET dados = excluded.dados');
 const sessoes = new Map();
-const conversas = new Map();
+const conversas = new Map(banco?.prepare('SELECT id, dados FROM conversas ORDER BY rowid').all().map(({ id, dados }) => {
+  const conversa = JSON.parse(dados);
+  if (conversa.digitando) {
+    conversa.digitando = false;
+    conversa.estado = 'Aguardando atendimento';
+  }
+  return [id, conversa];
+}));
 const respostasPendentes = new Map();
-const modelo = process.env.CHIADO_MODELO_LOCAL;
-const equipe = new Map([['will', 'Will']]);
-const senha = Buffer.from(process.env.CHIADO_SENHA_PILOTO || 'chiado-piloto-local');
+const cookieSeguro = online ? '; Secure' : '';
+
 const arquivos = new Map([
   ['/', ['./index.html', 'text/html; charset=utf-8']],
   ['/app.js', ['./app.js', 'text/javascript; charset=utf-8']],
@@ -100,14 +125,15 @@ createServer(async (req, res) => {
     if (req.url === '/entrar') {
       const dados = await ler(req);
       const digitada = Buffer.from(String(dados.senha ?? ''));
-      const pessoa = equipe.get(dados.login);
+      const pessoa = typeof dados.login === 'string' && Object.hasOwn(contas, dados.login) ? dados.login : null;
+      const senha = Buffer.from(pessoa ? contas[pessoa] : '');
       if (!pessoa || digitada.length !== senha.length || !timingSafeEqual(digitada, senha)) {
         return json(401, { erro: 'Login ou senha inválidos.' });
       }
       sessoes.delete(token);
       const id = randomUUID();
-      sessoes.set(id, { nome: pessoa, ate: Date.now() + 8 * 3600000 });
-      res.setHeader('Set-Cookie', `chiado_piloto=${id}; HttpOnly; SameSite=Strict; Path=/; Max-Age=28800`);
+      sessoes.set(id, { nome: pessoa === 'will' ? 'Will' : pessoa, ate: Date.now() + 8 * 3600000 });
+      res.setHeader('Set-Cookie', `chiado_piloto=${id}; HttpOnly; SameSite=Strict; Path=/; Max-Age=28800${cookieSeguro}`);
       return json(200, {});
     }
     if (!nome) return json(401, { erro: 'Entre novamente.' });
@@ -124,6 +150,7 @@ createServer(async (req, res) => {
         mensagem(conversa, 'Cliente', 'Oi! O Carmo tem duas suítes?');
         mensagem(conversa, 'IA simulada', 'Sim, as casas do Carmo têm duas suítes e um lavabo.');
       }
+      gravar?.run(conversa.id, JSON.stringify(conversa));
       conversas.set(conversa.id, conversa);
       return json(201, { id: conversa.id });
     }
@@ -165,6 +192,7 @@ createServer(async (req, res) => {
             if (respostasPendentes.get(id)?.controle === controle) {
               respostasPendentes.delete(id);
               conversa.digitando = false;
+              gravar?.run(id, JSON.stringify(conversa));
             }
           }
         }, espera);
@@ -192,8 +220,9 @@ createServer(async (req, res) => {
       respostasPendentes.delete(id);
       conversa.digitando = false;
     }
+    gravar?.run(id, JSON.stringify(conversa));
     return json(200, {});
   } catch {
     return json(400, { erro: 'Pedido inválido.' });
   }
-}).listen(8791, '127.0.0.1', () => console.log(`Piloto Chiado em ${origem}`));
+}).listen(Number(ambiente.PORT || 8791), host, () => console.log(`Piloto Chiado em ${origem}`));

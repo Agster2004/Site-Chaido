@@ -161,9 +161,12 @@ export async function responderComModelo(modelo, catalogo, historico, sinal) {
       texto => typeof texto === 'string' && !/dispon|entrega|preço|vend|apenas/i.test(texto)
     ),
   }));
-  const resposta = await fetch('http://127.0.0.1:11434/api/chat', {
+  const resposta = await fetch(new URL('/api/chat', process.env.CHIADO_OLLAMA_URL || 'http://127.0.0.1:11434'), {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      ...(process.env.CHIADO_OLLAMA_TOKEN ? { Authorization: 'Bearer ' + process.env.CHIADO_OLLAMA_TOKEN } : {}),
+    },
     signal: AbortSignal.any([sinal, AbortSignal.timeout(30000)]),
     body: JSON.stringify({
       model: modelo,

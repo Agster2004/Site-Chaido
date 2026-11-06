@@ -11,8 +11,13 @@
 </header>
 <main>
 <form id="acesso">
-<h2>Entrar no painel</h2><p>Piloto local com conversas fictícias</p>
-<label>Login<input name="login" autocomplete="username" required></label>
+<div class="acesso-intro">
+  <span class="acesso-marca"><img src="/logo-chiado.png" alt="" width="34" height="38"></span>
+  <p class="acesso-kicker">Área da equipe</p>
+  <h2>Entrar no painel</h2>
+  <p>Acesse as conversas e acompanhe os atendimentos da Chiado.</p>
+</div>
+<label>Usuário<input name="login" autocomplete="username" required></label>
 <label>Senha<input name="senha" type="password" autocomplete="current-password" required></label>
 <button class="principal">Entrar</button>
 </form>
@@ -41,7 +46,19 @@
     <button id="encaminhar" hidden>Simular pedido de visita</button></div>
   </div>
   <div class="chat-corpo">
-  <div id="chat-vazio"><strong>Nenhuma conversa aberta</strong><p>Selecione uma conversa na lista.</p></div>
+  <div id="chat-vazio">
+    <div class="boas-vindas">
+      <div class="boas-vindas-icone" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M13 10h23a4 4 0 0 1 4 4v14a4 4 0 0 1-4 4H23l-8 6v-6h-2a4 4 0 0 1-4-4V14a4 4 0 0 1 4-4Z"/>
+          <path d="M17 18h15m-15 6h10"/>
+        </svg>
+      </div>
+      <p class="boas-vindas-marca">Chiado Construtora</p>
+      <strong>Central de atendimento</strong>
+      <p>Selecione uma conversa para acompanhar o histórico ou responder ao cliente.</p>
+    </div>
+  </div>
   <ol id="historico" aria-label="Histórico da conversa"></ol>
 <p id="digitando" class="balao equipe" role="status" hidden>Assistente digitando…</p>
 </div>

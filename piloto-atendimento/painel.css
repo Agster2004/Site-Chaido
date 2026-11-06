@@ -146,3 +146,137 @@ article form { background: #f0f2f5; }
 .layout:not(.conversa-aberta) .chat-corpo { background: #f7f8fa; }
 #acesso { border: 1px solid var(--linha); }
 article form textarea { border-radius: 18px; }
+
+/* Acabamento do painel de atendimento */
+:root {
+  --linha: #dce5e2;
+  --barra: #f6f8f7;
+  --balao: #dff5e9;
+}
+
+.marca {
+  background: #123a34;
+  color: #fff;
+  border-bottom-color: #234b44;
+}
+
+.marca span { color: #c6e0d8; }
+#sair { background: #234b44; color: white; border-color: #55756e; }
+#sair:hover { background: #315d54; }
+.fila-topo { gap: 10px; }
+#buscar { border: 1px solid var(--linha); }
+#pendentes:not(:empty) { font-weight: 650; }
+#fila button[aria-current=true] { background: #e9f5ef; box-shadow: inset 3px 0 #08735d; }
+#fila button strong { font-weight: 650; }
+.chat-topo { background: #f9fbfa; }
+#situacao:not(:empty) {
+  width: fit-content;
+  margin-top: 4px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #e5f0eb;
+  color: #23554a;
+  font-size: .78rem;
+  font-weight: 650;
+}
+
+.chat-corpo {
+  background: #eef2ef radial-gradient(#d7e2db 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.balao {
+  line-height: 1.45;
+  border: 1px solid #dce5df;
+  border-radius: 4px 13px 13px;
+  box-shadow: 0 1px 2px #163c2c10;
+}
+
+.balao.equipe { border-color: #c9e8d7; border-radius: 13px 4px 13px 13px; }
+.balao small { font-size: .76rem; }
+article form { background: #f9fbfa; }
+#acesso { box-shadow: 0 12px 32px #123a3414; }
+
+main:has(#acesso:not([hidden])) {
+  min-height: calc(100dvh - 58px);
+  display: grid;
+  place-content: center;
+  padding: 28px 18px;
+  background: radial-gradient(ellipse at 50% 0%, #dceee6, #f5f8f6 70%);
+}
+
+#acesso {
+  width: min(100%, 420px);
+  margin: 0 auto;
+  padding: clamp(22px, 5vw, 36px);
+  border-radius: 20px;
+  gap: 18px;
+}
+
+.acesso-intro { display: grid; gap: 8px; }
+.acesso-marca {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 15px;
+  background: #123a34;
+}
+.acesso-marca img { object-fit: contain; }
+.acesso-intro .acesso-kicker { color: #23554a; font-size: .75rem; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
+.acesso-intro h2 { font-size: clamp(1.5rem, 5vw, 1.9rem); color: #123a34; }
+.acesso-intro p { color: var(--suave); line-height: 1.45; }
+#acesso label { font-size: .9rem; font-weight: 650; }
+#acesso input { min-height: 44px; background: #f9fbfa; font-weight: 400; }
+#acesso button { min-height: 44px; font-weight: 700; }
+main:has(#acesso:not([hidden])) #erro:not(:empty) { margin: 12px auto 0; }
+
+.layout:not(.conversa-aberta) .chat-corpo {
+  background: radial-gradient(ellipse at 50% 42%, #e2efe8, #f4f7f5 72%);
+}
+
+.boas-vindas {
+  width: min(100%, 410px);
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: clamp(22px, 4vw, 42px);
+  background: #fff;
+  border: 1px solid var(--linha);
+  border-radius: 24px;
+  box-shadow: 0 16px 50px #123a3410;
+}
+
+.boas-vindas-icone {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  margin-bottom: 6px;
+  border-radius: 23px;
+  background: #e5f4eb;
+  color: #145d47;
+}
+
+.boas-vindas .boas-vindas-marca {
+  color: #23554a;
+  font-size: .75rem;
+  font-weight: 750;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+#chat-vazio .boas-vindas strong {
+  color: #123a34;
+  font-size: clamp(1.3rem, 3vw, 1.85rem);
+  line-height: 1.15;
+}
+
+.boas-vindas p { line-height: 1.5; }
+.fila-topo { padding-inline: 20px; }
+#fila button { padding-inline: 20px; }
+#pendentes:not(:empty) {
+  padding: 8px 10px;
+  border-radius: 9px;
+  background: #eef6f1;
+}

@@ -283,7 +283,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql`, `
 
 Piloto local implementado com Qwen2.5 3B, catálogo do Garrett e do Carmo, painel de simulação e passagem para atendente com autoria. Os 28 testes automatizados passaram e três roteiros com vários turnos foram validados pelo servidor local, incluindo o reteste de bairros. O endereço do escritório fica fora das respostas.
 
-A próxima etapa é o ambiente privado online, com histórico persistente e modelo independente do Mac. Depois vêm o teste privado com WhatsApp e os avisos no Telegram. O [documento do atendimento](docs/atendimento-ia-chiado.md) reúne o estado, as pendências e a ordem de execução. O [guia do piloto](piloto-atendimento/README.md) descreve como rodar e testar nos dois computadores.
+O painel ganhou novo visual no login e na Central de atendimento. O servidor já prevê SQLite para conversas, contas individuais e conexão a um Ollama remoto. A próxima etapa é publicar o piloto privado e validar o acesso pelos dois computadores, a persistência após reinício e a retomada humana. Depois vêm o teste privado com WhatsApp e os avisos no Telegram. O [documento do atendimento](docs/atendimento-ia-chiado.md) reúne o estado, as pendências e a ordem de execução. O [guia do piloto](piloto-atendimento/README.md) descreve como rodar e testar nos dois computadores.
 
 ### 03/10/2026
 - Localizado o projeto certo; analisada a base de código; Etapas 1 e 2 feitas, publicadas e verificadas
