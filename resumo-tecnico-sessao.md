@@ -279,6 +279,12 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql`, `
 
 ## 7. Registro por sessão
 
+### 06/11/2026 — piloto de atendimento com IA
+
+Piloto local implementado com Qwen2.5 3B, catálogo do Garrett e do Carmo, painel de simulação e passagem para atendente com autoria. Os 28 testes automatizados passaram e três roteiros com vários turnos foram validados pelo servidor local, incluindo o reteste de bairros. O endereço do escritório fica fora das respostas.
+
+A próxima etapa é o ambiente privado online, com histórico persistente e modelo independente do Mac. Depois vêm o teste privado com WhatsApp e os avisos no Telegram. O [documento do atendimento](docs/atendimento-ia-chiado.md) reúne o estado, as pendências e a ordem de execução. O [guia do piloto](piloto-atendimento/README.md) descreve como rodar e testar nos dois computadores.
+
 ### 03/10/2026
 - Localizado o projeto certo; analisada a base de código; Etapas 1 e 2 feitas, publicadas e verificadas
   em produção; branches apagadas.

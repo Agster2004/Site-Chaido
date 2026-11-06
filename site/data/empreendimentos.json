@@ -2,6 +2,7 @@
   "items": [
     {
       "slug": "garrett",
+      "comodidades_ausentes": ["piscina"],
       "nome": "Residencial Garrett",
       "status": "pronto",
       "tag_label": "Pronto para morar",

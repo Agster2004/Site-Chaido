@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chiado · Atendimento</title>
+<link rel="stylesheet" href="/painel.css">
+<header class="marca">
+  <img src="/logo-chiado.png" alt="" width="42" height="46">
+  <div><h1>Chiado Construtora</h1><span>Atendimento</span></div>
+  <button id="sair" hidden>Sair</button>
+</header>
+<main>
+<form id="acesso">
+<h2>Entrar no painel</h2><p>Piloto local com conversas fictícias</p>
+<label>Login<input name="login" autocomplete="username" required></label>
+<label>Senha<input name="senha" type="password" autocomplete="current-password" required></label>
+<button class="principal">Entrar</button>
+</form>
+<div id="painel" class="layout" hidden>
+<aside aria-label="Conversas">
+  <div class="fila-topo">
+    <h2>Conversas</h2>
+    <p id="conta"></p>
+    <input id="buscar" type="search" aria-label="Pesquisar conversas" placeholder="Pesquisar conversa">
+    <div class="filtros" aria-label="Filtrar conversas">
+      <button type="button" data-filtro="todas" aria-pressed="true">Todas</button>
+      <button type="button" data-filtro="novas" aria-pressed="false">Não lidas</button>
+      <button type="button" data-filtro="pendentes" aria-pressed="false">Pendentes</button>
+    </div>
+    <p id="pendentes" role="status"></p>
+    <details class="simulacoes"><summary>Simulações</summary><div><button id="simular">Simular IA</button><button id="simular-cliente">Simular cliente</button></div></details>
+  </div>
+  <ul id="fila"></ul>
+  <p id="fila-vazia">Nenhuma conversa encontrada.</p>
+</aside>
+<article>
+  <div class="chat-topo">
+    <button id="voltar" type="button">‹ Conversas</button>
+    <div><h2 id="titulo">Selecione uma conversa</h2><p id="situacao"></p></div>
+    <div class="acoes"><button id="assumir" class="principal" hidden>Assumir atendimento</button>
+    <button id="encaminhar" hidden>Simular pedido de visita</button></div>
+  </div>
+  <div class="chat-corpo">
+  <div id="chat-vazio"><strong>Nenhuma conversa aberta</strong><p>Selecione uma conversa na lista.</p></div>
+  <ol id="historico" aria-label="Histórico da conversa"></ol>
+<p id="digitando" class="balao equipe" role="status" hidden>Assistente digitando…</p>
+</div>
+<form id="cliente" hidden><label>Digitar como cliente<textarea rows="1" name="texto" maxlength="2000" required></textarea></label><button class="principal">Enviar como cliente</button></form>
+<form id="resposta" hidden><label>Responder como atendente<textarea rows="1" name="texto" maxlength="2000" required></textarea></label><button class="principal">Enviar resposta</button></form>
+</article>
+</div>
+<p id="erro" role="alert"></p>
+</main>
+<script src="/app.js" defer></script>
+</html>
