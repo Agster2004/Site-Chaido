@@ -9,7 +9,9 @@ lançamentos, contas, vendas por unidade). Ficam em repositórios, bancos e chav
 misturam**. Qualquer ligação entre os dois no futuro (por exemplo, uma venda fechada no painel de leads
 virar venda no financeiro) é uma decisão à parte, tomada com o usuário e desenhada antes.
 
-## COMECE POR AQUI (estado em 23/10/2026; último "no ar" em 23/10/2026)
+## COMECE POR AQUI (estado em 23/11/2026)
+
+> **No ar desde 23/11/2026:** commit `7e3d92a` no `main`. A página inicial apresenta os dois imóveis com links diretos. Garrett tem atalho para plantas e convite para agendar visita pelo WhatsApp. Carmo tem atalho para plantas, solicitação do book pelo formulário e obra em **95%**, atualizada em 23/11/2026, com entrega prevista para janeiro de 2027. Os blocos de outubro abaixo registram as publicações anteriores.
 
 > **NO AR desde 13/10/2026:** a `trabalho` foi publicada no `main` (commit `ddb4082`, avanço simples) com o "podemos colocar no ar" do usuário. O site
 > oficial agora tem formulário, `/painel`, `/privacidade`, contador de visitas, origem no WhatsApp e keep-alive. No momento da publicação `main` e `trabalho` estavam no mesmo
@@ -176,7 +178,7 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql`, `
   **subir o `?v=` nos `<script>`/`<link>` de `index.html` e `imovel.html`** (a versão de hoje é `20261023j`), senão o visitante vê a página nova com o estilo antigo.
 - **`<base href="/">` nas páginas `/imovel/<slug>`:** o `api/imovel.js` o injeta, então `href="#interesse"` iria para a home. Um clique em `a[href^="#"]` é tratado em `assets/main.js` e rola dentro da própria página.
   Links de âncora novos funcionam sem mexer no `<base>`.
-- **Andamento da obra (Carmo):** `obra.total` e `obra.atualizado_em` em `empreendimentos.json` alimentam a barra larga na capa e o "OBRA 90%" do cartão da home; a seção "Acompanhe o andamento da obra" só aparece quando houver
+- **Andamento da obra (Carmo):** `obra.total` e `obra.atualizado_em` em `empreendimentos.json` alimentam a barra larga na capa e o percentual exibido no cartão da página inicial; a seção "Acompanhe o andamento da obra" só aparece quando houver
   `obra.etapas`. Empreendimento com `"status": "pronto"` (Garrett) não mostra nada disso nem a frase "projeto executivo" sob as plantas.
 - **Endereço do escritório (decisão do usuário, 23/10/2026): nunca público** (nem no rodapé, nem no schema). Só o bairro (Boqueirão, Praia Grande) aparece, em "Sobre a Chiado" e no schema; o endereço completo só consta na `/privacidade` (exigência legal).
 
@@ -278,6 +280,13 @@ Fora de `site/` (não vão para o site): `supabase/migrations/0001_leads.sql`, `
   (hoje: anúncios no Instagram direto ao WhatsApp), 3 divulgação, 4 impulsionar vendas (cada um com desenho e "pode construir" próprios).
 
 ## 7. Registro por sessão
+
+### 23/11/2026 — publicação dos ajustes de navegação e apresentação
+
+- A abertura da página inicial dá o mesmo destaque aos dois imóveis, mostra a fachada do Garrett em telas maiores e empilha os botões em telas pequenas.
+- As páginas dos imóveis ganharam atalhos para as plantas. No Garrett, o botão de visita abre uma mensagem de agendamento. No Carmo, “Solicitar o book” leva ao formulário com o pedido marcado.
+- A publicação foi conferida no domínio oficial. Os 50 testes de leads, visitas, painel e WhatsApp passaram. O envio real do formulário em produção ficou fora da conferência.
+- A aba Visitas continua contando uma entrada por sessão. Um clique no WhatsApp abre a conversa. O indicador de visitas agendadas conta leads marcados nessa etapa.
 
 ### 06/11/2026 — piloto de atendimento com IA
 
