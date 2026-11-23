@@ -192,9 +192,13 @@
     var esc = R.esc, picture = R.picture;
 
     // ---- capa ----
+    var paginaAtual = esc(location.pathname + location.search);
+    var garrett = item.slug === 'garrett';
+    var carmo = item.slug === 'carmo';
+    var entrega = carmo && item.obra && item.obra.total != null && item.tag_label.match(/ · Entrega (.+)$/i);
     var chips = '';
     if(item.bairro) chips += '<span class="dd-chip">' + esc(item.bairro) + '</span>';
-    if(item.tag_label) chips += '<span class="dd-chip dd-chip-ouro">' + esc(item.tag_label) + '</span>';
+    if(item.tag_label) chips += '<span class="dd-chip dd-chip-ouro">' + esc(entrega ? item.tag_label.slice(0, entrega.index) : item.tag_label) + '</span>';
     // selo do andamento da obra na capa (mesmo número da seção "Acompanhe o andamento da obra")
     var obraEtapas = (item.obra && item.obra.etapas || []).filter(function(e){ return e && e.nome; });
     var obraPct = null;
@@ -204,6 +208,7 @@
     if(obraPct !== null && item.status !== 'pronto') obraCapa = '<div class="dd-hero-obra" role="progressbar" aria-label="Andamento da obra" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + obraPct + '">' +
       '<div class="dd-hero-obra-topo"><span>Andamento da obra</span><b>' + fmtPct(obraPct) + '</b></div>' +
       '<div class="dd-hero-obra-barra"><i style="--pct:' + obraPct + '%"></i></div>' +
+      (entrega ? '<p class="dd-hero-obra-data">Entrega prevista para ' + esc(entrega[1].toLowerCase()) + '</p>' : '') +
       (item.obra && item.obra.atualizado_em ? '<p class="dd-hero-obra-data">Atualizado em ' + esc(item.obra.atualizado_em) + '</p>' : '') + '</div>';
 
     var capa = '' +
@@ -215,9 +220,11 @@
             '<h1>' + esc(item.nome) + '</h1>' +
             '<p class="dd-hero-end">' + esc(item.endereco) + '</p>' +
             '<div class="dd-hero-acoes">' +
-              '<a class="btn dd-btn-ouro" href="#interesse">Quero saber mais</a>' +
-              (item.book ? '<a class="btn dd-btn-vazado" href="#interesse" data-pedir-book>Baixar o book</a>' : '') +
-              '<a class="btn dd-btn-vazado" href="' + esc(p.waHref) + '" target="_blank" rel="noopener">' + R.waIconSvg() + 'WhatsApp</a>' +
+              (garrett ? '<a class="btn dd-btn-ouro" href="' + esc(R.waLink('Olá! Quero visitar o Residencial Garrett. Quais horários estão disponíveis?')) + '" target="_blank" rel="noopener">' + R.waIconSvg() + 'Agendar visita pelo WhatsApp</a>' : '') +
+              ((garrett || carmo) && item.plantas && item.plantas.length ? '<a class="btn ' + (carmo ? 'dd-btn-ouro' : 'dd-btn-vazado') + '" href="' + paginaAtual + '#plantas">' + (carmo ? 'Ver plantas das 5 casas' : 'Ver plantas') + '</a>' : '') +
+              (!garrett && !carmo ? '<a class="btn dd-btn-ouro" href="' + paginaAtual + '#interesse">Quero saber mais</a>' : '') +
+              (item.book ? '<a class="btn dd-btn-vazado" href="' + paginaAtual + '#interesse" data-pedir-book>Solicitar o book</a>' : '') +
+              (!garrett ? '<a class="btn dd-btn-vazado" href="' + esc(p.waHref) + '" target="_blank" rel="noopener">' + R.waIconSvg() + 'WhatsApp</a>' : '') +
             '</div>' +
             obraCapa +
           '</div>' +
@@ -239,7 +246,7 @@
           '<div class="dd-sobre reveal">' +
             '<div>' +
               '<div class="dd-eyebrow">O empreendimento</div>' +
-              '<h2 id="dd-sobre-titulo">' + esc(item.nome) + '</h2>' +
+              '<h2 id="dd-sobre-titulo">' + (garrett ? 'Casas de 3 dormitórios, de 89,1 a 94,5 m²' : esc(item.nome)) + '</h2>' +
             '</div>' +
             '<div class="dd-texto">' + paragrafos + '</div>' +
           '</div>' +
@@ -317,7 +324,7 @@
         corpoPlantas = carrosselPlantas(listaPlantas, 'Plantas');
       }
       plantasSec = '' +
-        '<section class="dd-sec dd-claro" aria-labelledby="dd-plantas-titulo">' +
+        '<section id="plantas" style="scroll-margin-top:88px" class="dd-sec dd-claro" aria-labelledby="dd-plantas-titulo">' +
           '<div class="wrap">' +
             '<div class="dd-eyebrow">Plantas</div>' +
             '<h2 id="dd-plantas-titulo" class="dd-h2">Conheça a planta de cada ' + esc(grupos.length > 1 ? 'casa' : 'unidade') + '</h2>' +
@@ -440,7 +447,7 @@
 
     root.querySelectorAll('[data-dd-carrossel]').forEach(iniciarCarrossel);
     iniciarAbas(root.querySelector('[data-dd-plantas]'));
-    // "Baixar o book": leva ao formulário e marca o pedido do book (o formulário escuta este evento).
+    // "Solicitar o book": leva ao formulário e marca o pedido do book (o formulário escuta este evento).
     root.querySelectorAll('[data-pedir-book]').forEach(function(b){
       b.addEventListener('click', function(){
         window.__chiadoQuerBook = true;
